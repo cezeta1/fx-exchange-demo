@@ -41,9 +41,8 @@ import { NavBarComponent } from './components/nav-bar/nav-bar.component';
   styles: `
     .cz-main-content {
       height: 100%;
-      padding: 10px;
-      padding-left: 30px;
-      overflow-y: scroll;
+      padding: 10px 30px;
+      overflow-y: auto;
     }
   `,
 })

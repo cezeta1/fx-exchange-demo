@@ -1,4 +1,5 @@
 export enum ContractStatus {
-    Pending = 0,
-    Completed
+  Pending = 0,
+  Completed,
+  Cancelled,
 }

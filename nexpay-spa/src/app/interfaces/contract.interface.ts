@@ -1,22 +1,24 @@
-import { ContractStatus } from "./contract-status.interface";
-import { Select } from "./select.interface";
+import { ContractStatus } from './contract-status.interface';
+import { Currency } from './currency.interface';
+import { Select } from './select.interface';
 
 export interface Contract {
-    id?: string,
-    
-    status: ContractStatus,
+  id?: string;
 
-    fromCurrency: Select,
-    toCurrency: Select,
-    exchangeRate: number,
-    amount: number,
+  status: ContractStatus;
 
-    createdOn: Date,
-    expiredOn: Date,
-    
-    createdBy: string,
-    createdByName: string,
+  fromCurrency: Currency;
+  toCurrency: Currency;
+  exchangeRate: number;
+  amount: number;
+  convertedAmount: number;
 
-    approvedBy: string,
-    approvedByName: string
+  createdOn: Date;
+  expiredOn: Date;
+
+  createdBy: string;
+  createdByName: string;
+
+  approvedBy: string;
+  approvedByName: string;
 }

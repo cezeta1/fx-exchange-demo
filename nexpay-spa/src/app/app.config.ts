@@ -24,6 +24,7 @@ import {
   LinkedinFill,
   GithubFill,
 } from '@ant-design/icons-angular/icons';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 const icons: IconDefinition[] = [
   BankFill,
   ControlFill,
@@ -37,6 +38,8 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideClientHydration(),
     provideAnimations(),
+    provideHttpClient(),
+    // withInterceptors()
     provideNzConfig(ngZorroConfig),
     importProvidersFrom(
       // NzIconModule.forRoot(Object.values(antDesignIcons)),

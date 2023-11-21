@@ -21,7 +21,6 @@ export class AuthService {
         error: (e) => {
           this.notificationService.showError("Couldn't create new account");
         },
-        complete: () => {},
       })
     );
   }
@@ -36,7 +35,6 @@ export class AuthService {
               'There has been an error when logging out'
             );
           },
-          complete: () => {},
         })
       );
   }
@@ -56,7 +54,6 @@ export class AuthService {
               'Please check that email and password are correct'
             );
           },
-          complete: () => {},
         })
       );
   }
