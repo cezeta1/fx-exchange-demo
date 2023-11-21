@@ -1,14 +1,10 @@
 import { Injectable } from '@angular/core';
-import {
-  NzNotificationDataOptions,
-  NzNotificationService,
-} from 'ng-zorro-antd/notification';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 
 @Injectable({
   providedIn: 'root',
 })
 export class NotificationService {
-  // private opts: NzNotificationDataOptions<{}> = { nzPlacement: 'bottomLeft' };
   constructor(private notificationService: NzNotificationService) {}
 
   public showSuccess(message: string, description?: string) {
