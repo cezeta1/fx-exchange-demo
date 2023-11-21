@@ -3,11 +3,11 @@ import { Component } from '@angular/core';
 import { Contract } from '../../../interfaces/contract.interface';
 
 @Component({
-  selector: 'contracts-page',
+  selector: 'admin-page',
   standalone: true,
   imports: [CommonModule],
-  template: ` <h1>CONTRACTS</h1> `,
+  template: ` <h1>ADMIN</h1> `,
 })
-export class ContractsPageComponent {
+export class AdminPageComponent {
   protected contracts: Contract[] = [];
 }
