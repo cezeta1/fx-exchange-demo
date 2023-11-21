@@ -4,6 +4,7 @@ import { UserLoginComponent } from '../user-profile/user-login/user-login.compon
 import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { Router } from '@angular/router';
+import { NotificationService } from '../../services/notifications.service';
 
 interface MenuOption {
   id: number;

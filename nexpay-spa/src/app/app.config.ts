@@ -3,12 +3,17 @@ import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
 import { provideClientHydration } from '@angular/platform-browser';
-import { provideAnimations } from '@angular/platform-browser/animations'; 
+import { provideAnimations } from '@angular/platform-browser/animations';
 import { IconDefinition } from '@ant-design/icons-angular';
 
-/* --- NZ Icons --- */
+/* --- NgZorro Configs --- */
+const ngZorroConfig: NzConfig = {
+  notification: { nzPlacement: 'bottomLeft' },
+};
+
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import * as AllIcons from '@ant-design/icons-angular/icons';
+import { NzConfig, provideNzConfig } from 'ng-zorro-antd/core/config';
 const antDesignIcons = AllIcons as {
   [key: string]: IconDefinition;
 };
@@ -19,7 +24,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideClientHydration(),
     provideAnimations(),
-    importProvidersFrom(
-      NzIconModule.forRoot(Object.values(antDesignIcons))
-    )]
+    provideNzConfig(ngZorroConfig),
+    importProvidersFrom(NzIconModule.forRoot(Object.values(antDesignIcons))),
+  ],
 };
