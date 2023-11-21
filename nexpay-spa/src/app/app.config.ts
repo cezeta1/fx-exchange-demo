@@ -7,16 +7,29 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { IconDefinition } from '@ant-design/icons-angular';
 
 /* --- NgZorro Configs --- */
+import { NzConfig, provideNzConfig } from 'ng-zorro-antd/core/config';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+
 const ngZorroConfig: NzConfig = {
   notification: { nzPlacement: 'bottomLeft' },
 };
 
-import { NzIconModule } from 'ng-zorro-antd/icon';
-import * as AllIcons from '@ant-design/icons-angular/icons';
-import { NzConfig, provideNzConfig } from 'ng-zorro-antd/core/config';
-const antDesignIcons = AllIcons as {
-  [key: string]: IconDefinition;
-};
+// import * as AllIcons from '@ant-design/icons-angular/icons';
+// const antDesignIcons = AllIcons as {
+//   [key: string]: IconDefinition;
+// };
+import {
+  BankFill,
+  ControlFill,
+  LinkedinFill,
+  GithubFill,
+} from '@ant-design/icons-angular/icons';
+const icons: IconDefinition[] = [
+  BankFill,
+  ControlFill,
+  LinkedinFill,
+  GithubFill,
+];
 /* ---------------- */
 
 export const appConfig: ApplicationConfig = {
@@ -25,6 +38,9 @@ export const appConfig: ApplicationConfig = {
     provideClientHydration(),
     provideAnimations(),
     provideNzConfig(ngZorroConfig),
-    importProvidersFrom(NzIconModule.forRoot(Object.values(antDesignIcons))),
+    importProvidersFrom(
+      // NzIconModule.forRoot(Object.values(antDesignIcons)),
+      NzIconModule.forRoot(icons)
+    ),
   ],
 };
