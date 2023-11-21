@@ -7,24 +7,44 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 
 import { SideMenuComponent } from './components/side-menu/side-menu.component';
 import { FooterComponent } from './components/footer/footer.component';
-import { UserLoginComponent } from './components/user-profile/user-login/user-login.component';
+import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [
     CommonModule,
-    RouterOutlet, 
+    RouterOutlet,
     NzLayoutModule,
     NzMenuModule,
     NzIconModule,
-    UserLoginComponent,
+    NavBarComponent,
     SideMenuComponent,
-    FooterComponent
+    FooterComponent,
   ],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  template: `
+    <nz-layout style="height: 100%;">
+      <nav-bar></nav-bar>
+      <nz-layout>
+        <nz-sider nzWidth="220px" nzTheme="dark">
+          <side-menu></side-menu>
+        </nz-sider>
+        <nz-layout>
+          <div class="cz-main-content">
+            <router-outlet></router-outlet>
+          </div>
+          <page-footer></page-footer>
+        </nz-layout>
+      </nz-layout>
+    </nz-layout>
+  `,
+  styles: `
+    .cz-main-content {
+      height: 100%;
+      padding: 10px;
+      padding-left: 30px;
+      overflow-y: scroll;
+    }
+  `,
 })
-
 export class AppComponent {}
-
