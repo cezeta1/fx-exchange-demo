@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { UserLoginComponent } from '../user-profile/user-login/user-login.component';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { NzIconModule } from 'ng-zorro-antd/icon';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 interface MenuOption {
   id: number;
@@ -19,9 +19,10 @@ interface MenuOption {
   template: `
     <ul nz-menu nzMode="inline">
       <li
-        nz-menu-item
         *ngFor="let item of menuItems; index as i"
+        nz-menu-item
         (click)="onMenuRedirect(item)"
+        [nzSelected]="currentSection === item.id"
       >
         <span nz-icon [nzType]="item.icon" nzTheme="fill"></span>
         <span>{{ item.name }} </span>
@@ -29,7 +30,7 @@ interface MenuOption {
     </ul>
   `,
 })
-export class SideMenuComponent implements OnInit {
+export class SideMenuComponent {
   protected menuItems: MenuOption[] = [
     {
       id: 0,
@@ -44,12 +45,14 @@ export class SideMenuComponent implements OnInit {
       route: 'admin',
     },
   ];
+  protected currentSection: number = 0;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private route: ActivatedRoute) {}
 
-  ngOnInit(): void {}
+  // TODO: OnInit, implement route recognition, and select menu item accordingly
 
   protected onMenuRedirect(item: MenuOption) {
+    this.currentSection = item.id;
     this.router.navigateByUrl(item.route);
   }
 }
