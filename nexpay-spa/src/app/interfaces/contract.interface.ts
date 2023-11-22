@@ -1,6 +1,5 @@
 import { ContractStatus } from './contract-status.interface';
 import { Currency } from './currency.interface';
-import { Select } from './select.interface';
 
 export interface Contract {
   id?: string;

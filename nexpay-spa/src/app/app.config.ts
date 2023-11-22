@@ -18,6 +18,7 @@ const ngZorroConfig: NzConfig = {
 // const antDesignIcons = AllIcons as {
 //   [key: string]: IconDefinition;
 // };
+// NzIconModule.forRoot(Object.values(antDesignIcons)),
 import {
   BankFill,
   ControlFill,
@@ -41,9 +42,6 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(),
     // withInterceptors()
     provideNzConfig(ngZorroConfig),
-    importProvidersFrom(
-      // NzIconModule.forRoot(Object.values(antDesignIcons)),
-      NzIconModule.forRoot(icons)
-    ),
+    importProvidersFrom(NzIconModule.forRoot(icons)),
   ],
 };
