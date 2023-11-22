@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
-import { AppComponent } from './app.component';
 import { ContractsPageComponent } from './features/Contracts/contracts-page/contracts-page.component';
 import { AdminPageComponent } from './features/Admin/admin-page/admin-page.component';
+import { MsalGuard } from '@azure/msal-angular';
 
 export const routes: Routes = [
   {
@@ -12,17 +12,11 @@ export const routes: Routes = [
   {
     path: 'contracts',
     component: ContractsPageComponent,
-    // canActivate: [authenticationGuard],
-    data: {
-      preload: true,
-    },
+    // canActivate: [MsalGuard],
   },
   {
     path: 'admin',
     component: AdminPageComponent,
-    // canActivate: [authenticationGuard],
-    data: {
-      preload: true,
-    },
+    // canActivate: [MsalGuard],
   },
 ];

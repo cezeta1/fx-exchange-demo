@@ -8,12 +8,7 @@ import { currencies } from '../../../interfaces/currency.interface';
 
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzTableModule } from 'ng-zorro-antd/table';
-import {
-  NzTableFilterFn,
-  NzTableFilterList,
-  NzTableSortFn,
-  NzTableSortOrder,
-} from 'ng-zorro-antd/table';
+import { NzTableSortFn, NzTableSortOrder } from 'ng-zorro-antd/table';
 import { CZTagComponent } from '../../../components/shared/cz-tag/cz-tag.component';
 
 interface ColumnConfig<T> {

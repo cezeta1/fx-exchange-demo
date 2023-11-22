@@ -24,6 +24,7 @@ export class AuthService {
       })
     );
   }
+
   public logOut(): Observable<boolean> {
     return this.http
       .put<boolean>(environment.JWTAuthAPI + 'auth/logout', {})
