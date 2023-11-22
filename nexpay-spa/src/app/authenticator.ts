@@ -60,9 +60,9 @@ export const authenticator = {
       console.log('initialized!');
     });
   },
-  popupSignIn: () => {
+  popupSignIn: async () => {
     debugger;
-    msalInstance
+    await msalInstance
       .loginPopup(loginRequest)
       .then((result) => {
         console.log(result);
