@@ -1,5 +1,5 @@
-import { ContractStatus } from './contract-status.interface';
-import { Currency } from './currency.interface';
+import { ContractStatus } from './contract-status.enum';
+import { Currency } from '../FxRatesAPI/currency.interface';
 
 export interface Contract {
   id?: string;

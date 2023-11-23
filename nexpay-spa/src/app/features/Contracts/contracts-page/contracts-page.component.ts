@@ -1,15 +1,18 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Contract } from '../../../interfaces/contract.interface';
+import { Component, EventEmitter, OnDestroy, OnInit } from '@angular/core';
+import { Contract } from '../../../interfaces/PaymentsAPI/contract.interface';
 import { SubSink } from 'subsink';
 import { PaymentAPIService } from '../../../services/paymentAPI.service';
-import { ContractStatus } from '../../../interfaces/contract-status.interface';
-import { currencies } from '../../../interfaces/currency.interface';
+import { ContractStatus } from '../../../interfaces/PaymentsAPI/contract-status.enum';
+import { currencies } from '../../../interfaces/FxRatesAPI/currency.interface';
 
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzTableSortFn, NzTableSortOrder } from 'ng-zorro-antd/table';
 import { CZTagComponent } from '../../../components/shared/cz-tag/cz-tag.component';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzModalModule } from 'ng-zorro-antd/modal';
+import { NewContractsModalComponent } from '../new-contract/new-contract.component';
 
 interface ColumnConfig<T> {
   name: string;
@@ -24,12 +27,23 @@ interface ColumnConfig<T> {
 @Component({
   selector: 'contracts-page',
   standalone: true,
-  imports: [CommonModule, NzButtonModule, NzTableModule, CZTagComponent],
+  imports: [
+    CommonModule,
+    NzButtonModule,
+    NzTableModule,
+    NzModalModule,
+    CZTagComponent,
+  ],
   host: { ngSkipHydration: 'true' },
   template: `
     <h1>CONTRACTS</h1>
     <div class="cz-toolbar">
-      <button nz-button nzType="primary" style="float:right">
+      <button
+        nz-button
+        nzType="primary"
+        style="float:right"
+        (click)="onNewContract()"
+      >
         New Contract
       </button>
     </div>
@@ -143,13 +157,14 @@ export class ContractsPageComponent implements OnInit, OnDestroy {
   ];
 
   protected tableColumns: ColumnConfig<Contract>[] = [];
-  constructor(private paymentAPIService: PaymentAPIService) {}
+  constructor(
+    private paymentAPIService: PaymentAPIService,
+    private modalService: NzModalService
+  ) {}
 
   ngOnInit(): void {
     this._loadUserContracts();
     this._initTableConfig();
-    this.contracts = [...this.contracts, ...this.contracts];
-    this.contracts = [...this.contracts, ...this.contracts];
     this.contracts = [...this.contracts, ...this.contracts];
     this.contracts = [...this.contracts, ...this.contracts];
   }
@@ -164,6 +179,21 @@ export class ContractsPageComponent implements OnInit, OnDestroy {
     //   },
     // });
   }
+
+  private _onModalCloseEmitter: EventEmitter<any> = new EventEmitter();
+  protected onNewContract(): void {
+    this.modalService.create({
+      nzTitle: 'Create new Contract',
+      nzContent: NewContractsModalComponent,
+      nzAfterClose: this._onModalCloseEmitter,
+    });
+    this.subs.sink = this._onModalCloseEmitter.subscribe({
+      next: () => {
+        this._loadUserContracts();
+      },
+    });
+  }
+
   private _initTableConfig(): void {
     this.tableColumns = [
       {
@@ -220,6 +250,7 @@ export class ContractsPageComponent implements OnInit, OnDestroy {
   protected getStatusTagType(
     s: ContractStatus
   ): 'success' | 'error' | 'warning' | null {
+    // TODO: This shouldn't be a function, as it gets called everytime Angular refreshes
     switch (s) {
       case ContractStatus.Pending:
         return 'warning';
