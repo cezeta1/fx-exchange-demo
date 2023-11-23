@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Observable, tap } from 'rxjs';
-import { Contract } from '../interfaces/contract.interface';
+import { Contract } from '../interfaces/PaymentsAPI/contract.interface';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../common/environment';
 import { NotificationService } from './notifications.service';
-import { ContractStatus } from '../interfaces/contract-status.interface';
+import { ContractStatus } from '../interfaces/PaymentsAPI/contract-status.enum';
+import { CreateContractPayload } from '../interfaces/PaymentsAPI/Payloads/create-contract-payload.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -44,7 +44,7 @@ export class PaymentAPIService {
       );
   }
 
-  public createContract(payload: Contract): Observable<Contract> {
+  public createContract(payload: CreateContractPayload): Observable<Contract> {
     return this.http
       .post<Contract>(environment.PaymentAPI + `contracts`, payload)
       .pipe(
