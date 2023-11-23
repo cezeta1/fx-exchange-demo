@@ -9,7 +9,7 @@ import { provideClientHydration } from '@angular/platform-browser';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { routes } from './app.routes';
 import { authInterceptorFn } from './auth-interceptor';
-import { MSAL_GUARD_CONFIG, MsalModule } from '@azure/msal-angular';
+import { MsalModule } from '@azure/msal-angular';
 import {
   MSALGuardConfigFactory,
   MSALInterceptorConfigFactory,
@@ -26,13 +26,9 @@ import {
   LinkedinFill,
   GithubFill,
 } from '@ant-design/icons-angular/icons';
-<<<<<<< HEAD
 const ngZorroConfig: NzConfig = {
   notification: { nzPlacement: 'bottomLeft' },
 };
-=======
-import { provideHttpClient, withFetch } from '@angular/common/http';
->>>>>>> main
 const icons: IconDefinition[] = [
   BankFill,
   ControlFill,
