@@ -10,6 +10,7 @@ public class AppDbContext : DbContext
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) {}
 
     public DbSet<Currency> Currencies { get; set; }
+    public DbSet<Rate> Rates { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -19,6 +20,7 @@ public class AppDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         new CurrencyEntityTypeConfiguration().Configure(modelBuilder.Entity<Currency>());
+        new RateEntityTypeConfiguration().Configure(modelBuilder.Entity<Rate>());
 
         #region Seed
         modelBuilder.Entity<Currency>().HasData(
@@ -62,8 +64,29 @@ public class CurrencyEntityTypeConfiguration : IEntityTypeConfiguration<Currency
     public void Configure(EntityTypeBuilder<Currency> builder)
     {
         builder
-            .Property(b => b.Id)
-            .IsRequired();
+            .HasKey(b => b.Id);
+    }
+}
+public class RateEntityTypeConfiguration : IEntityTypeConfiguration<Rate>
+{
+    public void Configure(EntityTypeBuilder<Rate> builder)
+    {
+        builder
+            .HasKey(r => r.Id);
+        builder
+            .Property(r => r.Id).IsRequired().ValueGeneratedNever();
+        builder
+            .Property(r => r.ExchangeRate).HasPrecision(19,9);
+        builder
+            .HasOne(r => r.CurrencyFrom)
+            .WithMany()
+            .HasForeignKey(r => r.CurrencyFromId)
+            .OnDelete(DeleteBehavior.NoAction);
+        builder
+            .HasOne(r => r.CurrencyTo)
+            .WithMany()
+            .HasForeignKey(r => r.CurrencyToId)
+            .OnDelete(DeleteBehavior.NoAction);
     }
 }
 

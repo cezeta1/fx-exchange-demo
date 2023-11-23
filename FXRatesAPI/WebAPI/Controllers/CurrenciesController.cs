@@ -10,20 +10,23 @@ namespace FXRatesAPI.WebAPI;
 public class CurrenciesController : ControllerBase
 {
     private readonly ILogger<CurrenciesController> _logger;
+    private CurrenciesService _currenciesService;
 
-    public CurrenciesController(ILogger<CurrenciesController> logger)
+    public CurrenciesController(ILogger<CurrenciesController> logger, CurrenciesService currenciesService)
     {
         _logger = logger;
+        _currenciesService = currenciesService;
     }
 
     /// <summary>
-    /// Gets all the currency options
+    /// Gets all Currency options
     /// </summary>
+    /// <returns>A list of all Currency options</returns>
     [HttpGet("all")]
     [ProducesResponseType(typeof(IEnumerable<CurrencyDTO>), StatusCodes.Status200OK)]
-    public JsonResult GetCurrencyOptions()
+    public async Task<IEnumerable<CurrencyDTO>> GetCurrencyOptionsAsync()
     {
-        var result = new List<CurrencyDTO>();
-        return new JsonResult(result);
+        var result = await _currenciesService.GetCurrencyOptions();
+        return result.Select(c => c.toDTO());
     }
 }

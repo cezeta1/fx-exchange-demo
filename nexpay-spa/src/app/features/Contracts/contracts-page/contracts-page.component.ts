@@ -4,7 +4,6 @@ import { Contract } from '../../../interfaces/PaymentsAPI/contract.interface';
 import { SubSink } from 'subsink';
 import { PaymentAPIService } from '../../../services/paymentAPI.service';
 import { ContractStatus } from '../../../interfaces/PaymentsAPI/contract-status.enum';
-import { currencies } from '../../../interfaces/FxRatesAPI/currency.interface';
 
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzTableModule } from 'ng-zorro-antd/table';
@@ -97,63 +96,51 @@ export class ContractsPageComponent implements OnInit, OnDestroy {
   private subs = new SubSink();
 
   protected contracts: Contract[] = [
-    {
-      id: '1931832',
-      status: ContractStatus.Pending,
-
-      fromCurrency: currencies[0],
-      toCurrency: currencies[1],
-      exchangeRate: 0.53,
-      amount: 500,
-      convertedAmount: 265,
-
-      createdOn: new Date(),
-      expiredOn: new Date(),
-
-      createdBy: '09294129031',
-      createdByName: 'Alberto',
-
-      approvedBy: '348230948234',
-      approvedByName: 'Sofia',
-    },
-    {
-      id: '2124423',
-      status: ContractStatus.Completed,
-
-      fromCurrency: currencies[1],
-      toCurrency: currencies[3],
-      exchangeRate: 0.89,
-      amount: 1000000,
-      convertedAmount: 890000,
-
-      createdOn: new Date(),
-      expiredOn: new Date(),
-
-      createdBy: '09294129031',
-      createdByName: 'Zulma',
-
-      approvedBy: '348230948234',
-      approvedByName: 'Julio',
-    },
-    {
-      id: '1931832',
-      status: ContractStatus.Cancelled,
-
-      fromCurrency: currencies[0],
-      toCurrency: currencies[1],
-      exchangeRate: 0.53,
-      amount: 500,
-      convertedAmount: 265,
-
-      createdOn: new Date(),
-      expiredOn: new Date(),
-
-      createdBy: '09294129031',
-      createdByName: 'Jorge',
-
-      approvedBy: '348230948234',
-      approvedByName: 'Carla',
-    },
+    // {
+    //   id: '1931832',
+    //   status: ContractStatus.Pending,
+    //   fromCurrency: currencies[0],
+    //   toCurrency: currencies[1],
+    //   exchangeRate: 0.53,
+    //   amount: 500,
+    //   convertedAmount: 265,
+    //   createdOn: new Date(),
+    //   expiredOn: new Date(),
+    //   createdBy: '09294129031',
+    //   createdByName: 'Alberto',
+    //   approvedBy: '348230948234',
+    //   approvedByName: 'Sofia',
+    // },
+    // {
+    //   id: '2124423',
+    //   status: ContractStatus.Completed,
+    //   fromCurrency: currencies[1],
+    //   toCurrency: currencies[3],
+    //   exchangeRate: 0.89,
+    //   amount: 1000000,
+    //   convertedAmount: 890000,
+    //   createdOn: new Date(),
+    //   expiredOn: new Date(),
+    //   createdBy: '09294129031',
+    //   createdByName: 'Zulma',
+    //   approvedBy: '348230948234',
+    //   approvedByName: 'Julio',
+    // },
+    // {
+    //   id: '1931832',
+    //   status: ContractStatus.Cancelled,
+    //   fromCurrency: currencies[0],
+    //   toCurrency: currencies[1],
+    //   exchangeRate: 0.53,
+    //   amount: 500,
+    //   convertedAmount: 265,
+    //   createdOn: new Date(),
+    //   expiredOn: new Date(),
+    //   createdBy: '09294129031',
+    //   createdByName: 'Jorge',
+    //   approvedBy: '348230948234',
+    //   approvedByName: 'Carla',
+    // },
   ];
 
   protected tableColumns: ColumnConfig<Contract>[] = [];

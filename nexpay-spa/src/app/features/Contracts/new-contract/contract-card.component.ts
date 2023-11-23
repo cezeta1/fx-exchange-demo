@@ -10,22 +10,6 @@ import { CZValidUntilTagComponent } from './valid-until-tag.component';
   imports: [CommonModule, NzCardModule, CZValidUntilTagComponent],
   host: { ngSkipHydration: 'true' },
   template: `
-    <!-- //   <nz-form-label [nzSpan]="6" nzFor="finalAmount">
-  //     Final Amount
-  //   </nz-form-label>
-  //   <nz-form-control [nzSpan]="14">
-  //     <nz-input-number-group
-  //       [nzAddOnBefore]="selectedToCurrency?.symbol ?? '-'"
-  //     >
-  //       <nz-input-number
-  //         [ngModel]="finalAmount"
-  //         [nzMin]="1"
-  //         [nzMax]="10"
-  //         [nzStep]="1"
-  //       ></nz-input-number>
-  //     </nz-input-number-group>
-  //   </nz-form-control> -->
-
     @if (rate && amount !== undefined) {
     <nz-card style="display: flex; flex-direction: vertical">
       <div style="width: 100%; margin-bottom: 10px">

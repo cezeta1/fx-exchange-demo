@@ -8,10 +8,7 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzModalModule, NzModalRef } from 'ng-zorro-antd/modal';
 import { NotificationService } from '../../../services/notifications.service';
 import { FxRatesAPIService } from '../../../services/fxRatesAPI.service';
-import {
-  Currency,
-  currencies,
-} from '../../../interfaces/FxRatesAPI/currency.interface';
+import { Currency } from '../../../interfaces/FxRatesAPI/currency.interface';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
@@ -26,10 +23,10 @@ import {
   Validators,
 } from '@angular/forms';
 import { Rate } from '../../../interfaces/FxRatesAPI/rate.interface';
-import { CZValidUntilTagComponent } from './valid-until-tag.component';
 import { CZContractCardComponent } from './contract-card.component';
 import { Contract } from '../../../interfaces/PaymentsAPI/contract.interface';
 import { CreateContractPayload } from '../../../interfaces/PaymentsAPI/Payloads/create-contract-payload.interface';
+import { GetRateQuotePayload } from '../../../interfaces/FxRatesAPI/Payloads/get-rate-quote-payload.interface';
 
 @Component({
   selector: 'new-contract-modal',
@@ -101,18 +98,15 @@ import { CreateContractPayload } from '../../../interfaces/PaymentsAPI/Payloads/
             </nz-select>
           </nz-form-control>
         </nz-form-item>
-
-        <!-- Rate -->
-
-        <!-- Final Amount -->
       </form>
 
+      <!-- Rate & Final amount -->
       <cz-contract-card
         [rate]="currentRate"
         [amount]="getControlValue('amount')"
       ></cz-contract-card>
     </div>
-
+    {{ 'Loading: ' + loading }}
     <!--- Footer --->
     <div *nzModalFooter>
       <button nz-button nzType="default" (click)="onCancel()">Cancel</button>
@@ -175,9 +169,6 @@ export class NewContractsModalComponent implements OnInit, OnDestroy {
     this._initForm();
     this._subscribeFormChanges();
     this._loadCurrencies();
-
-    this._currencyOptions = [...currencies];
-    this._updateCurrencyOptions();
   }
   ngOnDestroy(): void {
     this.subs.unsubscribe();
@@ -204,6 +195,7 @@ export class NewContractsModalComponent implements OnInit, OnDestroy {
         );
         this.selectedFromCurrency = this._currencyOptions[fi] ?? undefined;
         this.selectedToCurrency = this._currencyOptions[ti] ?? undefined;
+        this._updateCurrencyOptions();
       },
     });
   }
@@ -216,21 +208,23 @@ export class NewContractsModalComponent implements OnInit, OnDestroy {
     });
   }
   private _updateCurrencyOptions(): void {
-    const tempCurrOpt = this._currencyOptions.filter(
-      (c) =>
-        c.id !== this.getControlValue('fromCurr') &&
-        c.id !== this.getControlValue('toCurr')
+    this.fromCurrencies = this._currencyOptions.filter(
+      (c) => c.id !== this.getControlValue('toCurr')
     );
-    // debugger;
-    this.fromCurrencies = [...tempCurrOpt];
-    this.toCurrencies = [...tempCurrOpt];
+    this.toCurrencies = this._currencyOptions.filter(
+      (c) => c.id !== this.getControlValue('fromCurr')
+    );
   }
 
   private _getFxRate() {
+    let payload: GetRateQuotePayload = {};
     this.loading = true;
-    this.subs.sink = this.fxRatesAPIService.getRate().subscribe({
+    this.subs.sink = this.fxRatesAPIService.getRateQuote(payload).subscribe({
       next: (rate: Rate) => {
         this.currentRate = { ...rate };
+        this.loading = false;
+      },
+      error: () => {
         this.loading = false;
       },
     });

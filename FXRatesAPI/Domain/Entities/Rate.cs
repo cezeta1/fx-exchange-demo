@@ -3,9 +3,18 @@
 namespace FXRatesAPI.Domain;
 public class Rate
 {
-    public Rate() { }
-    public Currency CurrencyFrom { get; set; }
-    public Currency CurrencyTo { get; set; }
+    public Rate() {
+        Id = Guid.NewGuid();
+        QuotedOn = DateTime.Now;
+        ExpiredOn = DateTime.Now.AddSeconds(60);
+    }
+    public Guid Id { get; set; }
+
+    public int CurrencyFromId { get; set; }
+    public virtual Currency CurrencyFrom { get; set; }
+    public int CurrencyToId { get; set; }
+    public virtual Currency CurrencyTo { get; set; }
+
     public decimal ExchangeRate { get; set; }
 
     public DateTime QuotedOn { get; set; }
