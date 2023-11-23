@@ -25,7 +25,7 @@ import {
   LinkedinFill,
   GithubFill,
 } from '@ant-design/icons-angular/icons';
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { provideHttpClient, withFetch } from '@angular/common/http';
 const icons: IconDefinition[] = [
   BankFill,
   ControlFill,
@@ -34,14 +34,20 @@ const icons: IconDefinition[] = [
 ];
 /* ---------------- */
 
+import { registerLocaleData } from '@angular/common';
+import en from '@angular/common/locales/en';
+registerLocaleData(en);
+import { en_US, provideNzI18n } from 'ng-zorro-antd/i18n';
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
     provideClientHydration(),
     provideAnimations(),
-    provideHttpClient(),
+    provideHttpClient(withFetch()),
     // withInterceptors()
     provideNzConfig(ngZorroConfig),
+    provideNzI18n(en_US),
     importProvidersFrom(NzIconModule.forRoot(icons)),
   ],
 };

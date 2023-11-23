@@ -5,22 +5,22 @@ export const currencies: Currency[] = [
     symbol: 'AUD',
   },
   {
-    id: 0,
+    id: 1,
     name: 'Canadian Dollar',
     symbol: 'CAD',
   },
   {
-    id: 0,
+    id: 2,
     name: 'US Dollar',
     symbol: 'USD',
   },
   {
-    id: 0,
+    id: 3,
     name: 'British Pound Sterling',
     symbol: 'GBP',
   },
   {
-    id: 0,
+    id: 4,
     name: 'NZ Dollar',
     symbol: 'NZD',
   },

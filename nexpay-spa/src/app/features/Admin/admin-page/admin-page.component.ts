@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { Contract } from '../../../interfaces/contract.interface';
+import { Contract } from '../../../interfaces/PaymentsAPI/contract.interface';
 
 @Component({
   selector: 'admin-page',
