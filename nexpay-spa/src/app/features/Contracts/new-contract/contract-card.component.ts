@@ -2,16 +2,23 @@ import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { Rate } from '../../../interfaces/FxRatesAPI/rate.interface';
 import { NzCardModule } from 'ng-zorro-antd/card';
+import { NzSkeletonModule } from 'ng-zorro-antd/skeleton';
 import { CZValidUntilTagComponent } from './valid-until-tag.component';
 
 @Component({
   selector: 'cz-contract-card',
   standalone: true,
-  imports: [CommonModule, NzCardModule, CZValidUntilTagComponent],
+  imports: [
+    CommonModule,
+    NzCardModule,
+    NzSkeletonModule,
+    CZValidUntilTagComponent,
+  ],
   host: { ngSkipHydration: 'true' },
   template: `
-    @if (rate && amount !== undefined) {
+    @if (showCard) {
     <nz-card style="display: flex; flex-direction: vertical">
+      @if (rate && amount !== undefined) {
       <div style="width: 100%; margin-bottom: 10px">
         Current Rate: {{ rate.exchangeRate }}
       </div>
@@ -25,13 +32,17 @@ import { CZValidUntilTagComponent } from './valid-until-tag.component';
         customText="Rate valid until: "
         customExpiredText="Rate expired"
       ></cz-valid-until-tag>
+      } @else {
+      <nz-skeleton [nzActive]="true"></nz-skeleton>
+      }
     </nz-card>
     }
   `,
-  styles: ``,
 })
 export class CZContractCardComponent implements OnInit {
-  @Input() rate!: Rate;
+  @Input() showCard: boolean = false;
+
+  @Input() rate?: Rate;
   @Input() amount!: number;
 
   constructor() {}
@@ -39,6 +50,6 @@ export class CZContractCardComponent implements OnInit {
   ngOnInit(): void {}
 
   protected get getFinalAmount() {
-    return this.amount * this.rate.exchangeRate;
+    return this.amount * (this.rate?.exchangeRate ?? 0);
   }
 }

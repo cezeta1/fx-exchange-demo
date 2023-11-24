@@ -6,7 +6,7 @@ public class Rate
     public Rate() {
         Id = Guid.NewGuid();
         QuotedOn = DateTime.Now;
-        ExpiredOn = DateTime.Now.AddSeconds(60);
+        ExpiredOn = DateTime.Now.AddSeconds(120);
     }
     public Guid Id { get; set; }
 

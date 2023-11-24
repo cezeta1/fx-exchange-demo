@@ -31,11 +31,13 @@ export class FxRatesAPIService {
 
   public getRateQuote(payload: GetRateQuotePayload): Observable<Rate> {
     return this.http
-      .get<Rate>(environment.FxRatesAPI + `rates`, { params: { ...payload } })
+      .post<Rate>(environment.FxRatesAPI + `rates`, { ...payload })
       .pipe(
         tap({
           next: (data) => {
-            debugger;
+            data.expiredOn = new Date(data.expiredOn);
+            data.quotedOn = new Date(data.quotedOn);
+            return data;
           },
           error: (e) => {
             this.notificationService.showError("Couldn't get the rate");

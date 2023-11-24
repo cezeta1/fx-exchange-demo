@@ -61,12 +61,10 @@ export const authenticator = {
     });
   },
   popupSignIn: async () => {
-    debugger;
     await msalInstance
       .loginPopup(loginRequest)
       .then((result) => {
         console.log(result);
-        debugger;
         // this.setLoginDisplay();
       })
       .catch((error) => console.log(error));
