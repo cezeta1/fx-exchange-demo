@@ -1,31 +1,34 @@
 import { ApplicationConfig, importProvidersFrom } from '@angular/core';
 import { provideRouter } from '@angular/router';
-
-import { routes } from './app.routes';
+import {
+  provideHttpClient,
+  withFetch,
+  withInterceptors,
+} from '@angular/common/http';
 import { provideClientHydration } from '@angular/platform-browser';
 import { provideAnimations } from '@angular/platform-browser/animations';
-import { IconDefinition } from '@ant-design/icons-angular';
+import { routes } from './app.routes';
+import { authInterceptorFn } from './auth-interceptor';
+import { MsalModule } from '@azure/msal-angular';
+import {
+  MSALGuardConfigFactory,
+  MSALInterceptorConfigFactory,
+  msalInstance,
+} from './authenticator';
 
 /* --- NgZorro Configs --- */
 import { NzConfig, provideNzConfig } from 'ng-zorro-antd/core/config';
 import { NzIconModule } from 'ng-zorro-antd/icon';
-
-const ngZorroConfig: NzConfig = {
-  notification: { nzPlacement: 'bottomLeft' },
-};
-
-// import * as AllIcons from '@ant-design/icons-angular/icons';
-// const antDesignIcons = AllIcons as {
-//   [key: string]: IconDefinition;
-// };
-// NzIconModule.forRoot(Object.values(antDesignIcons)),
+import { IconDefinition } from '@ant-design/icons-angular';
 import {
   BankFill,
   ControlFill,
   LinkedinFill,
   GithubFill,
 } from '@ant-design/icons-angular/icons';
-import { provideHttpClient, withFetch } from '@angular/common/http';
+const ngZorroConfig: NzConfig = {
+  notification: { nzPlacement: 'bottomLeft' },
+};
 const icons: IconDefinition[] = [
   BankFill,
   ControlFill,
@@ -44,10 +47,16 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideClientHydration(),
     provideAnimations(),
-    provideHttpClient(withFetch()),
-    // withInterceptors()
-    provideNzConfig(ngZorroConfig),
     provideNzI18n(en_US),
-    importProvidersFrom(NzIconModule.forRoot(icons)),
+    provideHttpClient(withFetch(), withInterceptors([authInterceptorFn])),
+    provideNzConfig(ngZorroConfig),
+    importProvidersFrom(
+      NzIconModule.forRoot(icons),
+      MsalModule.forRoot(
+        msalInstance,
+        MSALGuardConfigFactory(),
+        MSALInterceptorConfigFactory()
+      )
+    ),
   ],
 };

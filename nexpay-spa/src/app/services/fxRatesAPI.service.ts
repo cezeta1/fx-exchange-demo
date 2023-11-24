@@ -5,6 +5,7 @@ import { environment } from '../../common/environment';
 import { NotificationService } from './notifications.service';
 import { Rate } from '../interfaces/FxRatesAPI/rate.interface';
 import { Currency } from '../interfaces/FxRatesAPI/currency.interface';
+import { GetRateQuotePayload } from '../interfaces/FxRatesAPI/Payloads/get-rate-quote-payload.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -16,24 +17,32 @@ export class FxRatesAPIService {
   ) {}
 
   public getCurrencyOptions(): Observable<Currency[]> {
-    return this.http.get<Currency[]>(environment.FxAPI + `currencies`, {}).pipe(
-      tap({
-        next: (data) => {},
-        error: (e) => {
-          this.notificationService.showError("Couldn't get Currencies");
-        },
-      })
-    );
+    return this.http
+      .get<Currency[]>(environment.FxRatesAPI + `currencies/all`, {})
+      .pipe(
+        tap({
+          next: (data) => {},
+          error: (e) => {
+            this.notificationService.showError("Couldn't get Currencies");
+          },
+        })
+      );
   }
 
-  public getRate(): Observable<Rate> {
-    return this.http.get<Rate>(environment.FxRatesAPI + `rates`, {}).pipe(
-      tap({
-        next: (data) => {},
-        error: (e) => {
-          this.notificationService.showError("Couldn't get the rate");
-        },
-      })
-    );
+  public getRateQuote(payload: GetRateQuotePayload): Observable<Rate> {
+    return this.http
+      .post<Rate>(environment.FxRatesAPI + `rates`, { ...payload })
+      .pipe(
+        tap({
+          next: (data) => {
+            data.expiredOn = new Date(data.expiredOn);
+            data.quotedOn = new Date(data.quotedOn);
+            return data;
+          },
+          error: (e) => {
+            this.notificationService.showError("Couldn't get the rate");
+          },
+        })
+      );
   }
 }

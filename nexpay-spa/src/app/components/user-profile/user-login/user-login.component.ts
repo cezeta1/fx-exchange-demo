@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
+import { authenticator, msalInstance } from '../../../authenticator';
 
 @Component({
   selector: 'user-login',
@@ -44,11 +45,12 @@ export class UserLoginComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    // debugger;
+    msalInstance.initialize();
   }
 
   protected onLogin(): void {
     this.isLoggedIn = true;
+    authenticator.popupSignIn();
   }
   protected onLogout(): void {
     this.isLoggedIn = false;

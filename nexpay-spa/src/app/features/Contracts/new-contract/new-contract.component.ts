@@ -8,15 +8,11 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzModalModule, NzModalRef } from 'ng-zorro-antd/modal';
 import { NotificationService } from '../../../services/notifications.service';
 import { FxRatesAPIService } from '../../../services/fxRatesAPI.service';
-import {
-  Currency,
-  currencies,
-} from '../../../interfaces/FxRatesAPI/currency.interface';
+import { Currency } from '../../../interfaces/FxRatesAPI/currency.interface';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 import { NzTagModule } from 'ng-zorro-antd/tag';
-import { NzCardModule } from 'ng-zorro-antd/card';
 
 import {
   FormControl,
@@ -26,10 +22,10 @@ import {
   Validators,
 } from '@angular/forms';
 import { Rate } from '../../../interfaces/FxRatesAPI/rate.interface';
-import { CZValidUntilTagComponent } from './valid-until-tag.component';
 import { CZContractCardComponent } from './contract-card.component';
 import { Contract } from '../../../interfaces/PaymentsAPI/contract.interface';
 import { CreateContractPayload } from '../../../interfaces/PaymentsAPI/Payloads/create-contract-payload.interface';
+import { GetRateQuotePayload } from '../../../interfaces/FxRatesAPI/Payloads/get-rate-quote-payload.interface';
 
 @Component({
   selector: 'new-contract-modal',
@@ -73,11 +69,12 @@ import { CreateContractPayload } from '../../../interfaces/PaymentsAPI/Payloads/
           <nz-form-label [nzSpan]="6" nzFor="amount">Amount</nz-form-label>
           <nz-form-control [nzSpan]="14">
             <nz-input-number-group
-              [nzAddOnBefore]="selectedFromCurrency?.symbol ?? '-'"
+              style="width:100%"
+              [nzAddOnBefore]="selectedFromCurrency?.symbol ?? ' '"
             >
               <nz-input-number
-                formControlName="amount"
                 name="amount"
+                formControlName="amount"
                 [nzMin]="0"
               ></nz-input-number>
             </nz-input-number-group>
@@ -88,7 +85,7 @@ import { CreateContractPayload } from '../../../interfaces/PaymentsAPI/Payloads/
         <nz-form-item>
           <nz-form-label [nzSpan]="6" nzFor="toCurr">To </nz-form-label>
           <nz-form-control [nzSpan]="14">
-            <nz-select formControlName="toCurr" name="toCurr">
+            <nz-select formControlName="toCurr" id="toCurr">
               @for (tCurr of toCurrencies; track $index) {
               <nz-option
                 nzCustomContent
@@ -101,13 +98,11 @@ import { CreateContractPayload } from '../../../interfaces/PaymentsAPI/Payloads/
             </nz-select>
           </nz-form-control>
         </nz-form-item>
-
-        <!-- Rate -->
-
-        <!-- Final Amount -->
       </form>
 
+      <!-- Rate & Final amount -->
       <cz-contract-card
+        [showCard]="loadingRate !== undefined"
         [rate]="currentRate"
         [amount]="getControlValue('amount')"
       ></cz-contract-card>
@@ -120,10 +115,9 @@ import { CreateContractPayload } from '../../../interfaces/PaymentsAPI/Payloads/
         nz-button
         nzType="primary"
         (click)="onConfirm()"
-        [disabled]="!isValid"
+        [disabled]="loadingRate || !isValid"
         [nzLoading]="isConfirmLoading"
       >
-        <!-- loading ||  -->
         Confirm
       </button>
     </div>
@@ -134,7 +128,7 @@ export class NewContractsModalComponent implements OnInit, OnDestroy {
   private subs = new SubSink();
 
   protected isConfirmLoading: boolean = false;
-  protected loading: boolean = false;
+  protected loadingRate!: boolean;
 
   private _currencyOptions: Currency[] = [];
   protected fromCurrencies: Currency[] = [];
@@ -144,24 +138,7 @@ export class NewContractsModalComponent implements OnInit, OnDestroy {
 
   protected newContractForm!: FormGroup;
 
-  private _today = new Date();
-  private _tomorrow = this._addDays(this._today);
-  private _addDays(date: Date, days: number = 1): Date {
-    var temp = new Date(date);
-    // temp.setDate(date.getDate() + days);
-    temp.setSeconds(temp.getSeconds() + 10);
-    return temp;
-  }
-
-  protected currentRate: Rate = {
-    id: 'asdasdasjdkda',
-    currencyFrom: this.selectedFromCurrency,
-    currencyTo: this.selectedFromCurrency,
-    exchangeRate: 0.53,
-    quotedOn: this._today,
-    expiredOn: this._tomorrow,
-  } as Rate;
-
+  protected currentRate?: Rate;
   protected finalAmount!: number;
 
   constructor(
@@ -175,9 +152,6 @@ export class NewContractsModalComponent implements OnInit, OnDestroy {
     this._initForm();
     this._subscribeFormChanges();
     this._loadCurrencies();
-
-    this._currencyOptions = [...currencies];
-    this._updateCurrencyOptions();
   }
   ngOnDestroy(): void {
     this.subs.unsubscribe();
@@ -187,8 +161,9 @@ export class NewContractsModalComponent implements OnInit, OnDestroy {
     this.newContractForm = new FormGroup({
       fromCurr: new FormControl(null, Validators.required),
       toCurr: new FormControl(null, Validators.required),
-      amount: new FormControl(0, Validators.required),
+      amount: new FormControl(0, [Validators.required, Validators.min(1)]),
     });
+    this.newContractForm.disable();
   }
   private _subscribeFormChanges(): void {
     this.subs.sink = this.newContractForm.valueChanges.subscribe({
@@ -204,6 +179,7 @@ export class NewContractsModalComponent implements OnInit, OnDestroy {
         );
         this.selectedFromCurrency = this._currencyOptions[fi] ?? undefined;
         this.selectedToCurrency = this._currencyOptions[ti] ?? undefined;
+        if (newVal.amount > 0) this._updateCurrencyOptions();
       },
     });
   }
@@ -211,71 +187,67 @@ export class NewContractsModalComponent implements OnInit, OnDestroy {
     this.subs.sink = this.fxRatesAPIService.getCurrencyOptions().subscribe({
       next: (data: Currency[]) => {
         this._currencyOptions = [...data];
+        this.newContractForm.enable();
         this._updateCurrencyOptions();
       },
     });
   }
   private _updateCurrencyOptions(): void {
-    const tempCurrOpt = this._currencyOptions.filter(
-      (c) =>
-        c.id !== this.getControlValue('fromCurr') &&
-        c.id !== this.getControlValue('toCurr')
+    this.fromCurrencies = this._currencyOptions.filter(
+      (c) => c.id !== this.getControlValue('toCurr')
     );
-    // debugger;
-    this.fromCurrencies = [...tempCurrOpt];
-    this.toCurrencies = [...tempCurrOpt];
+    this.toCurrencies = this._currencyOptions.filter(
+      (c) => c.id !== this.getControlValue('fromCurr')
+    );
   }
 
   private _getFxRate() {
-    this.loading = true;
-    this.subs.sink = this.fxRatesAPIService.getRate().subscribe({
+    this.currentRate = undefined;
+    const payload: GetRateQuotePayload = {
+      fromId: this.getControlValue('fromCurr'),
+      toId: this.getControlValue('toCurr'),
+      amount: this.getControlValue('amount'),
+    };
+    this.loadingRate = true;
+    this.subs.sink = this.fxRatesAPIService.getRateQuote(payload).subscribe({
       next: (rate: Rate) => {
         this.currentRate = { ...rate };
-        this.loading = false;
+        this.loadingRate = false;
+      },
+      error: () => {
+        this.loadingRate = false;
       },
     });
-    this._updateRate();
   }
 
   // On Actions
   protected onConfirm() {
     this.isConfirmLoading = true;
-    setTimeout(() => {
-      debugger;
-      let payload: CreateContractPayload = {} as CreateContractPayload;
-      this.paymentAPIService.createContract(payload).subscribe({
-        next: (rate: Contract) => {
-          this.loading = false;
-        },
-      });
-      // Create new Contract
-      this.notificationsService.showSuccess('Success!');
-      this._destroyModal();
-      this.isConfirmLoading = false;
-    }, 3000);
+    // Create new Contract
+    let payload: CreateContractPayload = {} as CreateContractPayload;
+    this.paymentAPIService.createContract(payload).subscribe({
+      next: (rate: Contract) => {
+        this.notificationsService.showSuccess('Success!');
+        this.isConfirmLoading = false;
+        this._destroyModal();
+      },
+      error: (error) => {
+        this.isConfirmLoading = false;
+      },
+    });
   }
   protected onCancel() {
     this._destroyModal();
   }
 
   // Utils
-  private _updateRate() {
-    this._tomorrow = this._addDays(new Date());
-    this.currentRate = {
-      id: 'asdasdasjdkda',
-      currencyFrom: this.selectedFromCurrency,
-      currencyTo: this.selectedFromCurrency,
-      exchangeRate: 0.53,
-      quotedOn: this._today,
-      expiredOn: this._tomorrow,
-    } as Rate;
-  }
   protected getControlValue(name: string) {
     return this.newContractForm.get(name)?.value;
   }
   protected get isValid() {
     return (
-      this.newContractForm.valid && new Date() < this.currentRate.expiredOn
+      this.newContractForm.valid &&
+      new Date() < (this.currentRate?.expiredOn ?? 0)
     );
   }
   private _destroyModal() {

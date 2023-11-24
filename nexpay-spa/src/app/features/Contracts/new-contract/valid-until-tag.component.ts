@@ -31,6 +31,6 @@ export class CZValidUntilTagComponent implements OnInit {
 
   // Utils
   protected get isValid() {
-    return new Date() < this.expiredOn;
+    return new Date() < new Date(this.expiredOn);
   }
 }
