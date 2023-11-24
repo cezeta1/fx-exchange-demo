@@ -1,6 +1,4 @@
-﻿using FXRatesAPI.Domain;
-using FXRatesAPI.Persistence;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace FXRatesAPI.Repository;
 
