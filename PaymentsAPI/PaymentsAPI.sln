@@ -11,8 +11,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaymentsAPI.Repository", "R
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaymentsAPI.Domain", "Domain\PaymentsAPI.Domain.csproj", "{3E5DDE8E-3FC6-40DC-B6A4-A85290213180}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{3BF9F25A-49A1-4D17-9E31-8CEC7B4C6828}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,10 +33,6 @@ Global
 		{3E5DDE8E-3FC6-40DC-B6A4-A85290213180}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3E5DDE8E-3FC6-40DC-B6A4-A85290213180}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3E5DDE8E-3FC6-40DC-B6A4-A85290213180}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3BF9F25A-49A1-4D17-9E31-8CEC7B4C6828}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3BF9F25A-49A1-4D17-9E31-8CEC7B4C6828}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3BF9F25A-49A1-4D17-9E31-8CEC7B4C6828}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3BF9F25A-49A1-4D17-9E31-8CEC7B4C6828}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

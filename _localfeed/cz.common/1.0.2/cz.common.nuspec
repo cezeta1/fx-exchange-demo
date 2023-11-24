@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>CZ.Common</id>
+    <version>1.0.2</version>
+    <title>CZ.Common</title>
+    <authors>CZ.Common</authors>
+    <description>A library with common Classes, Extensions and other Utils</description>
+    <repository type="git" commit="192f8f139960b6844bc61769a6f9bd39ca1dd6db" />
+    <dependencies>
+      <group targetFramework="net8.0" />
+    </dependencies>
+  </metadata>
+</package>

@@ -1,4 +1,4 @@
-﻿using Common.Attributes;
+﻿using CZ.Common.Attributes;
 
 namespace PaymentsAPI.Domain;
 

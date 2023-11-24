@@ -11,6 +11,8 @@ public class Contract
             ExpiredOn = DateTime.Now.AddDays(7);
     }
     public Guid Id { get; set; }
+
+    public Guid UserId { get; set; }
     
     public ContractStatus Status { get; set; }
 
@@ -25,8 +27,12 @@ public class Contract
         return new ContractDTO
         {
             Id = this.Id,
-            //Status = this.Status,
-            //Rate = this.Status.Rate,
+            UserId = this.UserId,
+            Status = this.Status,
+            RateId = this.RateId,
+            Amount = this.Amount,
+            CreatedOn = this.CreatedOn,
+            ExpiredOn = this.ExpiredOn,
         };
     }
 }
