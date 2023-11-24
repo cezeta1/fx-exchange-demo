@@ -29,6 +29,10 @@ public class RatesService
     {
         return await _ratesRepository.GetAllRates();
     }
+    public async Task<Rate> GetRateById(Guid id)
+    {
+        return await _ratesRepository.GetRateById(id);
+    }
 
     public async Task<Rate> CreateRateQuote(GetRateQuoteParam param)
     {
@@ -36,6 +40,8 @@ public class RatesService
 
         // Get desired currencies
         IEnumerable<Currency> currs = await _currenciesRepository.GetCurrenciesById([param.FromId,param.ToId]);
+        newRate.CurrencyFromId = currs.ElementAt(0).Id;
+        newRate.CurrencyToId = currs.ElementAt(1).Id;
 
         // Get current exchange from external API
         decimal currentRate = -1;

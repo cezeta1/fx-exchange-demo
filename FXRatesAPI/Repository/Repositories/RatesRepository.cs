@@ -18,7 +18,12 @@ public class RatesRepository
     }
     public async Task<Rate> GetRateById(Guid id)
     {
-        var result = await _db.Rates.Where(c => c.Id == id).SingleOrDefaultAsync();
+        var result = await _db.Rates
+                                .Include(r => r.CurrencyFrom)
+                                .Include(r => r.CurrencyTo)
+                                .Where(r => r.Id == id)
+                                .SingleOrDefaultAsync();
+
         if (result == null) {
             throw new ApplicationException("Rate not found. Id is not valid");
         }

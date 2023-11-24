@@ -40,9 +40,9 @@ public class RatesController : ControllerBase
     /// <returns></returns>
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(RateDTO), StatusCodes.Status200OK)]
-    public JsonResult GetRateById([FromRoute] string id)
+    public async Task<JsonResult> GetRateById([FromRoute] string id)
     {
-        var result = new Rate(); // Get rate from Repo
+        var result = await _ratesService.GetRateById(Guid.Parse(id));
         return new JsonResult(result.toDTO());
     }
 }

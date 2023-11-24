@@ -106,7 +106,6 @@ import { GetRateQuotePayload } from '../../../interfaces/FxRatesAPI/Payloads/get
         [amount]="getControlValue('amount')"
       ></cz-contract-card>
     </div>
-    {{ 'Loading: ' + loading }}
     <!--- Footer --->
     <div *nzModalFooter>
       <button nz-button nzType="default" (click)="onCancel()">Cancel</button>
@@ -217,7 +216,11 @@ export class NewContractsModalComponent implements OnInit, OnDestroy {
   }
 
   private _getFxRate() {
-    let payload: GetRateQuotePayload = {};
+    const payload: GetRateQuotePayload = {
+      fromId: this.getControlValue('fromCurr'),
+      toId: this.getControlValue('toCurr'),
+      amount: this.getControlValue('ammount'),
+    };
     this.loading = true;
     this.subs.sink = this.fxRatesAPIService.getRateQuote(payload).subscribe({
       next: (rate: Rate) => {

@@ -24,6 +24,7 @@ public class Rate
     {
         return new RateDTO
         {
+            Id = this.Id,
             CurrencyFrom = this.CurrencyFrom,
             CurrencyTo = this.CurrencyTo,
             ExchangeRate = this.ExchangeRate,

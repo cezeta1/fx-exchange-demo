@@ -6,10 +6,11 @@ public class RateDTO
         CurrencyFrom = new Currency();
         CurrencyTo = new Currency();
     }
+    public Guid Id { get; set; }
     public Currency CurrencyFrom { get; set; }
     public Currency CurrencyTo { get; set; }
     public decimal ExchangeRate { get; set; }
     public DateTime QuotedOn { get; set; }
     public DateTime ExpiredOn { get; set; }
-    public bool IsValid { get => DateTime.Now.CompareTo(ExpiredOn) > 0; }
+    public bool IsValid { get => DateTime.Now.CompareTo(ExpiredOn) <= 0; }
 }
