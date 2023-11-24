@@ -4,7 +4,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <InvariantGlobalization>false</InvariantGlobalization>
+    <InvariantGlobalization>true</InvariantGlobalization>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,9 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Domain\FXRatesAPI.Domain.csproj" />
-    <ProjectReference Include="..\Persistence\FXRatesAPI.Persistence.csproj" />
-    <ProjectReference Include="..\Repository\FXRatesAPI.Repository.csproj" />
+    <ProjectReference Include="..\Domain\PaymentsAPI.Domain.csproj" />
+    <ProjectReference Include="..\Repository\PaymentsAPI.Repository.csproj" />
   </ItemGroup>
 
 </Project>

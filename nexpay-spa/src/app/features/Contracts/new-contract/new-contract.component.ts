@@ -227,6 +227,7 @@ export class NewContractsModalComponent implements OnInit, OnDestroy {
     let payload: CreateContractPayload = {} as CreateContractPayload;
     this.paymentAPIService.createContract(payload).subscribe({
       next: (rate: Contract) => {
+        debugger;
         this.notificationsService.showSuccess('Success!');
         this.isConfirmLoading = false;
         this._destroyModal();

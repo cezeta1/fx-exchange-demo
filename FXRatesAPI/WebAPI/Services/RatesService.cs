@@ -1,19 +1,9 @@
 ﻿using FXRatesAPI.Domain;
-using FXRatesAPI.Domain.DTOs;
 using FXRatesAPI.Domain.Params;
-using FXRatesAPI.Persistence;
-using FXRatesAPI.Repository.Repositories;
-using Microsoft.EntityFrameworkCore;
+using FXRatesAPI.Repository;
 using System.Net.Http.Headers;
 
 namespace FXRatesAPI.WebAPI;
-public class ExchangeRatesAPIResult
-{ 
-    public double Amount {  get; set; }
-    public string? Base { get;set;}
-    public DateTime Date { get;set; }
-    public Dictionary<string, decimal> Rates { get;set; }
-}
 
 public class RatesService
 {

@@ -1,48 +1,48 @@
-﻿using FXRatesAPI.Persistence;
-using FXRatesAPI.Repository;
-using Microsoft.EntityFrameworkCore;
+﻿using PaymentsAPI.Repository;
 using Microsoft.OpenApi.Models;
+using PaymentsAPI.WebAPI.Services;
+using PaymentsAPI.Persistence;
+using Microsoft.EntityFrameworkCore;
 
-namespace FXRatesAPI.WebAPI;
-    public class Startup
+namespace PaymentsAPI.WebAPI;
+
+public class Startup
+{
+    public Startup(IConfiguration configuration)
     {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
+        Configuration = configuration;
+    }
 
-        public IConfiguration Configuration { get; }
+    public IConfiguration Configuration { get; }
 
-        private class CorsConfiguration
-        {
-            public string AllowedOrigins { get; set; }
-            public string AllowedMethods { get; set; }
-            public string AllowedHeaders { get; set; }
-        }
+    private class CorsConfiguration
+    {
+        public string AllowedOrigins { get; set; }
+        public string AllowedMethods { get; set; }
+        public string AllowedHeaders { get; set; }
+    }
 
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
+    {
+        services.AddControllers();
+        services.AddDbContext<AppDbContext>(options =>
+            options.UseSqlServer(Configuration.GetConnectionString("CEZ_NexPayPaymentsDB"))
+        , ServiceLifetime.Singleton);
+
+        services.AddSingleton<ContractsService>();
+
+        services.AddSingleton<ContractsRepository>();
+
+        services.AddEndpointsApiExplorer();
+        services.AddSwaggerGen(c =>
         {
-            services.AddControllers();
-            services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("CEZ_NexPayFxDB"))
-            , ServiceLifetime.Singleton);
-            
-            services.AddSingleton<CurrenciesService>();
-            services.AddSingleton<RatesService>();
+            c.SwaggerDoc("v1", new OpenApiInfo { Title = "CEZ.NexPayPaymentsAPI", Version = "v1" });
 
-            services.AddSingleton<CurrenciesRepository>();
-            services.AddSingleton<RatesRepository>();
+        });
 
-            services.AddEndpointsApiExplorer();
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "CEZ.NexPayFxAPI", Version = "v1" });
-
-            });
-
-            ConfigurationHelper.InitializeConfiguration(Configuration);
-            services.AddHttpContextAccessor();
+        ConfigurationHelper.InitializeConfiguration(Configuration);
+        services.AddHttpContextAccessor();
 
         // Checking if a CORS configuration was provided
         if (Configuration.GetChildren().Any(item => item.Key == "CORS"))
@@ -97,7 +97,7 @@ namespace FXRatesAPI.WebAPI;
                 }
             });
     }
-        
+
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
         if (env.IsDevelopment())

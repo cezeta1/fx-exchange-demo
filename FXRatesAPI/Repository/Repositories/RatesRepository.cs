@@ -2,7 +2,7 @@
 using FXRatesAPI.Persistence;
 using Microsoft.EntityFrameworkCore;
 
-namespace FXRatesAPI.Repository.Repositories;
+namespace FXRatesAPI.Repository;
 
 public class RatesRepository
 {
