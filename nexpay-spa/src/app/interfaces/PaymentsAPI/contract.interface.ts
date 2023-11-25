@@ -1,11 +1,11 @@
-import { ContractStatus } from './contract-status.enum';
+import { ContractStatusEnum } from './contract-status.enum';
 import { Currency } from '../FxRatesAPI/currency.interface';
 import { Effectiveness } from '../Common/effectiveness.interface';
 
 export interface Contract extends Effectiveness {
   id?: string;
 
-  status: ContractStatus;
+  status: ContractStatusEnum;
 
   fromCurrency: Currency;
   toCurrency: Currency;

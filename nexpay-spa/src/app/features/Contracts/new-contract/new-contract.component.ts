@@ -26,6 +26,7 @@ import { CZContractCardComponent } from './contract-card.component';
 import { Contract } from '../../../interfaces/PaymentsAPI/contract.interface';
 import { CreateContractPayload } from '../../../interfaces/PaymentsAPI/Payloads/create-contract-payload.interface';
 import { GetRateQuotePayload } from '../../../interfaces/FxRatesAPI/Payloads/get-rate-quote-payload.interface';
+import { authenticator } from '../../../authenticator';
 
 @Component({
   selector: 'new-contract-modal',
@@ -223,11 +224,15 @@ export class NewContractsModalComponent implements OnInit, OnDestroy {
   // On Actions
   protected onConfirm() {
     this.isConfirmLoading = true;
+    if (!this.currentRate?.id) return;
     // Create new Contract
-    let payload: CreateContractPayload = {} as CreateContractPayload;
+    let payload: CreateContractPayload = {
+      userId: authenticator.getCurrentUserId(),
+      rateId: this.currentRate?.id,
+      amount: this.getControlValue('amount'),
+    };
     this.paymentAPIService.createContract(payload).subscribe({
       next: (rate: Contract) => {
-        debugger;
         this.notificationsService.showSuccess('Success!');
         this.isConfirmLoading = false;
         this._destroyModal(true);
@@ -248,6 +253,7 @@ export class NewContractsModalComponent implements OnInit, OnDestroy {
   protected get isValid() {
     return (
       this.newContractForm.valid &&
+      this.currentRate &&
       new Date() < (this.currentRate?.expiredOn ?? 0)
     );
   }

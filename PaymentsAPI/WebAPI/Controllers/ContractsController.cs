@@ -6,12 +6,13 @@ using PaymentsAPI.Domain;
 using PaymentsAPI.Domain.DTOs;
 using PaymentsAPI.Domain.Params;
 using PaymentsAPI.WebAPI.Services;
+using System.Diagnostics.Contracts;
 
 namespace PaymentsAPI.WebAPI;
 
 
 [EnableCors("GeneralPolicy")]
-[Route("api/contracts/")]
+[Route("api/")]
 [ApiController]
 public class ContractsController : ControllerBase
 {
@@ -28,7 +29,7 @@ public class ContractsController : ControllerBase
     /// Gets all Contracts
     /// </summary>
     /// <returns>A list of all Contracts</returns>
-    [HttpGet("all")]
+    [HttpGet("contracts/all")]
     [ProducesResponseType(typeof(IEnumerable<ContractDTO>), StatusCodes.Status200OK)]
     public async Task<IEnumerable<ContractDTO>> GetAllContracts()
         => (await _contractsService.GetAllContracts()).Select(c => c.toDTO());
@@ -37,16 +38,16 @@ public class ContractsController : ControllerBase
     /// Gets all Contracts assigned to a user
     /// </summary>
     /// <returns>A list of all Contracts assigned to a user</returns>
-    [HttpGet]
+    [HttpGet("users/{userId}/contracts")]
     [ProducesResponseType(typeof(IEnumerable<ContractDTO>), StatusCodes.Status200OK)]
-    public async Task<IEnumerable<ContractDTO>> GetContractsByUserId([FromQuery] string userId)
+    public async Task<IEnumerable<ContractDTO>> GetContractsByUserId([FromRoute] string userId)
         => (await _contractsService.GetContractsByUserId(Guid.Parse(userId))).Select(c => c.toDTO());
     
     /// <summary>
     /// Gets a Contract by Id
     /// </summary>
     /// <returns>The Contract with provided Id</returns>
-    [HttpGet("{id}")]
+    [HttpGet("contracts/{id}")]
     [ProducesResponseType(typeof(ContractDTO), StatusCodes.Status200OK)]
     public async Task<ContractDTO> GetContractById([FromRoute] string id)
         => (await _contractsService.GetContractById(Guid.Parse(id))).toDTO();
@@ -65,7 +66,7 @@ public class ContractsController : ControllerBase
     /// </summary>
     /// <param name="param"></param>
     /// <returns>A new valid Contract for the given currencies</returns>
-    [HttpPost]
+    [HttpPost("contracts/")]
     [ProducesResponseType(typeof(ContractDTO), StatusCodes.Status200OK)]
     public async Task<JsonResult> CreateContract([FromBody] CreateContractParam param)
         => new JsonResult((await _contractsService.CreateContract(param)).toDTO());
@@ -75,8 +76,8 @@ public class ContractsController : ControllerBase
     /// </summary>
     /// <param name="param"></param>
     /// <returns>The updated Contract</returns>
-    [HttpPut]
+    [HttpPut("contracts/{userId}")]
     [ProducesResponseType(typeof(ContractDTO), StatusCodes.Status200OK)]
-    public async Task<JsonResult> UpdateContractStatus([FromBody] UpdateContractStatusParam param)
+    public async Task<JsonResult> UpdateContractStatus([FromRoute] string userId, [FromBody] UpdateContractStatusParam param)
         => new JsonResult((await _contractsService.UpdateContractStatus(param)).toDTO());
 }

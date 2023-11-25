@@ -1,4 +1,4 @@
-export enum ContractStatus {
+export enum ContractStatusEnum {
   Pending = 1,
   Completed,
   Cancelled,
