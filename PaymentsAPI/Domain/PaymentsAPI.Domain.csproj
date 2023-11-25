@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="CZ.Common" Version="1.0.2" />
+    <PackageReference Include="CZ.Common" Version="1.0.4" />
   </ItemGroup>
 
 </Project>

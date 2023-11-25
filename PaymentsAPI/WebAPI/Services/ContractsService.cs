@@ -1,8 +1,6 @@
 ﻿using PaymentsAPI.Domain;
 using PaymentsAPI.Domain.Params;
 using PaymentsAPI.Repository;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using System.Net.Http.Headers;
 
 namespace PaymentsAPI.WebAPI.Services;
 
@@ -21,13 +19,11 @@ public class ContractsService
     
     public async Task<Contract> CreateContract(CreateContractParam param)
     {
-        Contract newContract = new Contract();
-
-        // Get exchange rate from external API and check if it is valid
-       
-
+        string userIdStr = "29de8b07-4750-4ad0-a43e-f9c5ed493f53";
+        Contract newContract = new Contract(Guid.Parse(userIdStr));
+        newContract.RateId = param.RateId;
+        newContract.Amount = param.Amount;
         newContract = await _contractsRepository.CreateContract(newContract);
         return newContract;
     }
-
 }

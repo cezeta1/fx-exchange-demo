@@ -1,5 +1,5 @@
 $ProjectPath = ".\CZ.Common"
-$Version = "1.0.2"
+$Version = "1.0.4"
 $OutputPath = "..\..\..\_localfeed"
 
 cd $ProjectPath

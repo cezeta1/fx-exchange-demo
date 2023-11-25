@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using PaymentsAPI.Domain;
 using PaymentsAPI.Domain.DTOs;
+using PaymentsAPI.Domain.Params;
 using PaymentsAPI.WebAPI.Services;
 
 namespace PaymentsAPI.WebAPI;
@@ -45,5 +46,18 @@ public class ContractsController : ControllerBase
     {
         var result = (new ContractStatus()).ToSelectList();
         return result.ToList();
+    }
+
+    /// <summary>
+    /// Creates a Contract between two currencies. Valid only for a given amount of time.
+    /// </summary>
+    /// <param name="param"></param>
+    /// <returns>A new valid contract for the given currencies</returns>
+    [HttpPost]
+    [ProducesResponseType(typeof(ContractDTO), StatusCodes.Status200OK)]
+    public async Task<JsonResult> GetRateQuoteAsync([FromBody] CreateContractParam param)
+    {
+        var result = await _contractsService.CreateContract(param);
+        return new JsonResult(result.toDTO());
     }
 }

@@ -1,12 +1,14 @@
-﻿using PaymentsAPI.Domain.DTOs;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+﻿using CZ.Common.Entities;
+using PaymentsAPI.Domain.DTOs;
 
 namespace PaymentsAPI.Domain;
 
-public class Contract
+public class Contract: Effectiveness
 {
-    public Contract() {
+    public Contract(Guid userId) {
             Id = Guid.NewGuid();
+            UserId = userId;
+            Status = ContractStatus.Pending;
             CreatedOn = DateTime.Now;
             ExpiredOn = DateTime.Now.AddDays(7);
     }
@@ -18,9 +20,6 @@ public class Contract
 
     public Guid RateId { get; set; }
     public decimal Amount { get; set; }
-
-    public DateTime CreatedOn { get; set; }
-    public DateTime ExpiredOn { get; set; }
 
     public ContractDTO toDTO()
     {

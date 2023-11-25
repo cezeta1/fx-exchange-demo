@@ -35,8 +35,8 @@ export class FxRatesAPIService {
       .pipe(
         tap({
           next: (data) => {
+            data.createdOn = new Date(data.createdOn);
             data.expiredOn = new Date(data.expiredOn);
-            data.quotedOn = new Date(data.quotedOn);
             return data;
           },
           error: (e) => {

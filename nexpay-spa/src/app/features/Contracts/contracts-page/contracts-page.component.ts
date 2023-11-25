@@ -167,6 +167,7 @@ export class ContractsPageComponent implements OnInit, OnDestroy {
   }
 
   private _loadUserContracts(): void {
+    const userId = '';
     // this.subs.sink = this.paymentAPIService.getUserContracts('000').subscribe({
     //   next: (data: Contract[]) => {
     //     this.contracts = [...data];

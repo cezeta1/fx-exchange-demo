@@ -1,12 +1,15 @@
-﻿namespace PaymentsAPI.Domain.DTOs;
+﻿using CZ.Common.Entities;
+using CZ.Common.Extensions;
 
-public class ContractDTO
+namespace PaymentsAPI.Domain.DTOs;
+
+public class ContractDTO: EffectivenessDTO
 {
     public Guid Id { get; set; }
     public Guid UserId { get; set; }
     public ContractStatus Status { get; set; }
+    public string StatusName { get => (new ContractStatus()).GetDescription(Status); }
+
     public Guid RateId { get; set; }
     public decimal Amount { get; set; }
-    public DateTime CreatedOn { get; set; }
-    public DateTime ExpiredOn { get; set; }
 }
