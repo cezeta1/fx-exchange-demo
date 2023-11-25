@@ -1,4 +1,5 @@
-﻿using FXRatesAPI.Repository;
+﻿using FXRatesAPI.Domain;
+using FXRatesAPI.Repository;
 
 namespace FXRatesAPI.WebAPI;
 

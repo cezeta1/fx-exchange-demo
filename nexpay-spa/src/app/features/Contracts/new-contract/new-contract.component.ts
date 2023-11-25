@@ -230,7 +230,7 @@ export class NewContractsModalComponent implements OnInit, OnDestroy {
         debugger;
         this.notificationsService.showSuccess('Success!');
         this.isConfirmLoading = false;
-        this._destroyModal();
+        this._destroyModal(true);
       },
       error: (error) => {
         this.isConfirmLoading = false;
@@ -238,7 +238,7 @@ export class NewContractsModalComponent implements OnInit, OnDestroy {
     });
   }
   protected onCancel() {
-    this._destroyModal();
+    this._destroyModal(false);
   }
 
   // Utils
@@ -251,7 +251,7 @@ export class NewContractsModalComponent implements OnInit, OnDestroy {
       new Date() < (this.currentRate?.expiredOn ?? 0)
     );
   }
-  private _destroyModal() {
-    this.modal.destroy();
+  private _destroyModal(result?: any) {
+    this.modal.destroy(result);
   }
 }

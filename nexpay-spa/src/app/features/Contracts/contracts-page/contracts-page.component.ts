@@ -1,5 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  OnDestroy,
+  OnInit,
+  TemplateRef,
+} from '@angular/core';
 import { Contract } from '../../../interfaces/PaymentsAPI/contract.interface';
 import { SubSink } from 'subsink';
 import { PaymentAPIService } from '../../../services/paymentAPI.service';
@@ -12,6 +18,7 @@ import { CZTagComponent } from '../../../components/shared/cz-tag/cz-tag.compone
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NewContractsModalComponent } from '../new-contract/new-contract.component';
+import { CZModalService } from '../../../services/modal.service';
 
 interface ColumnConfig<T> {
   name: string;
@@ -146,7 +153,7 @@ export class ContractsPageComponent implements OnInit, OnDestroy {
   protected tableColumns: ColumnConfig<Contract>[] = [];
   constructor(
     private paymentAPIService: PaymentAPIService,
-    private modalService: NzModalService
+    private modalService: CZModalService
   ) {}
 
   ngOnInit(): void {
@@ -169,14 +176,13 @@ export class ContractsPageComponent implements OnInit, OnDestroy {
 
   private _onModalCloseEmitter: EventEmitter<any> = new EventEmitter();
   protected onNewContract(): void {
-    this.modalService.create({
-      nzTitle: 'Create new Contract',
-      nzContent: NewContractsModalComponent,
-      nzAfterClose: this._onModalCloseEmitter,
-    });
+    this.modalService.createModal(
+      <any>NewContractsModalComponent,
+      this._onModalCloseEmitter
+    );
     this.subs.sink = this._onModalCloseEmitter.subscribe({
-      next: () => {
-        this._loadUserContracts();
+      next: (reloadTable: boolean) => {
+        if (reloadTable) this._loadUserContracts();
       },
     });
   }

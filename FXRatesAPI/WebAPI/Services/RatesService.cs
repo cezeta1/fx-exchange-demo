@@ -1,4 +1,5 @@
-﻿using FXRatesAPI.Domain.Params;
+﻿using FXRatesAPI.Domain;
+using FXRatesAPI.Domain.Params;
 using FXRatesAPI.Repository;
 using System.Net.Http.Headers;
 

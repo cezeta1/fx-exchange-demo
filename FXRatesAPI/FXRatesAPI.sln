@@ -17,9 +17,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FXRatesAPI.Sdk", "Sdk\FXRatesAPI.Sdk.csproj", "{900FCEC5-FE4C-46A9-93FA-CB4C292D8284}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A330CB7D-4F4B-4A5A-8457-922B6DF979C9}"
-	ProjectSection(SolutionItems) = preProject
-		GlobalUsings.cs = GlobalUsings.cs
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
