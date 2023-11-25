@@ -6,12 +6,12 @@
     <Nullable>enable</Nullable>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>CZ.Common</Title>
-    <Version>1.0.6</Version>
+    <Version>1.0.8</Version>
     <Description>A library with common Classes, Extensions and other Utils</Description>
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Utilities\" />
+    <PackageReference Include="MailKit" Version="4.3.0" />
   </ItemGroup>
 
 </Project>

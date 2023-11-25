@@ -1,4 +1,6 @@
-﻿using PaymentsAPI.Domain;
+﻿using CZ.Common.Entities;
+using CZ.Common.Utilities;
+using PaymentsAPI.Domain;
 using PaymentsAPI.Domain.Params;
 using PaymentsAPI.Repository;
 
@@ -27,9 +29,26 @@ public class ContractsService
         Contract newContract = new Contract(Guid.Parse(userIdStr));
         newContract.RateId = param.RateId;
         newContract.Amount = param.Amount;
-        return await _contractsRepository.CreateContract(newContract);
+
+        await _contractsRepository.CreateContract(newContract);
+        await SendNotificationEmail(newContract);
+
+        return newContract;
     }
 
     public async Task<Contract> UpdateContractStatus(UpdateContractStatusParam param)
         => await _contractsRepository.UpdateContractStatus(param.ContractId,param.NewStatus);
+
+    // Email Utils
+    private async Task SendNotificationEmail(Contract c)
+    {
+        EmailHelper emailHelper = new EmailHelper("julic206@gmail.com", "rltn okpg yphq aepf");
+        await emailHelper.SendEmailAsync(new MailContents
+        {
+            Sender = "julic206@gmail.com",
+            Receiver = "julic206@gmail.com",
+            Subject = "A new Contract has been created",
+            Body = $"User {c.UserId} placed a new Contract (id: {c.Id}) at {c.CreatedOn.ToLocalTime()}. \r\nPlease visit our page to review and update status."
+        });
+    } 
 }

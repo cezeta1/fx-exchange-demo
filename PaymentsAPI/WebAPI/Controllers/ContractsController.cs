@@ -1,5 +1,6 @@
 ﻿using CZ.Common.Entities;
 using CZ.Common.Extensions;
+using CZ.Common.Utilities;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using PaymentsAPI.Domain;
