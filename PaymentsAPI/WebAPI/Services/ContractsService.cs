@@ -13,9 +13,13 @@ public class ContractsService
     }
 
     public async Task<IEnumerable<Contract>> GetAllContracts()
-    {
-        return await _contractsRepository.GetAllContracts();
-    }
+        => await _contractsRepository.GetAllContracts();
+    
+    public async Task<IEnumerable<Contract>> GetContractsByUserId(Guid userId)
+        => await _contractsRepository.GetContractsByUserId(userId);
+    
+    public async Task<Contract> GetContractById(Guid id)
+        => await _contractsRepository.GetContractById(id);
     
     public async Task<Contract> CreateContract(CreateContractParam param)
     {
@@ -23,7 +27,9 @@ public class ContractsService
         Contract newContract = new Contract(Guid.Parse(userIdStr));
         newContract.RateId = param.RateId;
         newContract.Amount = param.Amount;
-        newContract = await _contractsRepository.CreateContract(newContract);
-        return newContract;
+        return await _contractsRepository.CreateContract(newContract);
     }
+
+    public async Task<Contract> UpdateContractStatus(UpdateContractStatusParam param)
+        => await _contractsRepository.UpdateContractStatus(param.ContractId,param.NewStatus);
 }

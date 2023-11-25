@@ -31,11 +31,26 @@ public class ContractsController : ControllerBase
     [HttpGet("all")]
     [ProducesResponseType(typeof(IEnumerable<ContractDTO>), StatusCodes.Status200OK)]
     public async Task<IEnumerable<ContractDTO>> GetAllContracts()
-    {
-        var result = await _contractsService.GetAllContracts();
-        return result.Select(c => c.toDTO());
-    }
+        => (await _contractsService.GetAllContracts()).Select(c => c.toDTO());
+
+    /// <summary>
+    /// Gets all Contracts assigned to a user
+    /// </summary>
+    /// <returns>A list of all Contracts assigned to a user</returns>
+    [HttpGet]
+    [ProducesResponseType(typeof(IEnumerable<ContractDTO>), StatusCodes.Status200OK)]
+    public async Task<IEnumerable<ContractDTO>> GetContractsByUserId([FromQuery] string userId)
+        => (await _contractsService.GetContractsByUserId(Guid.Parse(userId))).Select(c => c.toDTO());
     
+    /// <summary>
+    /// Gets a Contract by Id
+    /// </summary>
+    /// <returns>The Contract with provided Id</returns>
+    [HttpGet("{id}")]
+    [ProducesResponseType(typeof(ContractDTO), StatusCodes.Status200OK)]
+    public async Task<ContractDTO> GetContractById([FromRoute] string id)
+        => (await _contractsService.GetContractById(Guid.Parse(id))).toDTO();
+
     /// <summary>
     /// Gets all Contract Status Options
     /// </summary>
@@ -43,21 +58,25 @@ public class ContractsController : ControllerBase
     [HttpGet("/statuses/options")]
     [ProducesResponseType(typeof(IEnumerable<Select>), StatusCodes.Status200OK)]
     public List<Select> GetContractStatusOptions()
-    {
-        var result = (new ContractStatus()).ToSelectList();
-        return result.ToList();
-    }
+        => (new ContractStatus()).ToSelectList().ToList();
 
     /// <summary>
     /// Creates a Contract between two currencies. Valid only for a given amount of time.
     /// </summary>
     /// <param name="param"></param>
-    /// <returns>A new valid contract for the given currencies</returns>
+    /// <returns>A new valid Contract for the given currencies</returns>
     [HttpPost]
     [ProducesResponseType(typeof(ContractDTO), StatusCodes.Status200OK)]
-    public async Task<JsonResult> GetRateQuoteAsync([FromBody] CreateContractParam param)
-    {
-        var result = await _contractsService.CreateContract(param);
-        return new JsonResult(result.toDTO());
-    }
+    public async Task<JsonResult> CreateContract([FromBody] CreateContractParam param)
+        => new JsonResult((await _contractsService.CreateContract(param)).toDTO());
+
+    /// <summary>
+    /// Updates a Contract's status. 
+    /// </summary>
+    /// <param name="param"></param>
+    /// <returns>The updated Contract</returns>
+    [HttpPut]
+    [ProducesResponseType(typeof(ContractDTO), StatusCodes.Status200OK)]
+    public async Task<JsonResult> UpdateContractStatus([FromBody] UpdateContractStatusParam param)
+        => new JsonResult((await _contractsService.UpdateContractStatus(param)).toDTO());
 }
