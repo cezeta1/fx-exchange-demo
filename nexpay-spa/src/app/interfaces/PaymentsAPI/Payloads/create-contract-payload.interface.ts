@@ -1,8 +1,5 @@
-import { Currency } from '../../FxRatesAPI/currency.interface';
-import { Rate } from '../../FxRatesAPI/rate.interface';
-
 export interface CreateContractPayload {
-  rate: Rate;
+  userId: string;
+  rateId: string;
   amount: number;
-  createdBy: string;
 }

@@ -4,8 +4,9 @@ import { Contract } from '../interfaces/PaymentsAPI/contract.interface';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../common/environment';
 import { NotificationService } from './notifications.service';
-import { ContractStatus } from '../interfaces/PaymentsAPI/contract-status.enum';
+import { ContractStatusEnum } from '../interfaces/PaymentsAPI/contract-status.enum';
 import { CreateContractPayload } from '../interfaces/PaymentsAPI/Payloads/create-contract-payload.interface';
+import { UpdateContractStatusPayload } from '../interfaces/PaymentsAPI/Payloads/update-contract-status-payload.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -57,10 +58,9 @@ export class PaymentAPIService {
       );
   }
 
-  public updateContractStatus(payload: {
-    contractId: string;
-    status: ContractStatus;
-  }): Observable<Contract> {
+  public updateContractStatus(
+    payload: UpdateContractStatusPayload
+  ): Observable<Contract> {
     return this.http
       .put<Contract>(
         environment.PaymentAPI + `contracts/${payload.contractId}`,

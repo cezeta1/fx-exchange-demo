@@ -41,6 +41,7 @@ import { registerLocaleData } from '@angular/common';
 import en from '@angular/common/locales/en';
 registerLocaleData(en);
 import { en_US, provideNzI18n } from 'ng-zorro-antd/i18n';
+import { NzModalModule } from 'ng-zorro-antd/modal';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -51,6 +52,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withFetch(), withInterceptors([authInterceptorFn])),
     provideNzConfig(ngZorroConfig),
     importProvidersFrom(
+      NzModalModule,
       NzIconModule.forRoot(icons),
       MsalModule.forRoot(
         msalInstance,

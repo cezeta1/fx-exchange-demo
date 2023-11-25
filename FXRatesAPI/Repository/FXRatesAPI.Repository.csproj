@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Persistence\FXRatesAPI.Persistence.csproj" />
+	<Folder Include="Repositories\" />
   </ItemGroup>
 
 </Project>

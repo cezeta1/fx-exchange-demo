@@ -1,19 +1,9 @@
 ﻿using FXRatesAPI.Domain;
-using FXRatesAPI.Domain.DTOs;
 using FXRatesAPI.Domain.Params;
-using FXRatesAPI.Persistence;
-using FXRatesAPI.Repository.Repositories;
-using Microsoft.EntityFrameworkCore;
+using FXRatesAPI.Repository;
 using System.Net.Http.Headers;
 
 namespace FXRatesAPI.WebAPI;
-public class ExchangeRatesAPIResult
-{ 
-    public double Amount {  get; set; }
-    public string? Base { get;set;}
-    public DateTime Date { get;set; }
-    public Dictionary<string, decimal> Rates { get;set; }
-}
 
 public class RatesService
 {
@@ -26,14 +16,11 @@ public class RatesService
     }
 
     public async Task<IEnumerable<Rate>> GetAllRates()
-    {
-        return await _ratesRepository.GetAllRates();
-    }
-    public async Task<Rate> GetRateById(Guid id)
-    {
-        return await _ratesRepository.GetRateById(id);
-    }
+        => await _ratesRepository.GetAllRates();
 
+    public async Task<Rate> GetRateById(Guid id)
+        => await _ratesRepository.GetRateById(id);
+    
     public async Task<Rate> CreateRateQuote(GetRateQuoteParam param)
     {
         Rate newRate = new Rate();

@@ -78,6 +78,9 @@ namespace FXRatesAPI.Persistence.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("CurrencyFromId")
                         .HasColumnType("int");
 
@@ -89,9 +92,6 @@ namespace FXRatesAPI.Persistence.Migrations
                         .HasColumnType("decimal(19,9)");
 
                     b.Property<DateTime>("ExpiredOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("QuotedOn")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");

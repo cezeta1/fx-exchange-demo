@@ -1,5 +1,5 @@
 ﻿using FXRatesAPI.Persistence;
-using FXRatesAPI.Repository.Repositories;
+using FXRatesAPI.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
@@ -105,7 +105,6 @@ namespace FXRatesAPI.WebAPI;
             app.UseSwagger();
             app.UseSwaggerUI();
         }
-
         app.UseHttpsRedirection();
 
         app.UseRouting();

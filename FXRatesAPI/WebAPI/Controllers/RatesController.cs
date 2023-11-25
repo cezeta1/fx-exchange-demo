@@ -1,4 +1,3 @@
-using FXRatesAPI.Domain;
 using FXRatesAPI.Domain.DTOs;
 using FXRatesAPI.Domain.Params;
 using Microsoft.AspNetCore.Cors;
@@ -17,20 +16,7 @@ public class RatesController : ControllerBase
     public RatesController(ILogger<RatesController> logger, RatesService ratesService)
     {
         _logger = logger;
-        _ratesService = ratesService;   
-    }
-
-    /// <summary>
-    /// Creates a Rate quote between two currencies. Valid only for a given amount of time.
-    /// </summary>
-    /// <param name="param"></param>
-    /// <returns>A new valid quote for the given currencies</returns>
-    [HttpPost]
-    [ProducesResponseType(typeof(RateDTO), StatusCodes.Status200OK)]
-    public async Task<JsonResult> GetRateQuoteAsync([FromBody] GetRateQuoteParam param)
-    {
-        var result = await _ratesService.CreateRateQuote(param);
-        return new JsonResult(result.toDTO());
+        _ratesService = ratesService;
     }
 
     /// <summary>
@@ -41,8 +27,15 @@ public class RatesController : ControllerBase
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(RateDTO), StatusCodes.Status200OK)]
     public async Task<JsonResult> GetRateById([FromRoute] string id)
-    {
-        var result = await _ratesService.GetRateById(Guid.Parse(id));
-        return new JsonResult(result.toDTO());
-    }
+        => new JsonResult((await _ratesService.GetRateById(Guid.Parse(id))).toDTO());
+
+    /// <summary>
+    /// Creates a Rate quote between two currencies. Valid only for a given amount of time.
+    /// </summary>
+    /// <param name="param"></param>
+    /// <returns>A new valid quote for the given currencies</returns>
+    [HttpPost]
+    [ProducesResponseType(typeof(RateDTO), StatusCodes.Status200OK)]
+    public async Task<JsonResult> GetRateQuoteAsync([FromBody] GetRateQuoteParam param)
+        => new JsonResult((await _ratesService.CreateRateQuote(param)).toDTO());
 }

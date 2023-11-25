@@ -1,6 +1,7 @@
 ﻿using FXRatesAPI.Domain.DTOs;
 
 namespace FXRatesAPI.Domain;
+
 public class Currency
 {
     public Currency() { }

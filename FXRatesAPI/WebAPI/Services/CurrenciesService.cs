@@ -1,5 +1,5 @@
 ﻿using FXRatesAPI.Domain;
-using FXRatesAPI.Repository.Repositories;
+using FXRatesAPI.Repository;
 
 namespace FXRatesAPI.WebAPI;
 
@@ -12,8 +12,7 @@ public class CurrenciesService
         _currenciesRepository = currenciesRepository;
     }
 
-    public async Task<IEnumerable<Currency>> GetCurrencyOptions()
-    {
-        return await _currenciesRepository.GetAllCurrencies();
-    }
+    public async Task<IEnumerable<Currency>> GetCurrencyOptions() 
+        => await _currenciesRepository.GetAllCurrencies();
+   
 }

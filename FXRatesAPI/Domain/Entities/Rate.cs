@@ -1,11 +1,12 @@
-﻿using FXRatesAPI.Domain.DTOs;
+﻿using CZ.Common.Entities;
+using FXRatesAPI.Domain.DTOs;
 
 namespace FXRatesAPI.Domain;
-public class Rate
+
+public class Rate : Effectiveness
 {
-    public Rate() {
+    public Rate(): base() {
         Id = Guid.NewGuid();
-        QuotedOn = DateTime.Now;
         ExpiredOn = DateTime.Now.AddSeconds(120);
     }
     public Guid Id { get; set; }
@@ -17,9 +18,6 @@ public class Rate
 
     public decimal ExchangeRate { get; set; }
 
-    public DateTime QuotedOn { get; set; }
-    public DateTime ExpiredOn { get; set; }
-
     public RateDTO toDTO()
     {
         return new RateDTO
@@ -28,7 +26,7 @@ public class Rate
             CurrencyFrom = this.CurrencyFrom,
             CurrencyTo = this.CurrencyTo,
             ExchangeRate = this.ExchangeRate,
-            QuotedOn = this.QuotedOn,
+            CreatedOn = this.CreatedOn,
             ExpiredOn = this.ExpiredOn
         };
     }

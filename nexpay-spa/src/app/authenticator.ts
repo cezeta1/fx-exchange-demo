@@ -75,6 +75,7 @@ export const authenticator = {
     });
   },
   getCurrentUser: () => msalInstance.getActiveAccount()?.username,
+  getCurrentUserId: () => '29de8b07-4750-4ad0-a43e-f9c5ed493f53',
   isLoggedIn: () => (msalInstance.getActiveAccount() ? true : false),
   getToken: (): string => {
     return 'TOKeEeEeEeEeEN';

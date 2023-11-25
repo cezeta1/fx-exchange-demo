@@ -1,9 +1,15 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  OnDestroy,
+  OnInit,
+  TemplateRef,
+} from '@angular/core';
 import { Contract } from '../../../interfaces/PaymentsAPI/contract.interface';
 import { SubSink } from 'subsink';
 import { PaymentAPIService } from '../../../services/paymentAPI.service';
-import { ContractStatus } from '../../../interfaces/PaymentsAPI/contract-status.enum';
+import { ContractStatusEnum } from '../../../interfaces/PaymentsAPI/contract-status.enum';
 
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzTableModule } from 'ng-zorro-antd/table';
@@ -12,6 +18,8 @@ import { CZTagComponent } from '../../../components/shared/cz-tag/cz-tag.compone
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NewContractsModalComponent } from '../new-contract/new-contract.component';
+import { CZModalService } from '../../../services/modal.service';
+import { authenticator } from '../../../authenticator';
 
 interface ColumnConfig<T> {
   name: string;
@@ -75,7 +83,7 @@ interface ColumnConfig<T> {
           <td>
             <cz-tag
               [type]="getStatusTagType(data.status)"
-              [text]="ContractStatus[data.status]"
+              [text]="ContractStatusEnum[data.status]"
             ></cz-tag>
           </td>
         </tr>
@@ -92,61 +100,15 @@ interface ColumnConfig<T> {
   `,
 })
 export class ContractsPageComponent implements OnInit, OnDestroy {
-  protected ContractStatus = ContractStatus;
+  protected ContractStatusEnum = ContractStatusEnum;
   private subs = new SubSink();
 
-  protected contracts: Contract[] = [
-    // {
-    //   id: '1931832',
-    //   status: ContractStatus.Pending,
-    //   fromCurrency: currencies[0],
-    //   toCurrency: currencies[1],
-    //   exchangeRate: 0.53,
-    //   amount: 500,
-    //   convertedAmount: 265,
-    //   createdOn: new Date(),
-    //   expiredOn: new Date(),
-    //   createdBy: '09294129031',
-    //   createdByName: 'Alberto',
-    //   approvedBy: '348230948234',
-    //   approvedByName: 'Sofia',
-    // },
-    // {
-    //   id: '2124423',
-    //   status: ContractStatus.Completed,
-    //   fromCurrency: currencies[1],
-    //   toCurrency: currencies[3],
-    //   exchangeRate: 0.89,
-    //   amount: 1000000,
-    //   convertedAmount: 890000,
-    //   createdOn: new Date(),
-    //   expiredOn: new Date(),
-    //   createdBy: '09294129031',
-    //   createdByName: 'Zulma',
-    //   approvedBy: '348230948234',
-    //   approvedByName: 'Julio',
-    // },
-    // {
-    //   id: '1931832',
-    //   status: ContractStatus.Cancelled,
-    //   fromCurrency: currencies[0],
-    //   toCurrency: currencies[1],
-    //   exchangeRate: 0.53,
-    //   amount: 500,
-    //   convertedAmount: 265,
-    //   createdOn: new Date(),
-    //   expiredOn: new Date(),
-    //   createdBy: '09294129031',
-    //   createdByName: 'Jorge',
-    //   approvedBy: '348230948234',
-    //   approvedByName: 'Carla',
-    // },
-  ];
+  protected contracts: Contract[] = [];
 
   protected tableColumns: ColumnConfig<Contract>[] = [];
   constructor(
     private paymentAPIService: PaymentAPIService,
-    private modalService: NzModalService
+    private modalService: CZModalService
   ) {}
 
   ngOnInit(): void {
@@ -160,23 +122,26 @@ export class ContractsPageComponent implements OnInit, OnDestroy {
   }
 
   private _loadUserContracts(): void {
-    // this.subs.sink = this.paymentAPIService.getUserContracts('000').subscribe({
-    //   next: (data: Contract[]) => {
-    //     this.contracts = [...data];
-    //   },
-    // });
+    // TODO: uncomment after BFF implementation
+    // this.subs.sink = this.paymentAPIService
+    //   .getUserContracts(authenticator.getCurrentUserId())
+    //   .subscribe({
+    //     next: (data: Contract[]) => {
+    //       debugger;
+    //       this.contracts = [...data];
+    //     },
+    //   });
   }
 
   private _onModalCloseEmitter: EventEmitter<any> = new EventEmitter();
   protected onNewContract(): void {
-    this.modalService.create({
-      nzTitle: 'Create new Contract',
-      nzContent: NewContractsModalComponent,
-      nzAfterClose: this._onModalCloseEmitter,
-    });
+    this.modalService.createModal(
+      <any>NewContractsModalComponent,
+      this._onModalCloseEmitter
+    );
     this.subs.sink = this._onModalCloseEmitter.subscribe({
-      next: () => {
-        this._loadUserContracts();
+      next: (reloadTable: boolean) => {
+        if (reloadTable) this._loadUserContracts();
       },
     });
   }
@@ -227,7 +192,9 @@ export class ContractsPageComponent implements OnInit, OnDestroy {
         name: 'Status',
         sortOrder: null,
         sortFn: (a: Contract, b: Contract) =>
-          ContractStatus[a.status].localeCompare(ContractStatus[b.status]),
+          ContractStatusEnum[a.status].localeCompare(
+            ContractStatusEnum[b.status]
+          ),
         sortDirections: ['ascend', 'descend', null],
       },
     ];
@@ -235,15 +202,15 @@ export class ContractsPageComponent implements OnInit, OnDestroy {
 
   // Utils
   protected getStatusTagType(
-    s: ContractStatus
+    s: ContractStatusEnum
   ): 'success' | 'error' | 'warning' | null {
     // TODO: This shouldn't be a function, as it gets called everytime Angular refreshes
     switch (s) {
-      case ContractStatus.Pending:
+      case ContractStatusEnum.Pending:
         return 'warning';
-      case ContractStatus.Completed:
+      case ContractStatusEnum.Completed:
         return 'success';
-      case ContractStatus.Cancelled:
+      case ContractStatusEnum.Cancelled:
         return 'error';
       default:
         return null;
