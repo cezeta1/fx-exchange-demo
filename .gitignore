@@ -263,3 +263,4 @@ FakesAssemblies/
 *.opt
 
 FXRatesAPI/Persistence/FXRatesAPI - Backup.Persistence.csproj
+_localfeed

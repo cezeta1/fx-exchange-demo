@@ -6,7 +6,6 @@ using PaymentsAPI.Domain;
 using PaymentsAPI.Domain.DTOs;
 using PaymentsAPI.Domain.Params;
 using PaymentsAPI.WebAPI.Services;
-using System.Diagnostics.Contracts;
 
 namespace PaymentsAPI.WebAPI;
 
@@ -56,7 +55,7 @@ public class ContractsController : ControllerBase
     /// Gets all Contract Status Options
     /// </summary>
     /// <returns>A list of all Contract Statuses</returns>
-    [HttpGet("/statuses/options")]
+    [HttpGet("statuses/options")]
     [ProducesResponseType(typeof(IEnumerable<Select>), StatusCodes.Status200OK)]
     public List<Select> GetContractStatusOptions()
         => (new ContractStatus()).ToSelectList().ToList();
@@ -66,7 +65,7 @@ public class ContractsController : ControllerBase
     /// </summary>
     /// <param name="param"></param>
     /// <returns>A new valid Contract for the given currencies</returns>
-    [HttpPost("contracts/")]
+    [HttpPost("contracts")]
     [ProducesResponseType(typeof(ContractDTO), StatusCodes.Status200OK)]
     public async Task<JsonResult> CreateContract([FromBody] CreateContractParam param)
         => new JsonResult((await _contractsService.CreateContract(param)).toDTO());
