@@ -1,17 +1,37 @@
-#$ProjectPath = ".\CZ.Common"
-#$ProjectName = "CZ.Common"
-#$Version = "1.0.6"
-#$OutputPath = "..\..\..\_localfeed"
+<#
+$ProjectPath = ".\CZ.Common"
+$ProjectName = "CZ.Common"
+$Version = "1.0.6"
+$OutputPath = "..\..\..\_localfeed"
+#>
 
+<#
 $ProjectPath = ".\PaymentsAPI\Sdk"
 $ProjectName = "PaymentsAPI.Sdk"
 $Version = "1.0.1"
 $OutputPath = "..\..\..\..\_localfeed"
+#>
 
-#$ProjectPath = ".\PaymentsAPI\Domain"
-#$ProjectName = "PaymentsAPI.Domain"
-#$Version = "1.0.1"
-#$OutputPath = "..\..\..\..\_localfeed"
+<#
+$ProjectPath = ".\PaymentsAPI\Domain"
+$ProjectName = "PaymentsAPI.Domain"
+$Version = "1.0.1"
+$OutputPath = "..\..\..\..\_localfeed"
+#>
+
+<#
+$ProjectPath = ".\FXRatesAPI\Sdk"
+$ProjectName = "FXRatesAPI.Sdk"
+$Version = "1.0.2"
+$OutputPath = "..\..\..\..\_localfeed"
+#>
+
+#<#
+$ProjectPath = ".\FXRatesAPI\Domain"
+$ProjectName = "FXRatesAPI.Domain"
+$Version = "1.0.2"
+$OutputPath = "..\..\..\..\_localfeed"
+##>
 
 cd $ProjectPath
 

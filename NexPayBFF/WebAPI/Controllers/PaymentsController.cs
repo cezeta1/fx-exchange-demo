@@ -1,16 +1,14 @@
 ﻿using CZ.Common.Entities;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using PaymentsAPI.Domain;
 using PaymentsAPI.Domain.DTOs;
 using PaymentsAPI.Domain.Params;
 using PaymentsAPI.Sdk;
 
 namespace NexPayBFF.WebAPI.Controllers;
 
-
 [EnableCors("GeneralPolicy")]
-[Route("api/payments/")]
+[Route("api/")]
 [ApiController]
 public class PaymentsController
 {

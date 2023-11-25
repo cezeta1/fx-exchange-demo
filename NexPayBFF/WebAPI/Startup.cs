@@ -1,5 +1,6 @@
 ﻿using Microsoft.OpenApi.Models;
 using PaymentsAPI.Sdk;
+using FXRatesAPI.Sdk;
 
 namespace NexPayBFF.WebAPI;
 
@@ -25,6 +26,7 @@ public class Startup
         services.AddControllers();
 
         services.AddSingleton<PaymentsAPIService>();
+        services.AddSingleton<FXRatesAPIService>();
 
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen(c =>

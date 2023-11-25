@@ -4,6 +4,17 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+	<Title>FXRatesAPI.Sdk</Title>
+	<Version>1.0.2</Version>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CZ.Common" Version="1.0.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Domain\FXRatesAPI.Domain.csproj" />
+  </ItemGroup>
 
 </Project>
