@@ -16,14 +16,11 @@ public class RatesService
     }
 
     public async Task<IEnumerable<Rate>> GetAllRates()
-    {
-        return await _ratesRepository.GetAllRates();
-    }
-    public async Task<Rate> GetRateById(Guid id)
-    {
-        return await _ratesRepository.GetRateById(id);
-    }
+        => await _ratesRepository.GetAllRates();
 
+    public async Task<Rate> GetRateById(Guid id)
+        => await _ratesRepository.GetRateById(id);
+    
     public async Task<Rate> CreateRateQuote(GetRateQuoteParam param)
     {
         Rate newRate = new Rate();

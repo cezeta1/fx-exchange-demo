@@ -13,19 +13,13 @@ public class CurrenciesRepository
     }
 
     public async Task<IEnumerable<Currency>> GetAllCurrencies()
-    {
-        return await _db.Currencies.ToListAsync();
-    }
+        => await _db.Currencies.ToListAsync();
+
     public async Task<Currency> GetCurrencyById(int id)
-    {
-        var result = await _db.Currencies.Where(c => c.Id == id).SingleOrDefaultAsync();
-        if (result == null) {
-            throw new Exception("Currency not found. Id is not valid");
-        }
-        return result;
-    }
+        => await _db.Currencies.Where(c => c.Id == id)
+                           .SingleOrDefaultAsync()
+                ?? throw new Exception("Currency not found. Id is not valid");
+
     public async Task<IEnumerable<Currency>> GetCurrenciesById(List<int> ids)
-    {
-        return await _db.Currencies.Where(c => ids.Contains(c.Id)).ToListAsync();
-    }
+        => await _db.Currencies.Where(c => ids.Contains(c.Id)).ToListAsync();
 }

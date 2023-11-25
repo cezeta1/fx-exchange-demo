@@ -12,8 +12,7 @@ public class CurrenciesService
         _currenciesRepository = currenciesRepository;
     }
 
-    public async Task<IEnumerable<Currency>> GetCurrencyOptions()
-    {
-        return await _currenciesRepository.GetAllCurrencies();
-    }
+    public async Task<IEnumerable<Currency>> GetCurrencyOptions() 
+        => await _currenciesRepository.GetAllCurrencies();
+   
 }

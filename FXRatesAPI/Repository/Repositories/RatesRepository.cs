@@ -13,22 +13,14 @@ public class RatesRepository
     }
 
     public async Task<IEnumerable<Rate>> GetAllRates()
-    {
-        return await _db.Rates.ToListAsync();
-    }
-    public async Task<Rate> GetRateById(Guid id)
-    {
-        var result = await _db.Rates
-                                .Include(r => r.CurrencyFrom)
-                                .Include(r => r.CurrencyTo)
-                                .Where(r => r.Id == id)
-                                .SingleOrDefaultAsync();
+        => await _db.Rates.ToListAsync();
 
-        if (result == null) {
-            throw new ApplicationException("Rate not found. Id is not valid");
-        }
-        return result;
-    }
+    public async Task<Rate> GetRateById(Guid id)
+        => await _db.Rates.Include(r => r.CurrencyFrom)
+                          .Include(r => r.CurrencyTo)
+                          .Where(r => r.Id == id)
+                          .SingleOrDefaultAsync()
+            ?? throw new ApplicationException("Rate not found. Id is not valid");
 
     public async Task<Rate> CreateRate(Rate newRate)
     {

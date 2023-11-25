@@ -27,10 +27,7 @@ public class RatesController : ControllerBase
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(RateDTO), StatusCodes.Status200OK)]
     public async Task<JsonResult> GetRateById([FromRoute] string id)
-    {
-        var result = await _ratesService.GetRateById(Guid.Parse(id));
-        return new JsonResult(result.toDTO());
-    }
+        => new JsonResult((await _ratesService.GetRateById(Guid.Parse(id))).toDTO());
 
     /// <summary>
     /// Creates a Rate quote between two currencies. Valid only for a given amount of time.
@@ -40,8 +37,5 @@ public class RatesController : ControllerBase
     [HttpPost]
     [ProducesResponseType(typeof(RateDTO), StatusCodes.Status200OK)]
     public async Task<JsonResult> GetRateQuoteAsync([FromBody] GetRateQuoteParam param)
-    {
-        var result = await _ratesService.CreateRateQuote(param);
-        return new JsonResult(result.toDTO());
-    }
+        => new JsonResult((await _ratesService.CreateRateQuote(param)).toDTO());
 }

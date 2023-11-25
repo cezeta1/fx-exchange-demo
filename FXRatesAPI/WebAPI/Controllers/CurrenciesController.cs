@@ -25,8 +25,5 @@ public class CurrenciesController : ControllerBase
     [HttpGet("all")]
     [ProducesResponseType(typeof(IEnumerable<CurrencyDTO>), StatusCodes.Status200OK)]
     public async Task<IEnumerable<CurrencyDTO>> GetCurrencyOptionsAsync()
-    {
-        var result = await _currenciesService.GetCurrencyOptions();
-        return result.Select(c => c.toDTO());
-    }
+        => (await _currenciesService.GetCurrencyOptions()).Select(c => c.toDTO());
 }
