@@ -1,4 +1,0 @@
-{
-  "appService.defaultWebAppToDeploy": "/subscriptions/f1ec7c6b-97d0-43dd-ba46-3c6493b5697e/resourceGroups/NexPayTenant/providers/Microsoft.Web/sites/NexPaySPA",
-  "appService.deploySubpath": "."
-}
