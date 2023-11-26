@@ -26,7 +26,7 @@ import { CZContractCardComponent } from './contract-card.component';
 import { Contract } from '../../../interfaces/PaymentsAPI/contract.interface';
 import { CreateContractPayload } from '../../../interfaces/PaymentsAPI/Payloads/create-contract-payload.interface';
 import { GetRateQuotePayload } from '../../../interfaces/FxRatesAPI/Payloads/get-rate-quote-payload.interface';
-import { authenticator } from '../../../authenticator';
+import { authenticator } from '../../../auth/authenticator';
 
 @Component({
   selector: 'new-contract-modal',
@@ -227,7 +227,7 @@ export class NewContractsModalComponent implements OnInit, OnDestroy {
     if (!this.currentRate?.id) return;
     // Create new Contract
     let payload: CreateContractPayload = {
-      userId: authenticator.getCurrentUserId(),
+      userId: authenticator.getCurrentUserId() ?? '-',
       rateId: this.currentRate?.id,
       amount: this.getControlValue('amount'),
     };

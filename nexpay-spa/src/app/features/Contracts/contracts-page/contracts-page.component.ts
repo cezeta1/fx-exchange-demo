@@ -19,7 +19,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NewContractsModalComponent } from '../new-contract/new-contract.component';
 import { CZModalService } from '../../../services/modal.service';
-import { authenticator } from '../../../authenticator';
+import { authenticator } from '../../../auth/authenticator';
 
 interface ColumnConfig<T> {
   name: string;
@@ -123,14 +123,13 @@ export class ContractsPageComponent implements OnInit, OnDestroy {
 
   private _loadUserContracts(): void {
     // TODO: uncomment after BFF implementation
-    // this.subs.sink = this.paymentAPIService
-    //   .getUserContracts(authenticator.getCurrentUserId())
-    //   .subscribe({
-    //     next: (data: Contract[]) => {
-    //       debugger;
-    //       this.contracts = [...data];
-    //     },
-    //   });
+    this.subs.sink = this.paymentAPIService
+      .getUserContracts(authenticator.getCurrentUserId() ?? '-')
+      .subscribe({
+        next: (data: Contract[]) => {
+          this.contracts = [...data];
+        },
+      });
   }
 
   private _onModalCloseEmitter: EventEmitter<any> = new EventEmitter();

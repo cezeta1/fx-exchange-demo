@@ -1,16 +1,24 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
-import { authenticator, msalInstance } from '../../../authenticator';
+import { authenticator } from '../../../auth/authenticator';
+import { AccountInfo } from '@azure/msal-browser';
+import { NzDividerModule } from 'ng-zorro-antd/divider';
 
 @Component({
   selector: 'user-login',
   standalone: true,
-  imports: [CommonModule, NzAvatarModule, NzDropDownModule, NzButtonModule],
+  imports: [
+    CommonModule,
+    NzAvatarModule,
+    NzDropDownModule,
+    NzDividerModule,
+    NzButtonModule,
+  ],
   template: `
-    @if (isLoggedIn) {
+    @if (authenticator.isLoggedIn()) {
     <a
       nz-dropdown
       nzTrigger="click"
@@ -18,10 +26,23 @@ import { authenticator, msalInstance } from '../../../authenticator';
       nzPlacement="bottomRight"
       nzOverlayClassName="cz-profile-menu"
     >
-      <nz-avatar [nzText]="user.initials" [nzSize]="42"></nz-avatar>
+      <nz-avatar [nzText]="currentUser.initials" [nzSize]="42"></nz-avatar>
     </a>
     <nz-dropdown-menu #menu="nzDropdownMenu">
       <ul nz-menu nzSelectable>
+        <li>
+          <div style="display:flex; flex-direction: column; margin: 5px 15px">
+            <span class="cz-label">User Id</span>
+            <span class="cz-value">{{ currentUser.id }}</span>
+            <nz-divider class="cz-divider"></nz-divider>
+            <span class="cz-label">UserName</span>
+            <span class="cz-value">{{ currentUser.fullName }}</span>
+            <nz-divider class="cz-divider"></nz-divider>
+            <span class="cz-label">Tenant Id</span>
+            <span class="cz-value">{{ currentUser.tenantId }}</span>
+          </div>
+        </li>
+        <li nz-menu-divider></li>
         <li nz-menu-item (click)="onLogout()">Logout</li>
       </ul>
     </nz-dropdown-menu>
@@ -30,29 +51,49 @@ import { authenticator, msalInstance } from '../../../authenticator';
     }
   `,
   styles: `
-     ::ng-deep .cz-profile-menu {
-        width: 150px;
+    ::ng-deep .cz-profile-menu {
+        width: 200px;
         margin-top: 25px
+    }
+    .cz-label {
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    .cz-value {
+      font-size: x-small;
+    }
+    .cz-divider {
+      margin: 10px 0;
     }
   `,
 })
-export class UserLoginComponent implements OnInit {
-  protected isLoggedIn: boolean = false;
-  protected user: any = {
-    initials: 'JC',
-  };
+export class UserLoginComponent {
+  protected authenticator = authenticator;
+  protected currentUser: any = {};
 
   constructor() {}
 
-  ngOnInit(): void {
-    msalInstance.initialize();
+  ngOnInit() {
+    if (authenticator.isLoggedIn()) this._fillInUserData();
   }
 
   protected onLogin(): void {
-    this.isLoggedIn = true;
-    authenticator.popupSignIn();
+    authenticator.signIn().then(() => this._fillInUserData());
   }
   protected onLogout(): void {
-    this.isLoggedIn = false;
+    authenticator.signOut();
+  }
+
+  private _fillInUserData(): void {
+    const acc: AccountInfo | null = authenticator.getCurrentAccount();
+    this.currentUser = {
+      id: acc?.localAccountId ?? '-',
+      fullName: acc?.name ?? '-',
+      initials: this._getUserInitials(acc?.name) ?? '-',
+      tenantId: acc?.tenantId ?? '-',
+    };
+  }
+  private _getUserInitials(username?: string): string {
+    return username ?? '-';
   }
 }

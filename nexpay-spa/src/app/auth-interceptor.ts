@@ -1,5 +1,5 @@
 import { HttpHeaders, HttpInterceptorFn } from '@angular/common/http';
-import { authenticator } from './authenticator';
+import { authenticator } from './auth/authenticator';
 
 export const authInterceptorFn: HttpInterceptorFn = (req, next) => {
   const auth_token = authenticator.getToken() ?? 'No Token';

@@ -14,7 +14,7 @@ import {
   MSALGuardConfigFactory,
   MSALInterceptorConfigFactory,
   msalInstance,
-} from './authenticator';
+} from './auth/authenticator';
 
 /* --- NgZorro Configs --- */
 import { NzConfig, provideNzConfig } from 'ng-zorro-antd/core/config';
