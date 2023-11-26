@@ -1,35 +1,37 @@
+$RootPath = $MyInvocation.MyCommand.Path
+
 #<#
 $ProjectPath = ".\CZ.Common"
 $ProjectName = "CZ.Common"
-$Version = "1.0.8"
+$Version = "1.0.9"
 $OutputPath = "..\..\..\_localfeed"
 ##>
 
 <#
 $ProjectPath = ".\PaymentsAPI\Sdk"
 $ProjectName = "PaymentsAPI.Sdk"
-$Version = "1.0.1"
+$Version = "1.0.3"
 $OutputPath = "..\..\..\..\_localfeed"
 #>
 
 <#
 $ProjectPath = ".\PaymentsAPI\Domain"
 $ProjectName = "PaymentsAPI.Domain"
-$Version = "1.0.1"
+$Version = "1.0.3"
 $OutputPath = "..\..\..\..\_localfeed"
 #>
 
-<#
+#<#
 $ProjectPath = ".\FXRatesAPI\Sdk"
 $ProjectName = "FXRatesAPI.Sdk"
-$Version = "1.0.2"
+$Version = "1.0.8"
 $OutputPath = "..\..\..\..\_localfeed"
 #>
 
 <#
 $ProjectPath = ".\FXRatesAPI\Domain"
 $ProjectName = "FXRatesAPI.Domain"
-$Version = "1.0.2"
+$Version = "1.0.8"
 $OutputPath = "..\..\..\..\_localfeed"
 #>
 
@@ -48,4 +50,3 @@ dotnet build -c "Debug"
 dotnet pack
 cd bin\Debug
 nuget add "${ProjectName}.${Version}.nupkg" -Source $OutputPath
-cd ..\..\..

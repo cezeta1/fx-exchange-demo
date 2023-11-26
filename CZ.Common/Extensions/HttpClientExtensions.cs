@@ -4,6 +4,8 @@ namespace CZ.Common.Extensions;
 
 public static class HttpClientExtensions
 {
+    // TODO: Add query object mapping support
+
     public static async Task<T?> GetAsync<T>(this HttpClient httpClient, string? query)
         => await httpClient.GetFromJsonAsync<T>(query ?? "");
 

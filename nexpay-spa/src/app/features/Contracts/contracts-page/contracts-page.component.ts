@@ -122,6 +122,7 @@ export class ContractsPageComponent implements OnInit, OnDestroy {
   }
 
   private _loadUserContracts(): void {
+    if (!authenticator.getCurrentUserId()) return;
     // TODO: uncomment after BFF implementation
     this.subs.sink = this.paymentAPIService
       .getUserContracts(authenticator.getCurrentUserId() ?? '-')

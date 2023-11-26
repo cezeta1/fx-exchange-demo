@@ -26,13 +26,13 @@ public class Startup
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddControllers();
-        services.AddDbContext<AppDbContext>(options =>
-            options.UseSqlServer(Configuration.GetConnectionString("CEZ_NexPayPaymentsDB")),
-            ServiceLifetime.Transient);
-
         //services.AddDbContext<AppDbContext>(options =>
-        //    options.UseSqlServer(Configuration.GetConnectionString("CEZ_NexPayPaymentsDB"))
-        //, ServiceLifetime.Singleton);
+        //    options.UseSqlServer(Configuration.GetConnectionString("CEZ_NexPayPaymentsDB")),
+        //    ServiceLifetime.Transient);
+
+        services.AddDbContext<AppDbContext>(options =>
+            options.UseSqlServer(Configuration.GetConnectionString("CEZ_NexPayPaymentsDB"))
+        , ServiceLifetime.Singleton);
 
         services.AddSingleton<ContractsService>();
 

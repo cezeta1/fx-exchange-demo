@@ -1,6 +1,8 @@
 ﻿using CZ.Common.Extensions;
 using FXRatesAPI.Domain.DTOs;
 using FXRatesAPI.Domain.Params;
+using System.Linq;
+using System.Web;
 
 namespace FXRatesAPI.Sdk;
 
@@ -20,6 +22,20 @@ public class FXRatesAPIService
     // Rates
     public async Task<RateDTO> GetRateById(string id)
         => await _httpClient.GetAsync<RateDTO>("rates/{id}");
+
+    public async Task<IEnumerable<RateDTO>> GetRatesById(IEnumerable<Guid> ids)
+    {
+        var builder = new UriBuilder("rates");
+        builder.Port = -1;
+        var query = HttpUtility.ParseQueryString(builder.Query);
+        for (var i = 0; i < ids.Count(); i++)
+        {
+            query[$"ids[{i}]"] = ids.ElementAt(i).ToString();
+        }
+        builder.Query = query.ToString();
+        //string query = "?ids[]=" + string.Join("&ids[]=",ids.Select(x => x.ToString()));
+        return await _httpClient.GetAsync<IEnumerable<RateDTO>>("rates"+builder.Query.ToString());
+    } 
 
     public async Task<RateDTO> GetRateQuoteAsync(GetRateQuoteParam param)
         => await _httpClient.PostAsync<RateDTO, GetRateQuoteParam>("rates", param);

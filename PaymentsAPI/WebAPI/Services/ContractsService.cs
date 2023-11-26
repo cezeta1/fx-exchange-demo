@@ -25,8 +25,7 @@ public class ContractsService
     
     public async Task<Contract> CreateContract(CreateContractParam param)
     {
-        string userIdStr = "29de8b07-4750-4ad0-a43e-f9c5ed493f53";
-        Contract newContract = new Contract(Guid.Parse(userIdStr));
+        Contract newContract = new Contract(param.UserId);
         newContract.RateId = param.RateId;
         newContract.Amount = param.Amount;
 

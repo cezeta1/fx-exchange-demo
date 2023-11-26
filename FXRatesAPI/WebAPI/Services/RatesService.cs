@@ -20,7 +20,9 @@ public class RatesService
 
     public async Task<Rate> GetRateById(Guid id)
         => await _ratesRepository.GetRateById(id);
-    
+    public async Task<IEnumerable<Rate>> GetRatesById(IEnumerable<Guid> ids)
+    => await _ratesRepository.GetRatesById(ids);
+
     public async Task<Rate> CreateRateQuote(GetRateQuoteParam param)
     {
         Rate newRate = new Rate();

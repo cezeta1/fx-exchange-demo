@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
 	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 	<Title>PaymentsAPI.Domain</Title>
-	<Version>1.0.1</Version>
+	<Version>1.0.3</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,7 +14,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="CZ.Common" Version="1.0.4" />
+    <PackageReference Include="CZ.Common" Version="1.0.9" />
+    <PackageReference Include="FXRatesAPI.Sdk" Version="1.0.3" />
   </ItemGroup>
 
 </Project>

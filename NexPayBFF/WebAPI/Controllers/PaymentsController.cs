@@ -1,6 +1,9 @@
 ﻿using CZ.Common.Entities;
+using FXRatesAPI.Domain.DTOs;
+using FXRatesAPI.Sdk;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using NexPayBFF.WebAPI.Extensions;
 using PaymentsAPI.Domain.DTOs;
 using PaymentsAPI.Domain.Params;
 using PaymentsAPI.Sdk;
@@ -14,11 +17,13 @@ public class PaymentsController
 {
     private readonly ILogger<PaymentsController> _logger;
     private readonly PaymentsAPIService _paymentsAPIService;
+    private readonly FXRatesAPIService _fxRatesAPIService;
 
-    public PaymentsController(ILogger<PaymentsController> logger, PaymentsAPIService paymentsAPIService)
+    public PaymentsController(ILogger<PaymentsController> logger, PaymentsAPIService paymentsAPIService, FXRatesAPIService fXRatesAPIService)
     {
         _logger = logger;
         _paymentsAPIService = paymentsAPIService;
+        _fxRatesAPIService = fXRatesAPIService;
     }
 
     /// <summary>
@@ -38,7 +43,14 @@ public class PaymentsController
     [HttpGet("users/{userId}/contracts")]
     [ProducesResponseType(typeof(IEnumerable<ContractDTO>), StatusCodes.Status200OK)]
     public async Task<IEnumerable<ContractDTO>> GetContractsByUserId([FromRoute] string userId)
-        => await _paymentsAPIService.GetContractsByUserId(userId);
+    {
+        IEnumerable<ContractDTO> results = await _paymentsAPIService.GetContractsByUserId(userId);
+        IEnumerable<RateDTO> rates = await _fxRatesAPIService.GetRatesById(results.Select(x => x.RateId));
+
+        results.Apply(rates);
+
+        return results;
+    }
 
     /// <summary>
     /// Gets a Contract by Id
