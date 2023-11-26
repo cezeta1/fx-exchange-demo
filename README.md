@@ -20,6 +20,6 @@ Developed with .NET 8.0 using swagger for endpoint documentation. Use of the [re
  - `CZ.Common`, `PaymentsAPI` and `FXRatesAPI` expose nuget packages for ease of use in other solutions. Upon changes on any of their Controllers, Services and/or Domains, they must be rebuilt and republished. To do that locally, use the `publish-nuget-packages.ps1` script. Please check and change package versions accordingly.
 
 ### Frontend
-This project was generated with Angular CLI version 17.0.2.
+This project was generated with Angular CLI version 17.0.2, using Ng-Zorro as UI Library.
 
  - Run `npm run serve` for a dev server. Navigate to http://localhost:4200/. The app will automatically reload if you change any of the source files.
