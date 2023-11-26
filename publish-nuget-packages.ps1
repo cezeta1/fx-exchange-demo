@@ -1,39 +1,40 @@
 $RootPath = $MyInvocation.MyCommand.Path
 
-#<#
-$ProjectPath = ".\CZ.Common"
+<#
+$ProjectPath = ".\3-Extra\CZ.Common"
 $ProjectName = "CZ.Common"
 $Version = "1.0.9"
 $OutputPath = "..\..\..\_localfeed"
 ##>
 
-<#
-$ProjectPath = ".\PaymentsAPI\Sdk"
+#<#
+$ProjectPath = ".\2-Backend\PaymentsAPI\Sdk"
 $ProjectName = "PaymentsAPI.Sdk"
 $Version = "1.0.3"
 $OutputPath = "..\..\..\..\_localfeed"
 #>
 
 <#
-$ProjectPath = ".\PaymentsAPI\Domain"
+$ProjectPath = ".\2-Backend\PaymentsAPI\Domain"
 $ProjectName = "PaymentsAPI.Domain"
 $Version = "1.0.3"
 $OutputPath = "..\..\..\..\_localfeed"
 #>
 
-#<#
-$ProjectPath = ".\FXRatesAPI\Sdk"
+<#
+$ProjectPath = ".\2-Backend\FXRatesAPI\Sdk"
 $ProjectName = "FXRatesAPI.Sdk"
 $Version = "1.0.8"
 $OutputPath = "..\..\..\..\_localfeed"
 #>
 
 <#
-$ProjectPath = ".\FXRatesAPI\Domain"
+$ProjectPath = ".\2-Backend\FXRatesAPI\Domain"
 $ProjectName = "FXRatesAPI.Domain"
 $Version = "1.0.8"
 $OutputPath = "..\..\..\..\_localfeed"
 #>
+
 
 cd $ProjectPath
 
