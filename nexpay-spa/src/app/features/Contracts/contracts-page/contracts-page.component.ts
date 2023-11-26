@@ -75,10 +75,10 @@ interface ColumnConfig<T> {
       <tbody>
         <tr *ngFor="let data of filterTable.data">
           <td>{{ data.id }}</td>
-          <td>{{ data.fromCurrency.symbol }}</td>
-          <td>{{ data.toCurrency.symbol }}</td>
+          <td>{{ data.rate.currencyFrom.symbol ?? '-' }}</td>
+          <td>{{ data.rate.currencyTo.symbol ?? '-' }}</td>
           <td>{{ data.amount }}</td>
-          <td>{{ data.exchangeRate }}</td>
+          <td>{{ data.rate.exchangeRate }}</td>
           <td>{{ data.convertedAmount }}</td>
           <td>
             <cz-tag
@@ -106,6 +106,7 @@ export class ContractsPageComponent implements OnInit, OnDestroy {
   protected contracts: Contract[] = [];
 
   protected tableColumns: ColumnConfig<Contract>[] = [];
+
   constructor(
     private paymentAPIService: PaymentAPIService,
     private modalService: CZModalService
@@ -123,7 +124,6 @@ export class ContractsPageComponent implements OnInit, OnDestroy {
 
   private _loadUserContracts(): void {
     if (!authenticator.getCurrentUserId()) return;
-    // TODO: uncomment after BFF implementation
     this.subs.sink = this.paymentAPIService
       .getUserContracts(authenticator.getCurrentUserId() ?? '-')
       .subscribe({
@@ -158,14 +158,14 @@ export class ContractsPageComponent implements OnInit, OnDestroy {
         name: 'From',
         sortOrder: null,
         sortFn: (a: Contract, b: Contract) =>
-          a.fromCurrency.name.localeCompare(b.fromCurrency.name),
+          a.rate.currencyFrom.name.localeCompare(b.rate.currencyFrom.name),
         sortDirections: ['ascend', 'descend', null],
       },
       {
         name: 'To',
         sortOrder: null,
         sortFn: (a: Contract, b: Contract) =>
-          a.toCurrency.name.localeCompare(b.toCurrency.name),
+          a.rate.currencyTo.name.localeCompare(b.rate.currencyTo.name),
         sortDirections: ['ascend', 'descend', null],
       },
       {
@@ -178,7 +178,7 @@ export class ContractsPageComponent implements OnInit, OnDestroy {
         name: 'Exchange Rate',
         sortOrder: null,
         sortFn: (a: Contract, b: Contract) =>
-          a.exchangeRate > b.exchangeRate ? 1 : -1,
+          a.rate.exchangeRate > b.rate.exchangeRate ? 1 : -1,
         sortDirections: ['ascend', 'descend', null],
       },
       {
