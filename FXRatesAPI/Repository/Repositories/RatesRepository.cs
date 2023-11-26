@@ -22,6 +22,18 @@ public class RatesRepository
                           .SingleOrDefaultAsync()
             ?? throw new ApplicationException("Rate not found. Id is not valid");
 
+    public async Task<IEnumerable<Rate>> GetRatesById(IEnumerable<Guid> ids)
+    {
+        IEnumerable<Rate> result = await _db.Rates.Include(r => r.CurrencyFrom)
+                                                  .Include(r => r.CurrencyTo)
+                                                  .Where(r => ids.Contains(r.Id))
+                                                  .ToListAsync();
+        return result;
+        //return result.Count() == ids.Count() ? 
+        //    result :
+        //    throw new ApplicationException("Some Rates were not found. Some Ids are not valid");
+    }
+
     public async Task<Rate> CreateRate(Rate newRate)
     {
         _db.Rates.Add(newRate);

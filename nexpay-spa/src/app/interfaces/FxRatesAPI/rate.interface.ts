@@ -3,7 +3,7 @@ import { Currency } from './currency.interface';
 
 export interface Rate extends Effectiveness {
   id: string;
-  currencyFrom: Currency | undefined;
-  currencyTo: Currency | undefined;
+  currencyFrom: Currency;
+  currencyTo: Currency;
   exchangeRate: number;
 }

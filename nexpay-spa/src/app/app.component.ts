@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
@@ -8,6 +8,8 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { SideMenuComponent } from './components/side-menu/side-menu.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
+
+import { authenticator } from './auth/authenticator';
 
 @Component({
   selector: 'app-root',
@@ -46,4 +48,10 @@ import { NavBarComponent } from './components/nav-bar/nav-bar.component';
     }
   `,
 })
-export class AppComponent {}
+export class AppComponent implements OnInit {
+  constructor() {}
+
+  ngOnInit(): void {
+    authenticator.initialize();
+  }
+}

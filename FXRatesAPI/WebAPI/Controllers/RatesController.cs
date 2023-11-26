@@ -30,6 +30,16 @@ public class RatesController : ControllerBase
         => new JsonResult((await _ratesService.GetRateById(Guid.Parse(id))).toDTO());
 
     /// <summary>
+    /// Gets multiple Rates by Id.
+    /// </summary>
+    /// <param name="ids"></param>
+    /// <returns></returns>
+    [HttpGet("")]
+    [ProducesResponseType(typeof(IEnumerable<RateDTO>), StatusCodes.Status200OK)]
+    public async Task<JsonResult> GetRatesById([FromQuery] IEnumerable<Guid> ids)
+        => new JsonResult((await _ratesService.GetRatesById(ids)).Select(r => r.toDTO()));
+
+    /// <summary>
     /// Creates a Rate quote between two currencies. Valid only for a given amount of time.
     /// </summary>
     /// <param name="param"></param>

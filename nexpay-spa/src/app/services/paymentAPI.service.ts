@@ -4,7 +4,6 @@ import { Contract } from '../interfaces/PaymentsAPI/contract.interface';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../common/environment';
 import { NotificationService } from './notifications.service';
-import { ContractStatusEnum } from '../interfaces/PaymentsAPI/contract-status.enum';
 import { CreateContractPayload } from '../interfaces/PaymentsAPI/Payloads/create-contract-payload.interface';
 import { UpdateContractStatusPayload } from '../interfaces/PaymentsAPI/Payloads/update-contract-status-payload.interface';
 
@@ -19,7 +18,7 @@ export class PaymentAPIService {
 
   public getUserContracts(userId: string): Observable<Contract[]> {
     return this.http
-      .get<Contract[]>(environment.PaymentAPI + `users/${userId}/contracts`, {})
+      .get<Contract[]>(environment.NexPayBFF + `users/${userId}/contracts`, {})
       .pipe(
         tap({
           next: (data) => {},
@@ -32,7 +31,7 @@ export class PaymentAPIService {
 
   public getAllContracts(userId: string): Observable<Contract[]> {
     return this.http
-      .get<Contract[]>(environment.PaymentAPI + `contracts`, {})
+      .get<Contract[]>(environment.NexPayBFF + `contracts`, {})
       .pipe(
         tap({
           next: (data) => {},
@@ -47,7 +46,7 @@ export class PaymentAPIService {
 
   public createContract(payload: CreateContractPayload): Observable<Contract> {
     return this.http
-      .post<Contract>(environment.PaymentAPI + `contracts`, payload)
+      .post<Contract>(environment.NexPayBFF + `contracts`, payload)
       .pipe(
         tap({
           next: (data) => {},
@@ -63,7 +62,7 @@ export class PaymentAPIService {
   ): Observable<Contract> {
     return this.http
       .put<Contract>(
-        environment.PaymentAPI + `contracts/${payload.contractId}`,
+        environment.NexPayBFF + `contracts/${payload.contractId}`,
         payload
       )
       .pipe(

@@ -1,9 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+	<Title>PaymentsAPI.Sdk</Title>
+	<Version>1.0.3</Version>
+	<Description>A library to access PaymentsAPI Endpoints</Description>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CZ.Common" Version="1.0.9" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Domain\PaymentsAPI.Domain.csproj" />
+  </ItemGroup>
 
 </Project>

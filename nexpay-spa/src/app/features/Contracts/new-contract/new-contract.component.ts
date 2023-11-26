@@ -26,7 +26,8 @@ import { CZContractCardComponent } from './contract-card.component';
 import { Contract } from '../../../interfaces/PaymentsAPI/contract.interface';
 import { CreateContractPayload } from '../../../interfaces/PaymentsAPI/Payloads/create-contract-payload.interface';
 import { GetRateQuotePayload } from '../../../interfaces/FxRatesAPI/Payloads/get-rate-quote-payload.interface';
-import { authenticator } from '../../../authenticator';
+import { authenticator } from '../../../auth/authenticator';
+import { CEZ_Validators } from '../../../utils/validators';
 
 @Component({
   selector: 'new-contract-modal',
@@ -85,7 +86,7 @@ import { authenticator } from '../../../authenticator';
         <!-- To Currency -->
         <nz-form-item>
           <nz-form-label [nzSpan]="6" nzFor="toCurr">To </nz-form-label>
-          <nz-form-control [nzSpan]="14">
+          <nz-form-control [nzSpan]="14" nzErrorTip="Required">
             <nz-select formControlName="toCurr" id="toCurr">
               @for (tCurr of toCurrencies; track $index) {
               <nz-option
@@ -160,10 +161,16 @@ export class NewContractsModalComponent implements OnInit, OnDestroy {
 
   private _initForm(): void {
     this.newContractForm = new FormGroup({
-      fromCurr: new FormControl(null, Validators.required),
+      fromCurr: new FormControl(null, [Validators.required]),
       toCurr: new FormControl(null, Validators.required),
       amount: new FormControl(0, [Validators.required, Validators.min(1)]),
     });
+    this.getControl('fromCurr')?.addValidators([
+      CEZ_Validators.notEqualValidator(this.getControl('toCurr')),
+    ]);
+    this.getControl('toCurr')?.addValidators([
+      CEZ_Validators.notEqualValidator(this.getControl('fromCurr')),
+    ]);
     this.newContractForm.disable();
   }
   private _subscribeFormChanges(): void {
@@ -227,7 +234,7 @@ export class NewContractsModalComponent implements OnInit, OnDestroy {
     if (!this.currentRate?.id) return;
     // Create new Contract
     let payload: CreateContractPayload = {
-      userId: authenticator.getCurrentUserId(),
+      userId: authenticator.getCurrentUserId() ?? '-',
       rateId: this.currentRate?.id,
       amount: this.getControlValue('amount'),
     };
@@ -247,9 +254,9 @@ export class NewContractsModalComponent implements OnInit, OnDestroy {
   }
 
   // Utils
-  protected getControlValue(name: string) {
-    return this.newContractForm.get(name)?.value;
-  }
+  protected getControl = (name: string) => this.newContractForm.get(name);
+  protected getControlValue = (name: string) =>
+    this.newContractForm.get(name)?.value;
   protected get isValid() {
     return (
       this.newContractForm.valid &&

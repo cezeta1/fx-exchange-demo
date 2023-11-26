@@ -18,7 +18,7 @@ export class FxRatesAPIService {
 
   public getCurrencyOptions(): Observable<Currency[]> {
     return this.http
-      .get<Currency[]>(environment.FxRatesAPI + `currencies/all`, {})
+      .get<Currency[]>(environment.NexPayBFF + `currencies/all`, {})
       .pipe(
         tap({
           next: (data) => {},
@@ -31,7 +31,7 @@ export class FxRatesAPIService {
 
   public getRateQuote(payload: GetRateQuotePayload): Observable<Rate> {
     return this.http
-      .post<Rate>(environment.FxRatesAPI + `rates`, { ...payload })
+      .post<Rate>(environment.NexPayBFF + `rates`, { ...payload })
       .pipe(
         tap({
           next: (data) => {

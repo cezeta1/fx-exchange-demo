@@ -1,8 +1,13 @@
 TODO:
 
- * AUTHENTICATION
+ * AUTHENTICATION (backend)
 
  * Improve interface annotations for controllers
  * Add in-depth data validation for API controllers' inputs
+ * 
+ * 
+
+Common
+ * HttpClientExtensions -- Add query object mapping support
  * 
  * 
