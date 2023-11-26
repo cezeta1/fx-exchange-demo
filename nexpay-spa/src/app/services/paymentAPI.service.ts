@@ -31,7 +31,7 @@ export class PaymentAPIService {
 
   public getAllContracts(userId: string): Observable<Contract[]> {
     return this.http
-      .get<Contract[]>(environment.PaymentAPI + `contracts`, {})
+      .get<Contract[]>(environment.NexPayBFF + `contracts`, {})
       .pipe(
         tap({
           next: (data) => {},
@@ -46,7 +46,7 @@ export class PaymentAPIService {
 
   public createContract(payload: CreateContractPayload): Observable<Contract> {
     return this.http
-      .post<Contract>(environment.PaymentAPI + `contracts`, payload)
+      .post<Contract>(environment.NexPayBFF + `contracts`, payload)
       .pipe(
         tap({
           next: (data) => {},
@@ -62,7 +62,7 @@ export class PaymentAPIService {
   ): Observable<Contract> {
     return this.http
       .put<Contract>(
-        environment.PaymentAPI + `contracts/${payload.contractId}`,
+        environment.NexPayBFF + `contracts/${payload.contractId}`,
         payload
       )
       .pipe(
