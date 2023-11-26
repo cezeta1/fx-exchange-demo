@@ -1,6 +1,12 @@
 # nexpay-demo
 
-This project is built as a tech demo for NexPay code challenge interview. It features a foreign exchange (FX) platform where users can create contracts selecting which currency they want to convert from and to. The exchange rate is calculated and provided by an FX API. The PaymentAPI receives the contract requests, saves them, and checks if they are completed.
+This project is built as a tech demo for NexPay code challenge interview. It features a foreign exchange (FX) platform where users can create contracts selecting which currency they want to convert from and to. 
+This repo includes:
+ - **nexpay-spa** => Single Page Application providing user log-in and Contract management UIs for Users and Admins.
+ - **NexPayBFF** => BFF API to manage calls to the other APIs. Provides a single point of entry for the Frontend to get the required data.
+ - **FXRatesAPI** => The exchange Rate provider. Upon request, gets the current exchange rates between two currencies and provides a Rate. This Rate is saved and has a validity of 2 minutes.
+ - **PaymentsAPI** => Manages user contracts. To create a new contract, the rate has to be valid at the moment of placement. Admins can change the Contract status and mark them as Completed, Cancelled, etc.
+ - **CZ.Common** => Common library package. Provides common use Classes, Extensions and Utils.
 
 ## Instructions
 
@@ -17,7 +23,7 @@ Change the entity or the context and run `add-migration <migration-name>` in the
 Developed with .NET 8.0 using swagger for endpoint documentation. Use of the [restful API guidelines](https://restfulapi.net/resource-naming/).
 
  - Each solution can be run using Visual Studio OR using the `run-backend-solutions.bat` script in the root directory.
- - `CZ.Common`, `PaymentsAPI` and `FXRatesAPI` expose nuget packages for ease of use in other solutions. Upon changes on any of their Controllers, Services and/or Domains, they must be rebuilt and republished. To do that locally, use the `publish-nuget-packages.ps1` script. Please check and change package versions accordingly.
+ - `CZ.Common`, `PaymentsAPI` and `FXRatesAPI` expose nuget packages for ease of use in other solutions. Upon changes on any of their Controllers, Services and/or Domains, they must be rebuilt and republished. To do that locally, use the `publish-nuget-packages.ps1` script. Please check and change package versions accordingly. Locally published packages are placed in the `_localfeed` folder.
 
 ### Frontend
 This project was generated with Angular CLI version 17.0.2, using Ng-Zorro as UI Library.
