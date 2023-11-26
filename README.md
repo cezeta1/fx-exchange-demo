@@ -5,7 +5,7 @@ This repo includes:
  - **nexpay-spa** => Single Page Application providing user log-in and Contract management UIs for Users and Admins.
  - **NexPayBFF** => BFF API to manage calls to the other APIs. Provides a single point of entry for the Frontend to get the required data.
  - **FXRatesAPI** => The exchange Rate provider. Upon request, gets the current exchange rates between two currencies and provides a Rate. This Rate is saved and has a validity of 2 minutes.
- - **PaymentsAPI** => Manages user contracts. To create a new contract, the rate has to be valid at the moment of placement. Admins can change the Contract status and mark them as Completed, Cancelled, etc.
+ - **PaymentsAPI** => Manages user contracts. To create a new contract, the rate has to be valid at the moment of placement. When a new Contract is placed, sends a notification email to select Admin.Admins can change the Contract status and mark them as Completed, Cancelled, etc.
  - **CZ.Common** => Common library package. Provides common use Classes, Extensions and Utils.
 
 ## Instructions
