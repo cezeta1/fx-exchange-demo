@@ -14,6 +14,8 @@ import {
   NzTableSortOrder,
 } from 'ng-zorro-antd/table';
 import { CZTagComponent } from '../../../components/shared/cz-tag/cz-tag.component';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NotificationService } from '../../../services/notifications.service';
 
 interface ColumnConfig<T> {
   name: string;
@@ -28,7 +30,13 @@ interface ColumnConfig<T> {
 @Component({
   selector: 'admin-page',
   standalone: true,
-  imports: [CommonModule, NzButtonModule, NzTableModule, CZTagComponent],
+  imports: [
+    CommonModule,
+    NzButtonModule,
+    NzTableModule,
+    NzIconModule,
+    CZTagComponent,
+  ],
   host: { ngSkipHydration: 'true' },
   template: `
     <h1>ADMIN</h1>
@@ -65,9 +73,32 @@ interface ColumnConfig<T> {
               [text]="ContractStatusEnum[data.status]"
             ></cz-tag>
           </td>
+          <td>
+            <nz-button-group>
+              <button
+                nz-button
+                nzType="primary"
+                (click)="onChangeStatus(data.id, ContractStatusEnum.Completed)"
+              >
+                <span nz-icon nzType="check" nzTheme="outline"></span>
+              </button>
+              <button
+                nz-button
+                nzType="default"
+                (click)="onChangeStatus(data.id, ContractStatusEnum.Cancelled)"
+              >
+                <span nz-icon nzType="close" nzTheme="outline"></span>
+              </button>
+            </nz-button-group>
+          </td>
         </tr>
       </tbody>
     </nz-table>
+  `,
+  styles: `
+    .cz-table-cell {
+      text-overflow: ellipsis;
+    }
   `,
 })
 export class AdminPageComponent {
@@ -78,7 +109,10 @@ export class AdminPageComponent {
 
   protected tableColumns: ColumnConfig<Contract>[] = [];
 
-  constructor(private paymentAPIService: PaymentAPIService) {}
+  constructor(
+    private notificationService: NotificationService,
+    private paymentAPIService: PaymentAPIService
+  ) {}
 
   ngOnInit(): void {
     this._initTableConfig();
@@ -92,25 +126,10 @@ export class AdminPageComponent {
     if (!authenticator.getCurrentUserId()) return;
     this.subs.sink = this.paymentAPIService.getAllContracts().subscribe({
       next: (data: Contract[]) => {
-        debugger;
         this.contracts = [...data];
       },
     });
   }
-
-  // private _onModalCloseEmitter: EventEmitter<any> = new EventEmitter();
-  // protected onNewContract(): void {
-  //   this.modalService.createModal(
-  //     <any>NewContractsModalComponent,
-  //     this._onModalCloseEmitter
-  //   );
-  //   this.subs.sink = this._onModalCloseEmitter.subscribe({
-  //     next: (reloadTable: boolean) => {
-  //       if (reloadTable) this._loadUserContracts();
-  //     },
-  //   });
-  // }
-
   private _initTableConfig(): void {
     this.tableColumns = [
       {
@@ -168,7 +187,29 @@ export class AdminPageComponent {
           ),
         sortDirections: ['ascend', 'descend', null],
       },
+      {
+        name: 'Actions',
+        sortOrder: null,
+        sortFn: null,
+        sortDirections: [null],
+      },
     ];
+  }
+
+  protected onChangeStatus(
+    cId: string | undefined,
+    newStatus: ContractStatusEnum
+  ) {
+    if (!cId) return;
+    this.paymentAPIService
+      .updateContractStatus({
+        contractId: cId,
+        newStatus: newStatus,
+      })
+      .subscribe(() => {
+        this.notificationService.showSuccess('Success');
+        this._loadAllContracts();
+      });
   }
 
   // Utils
