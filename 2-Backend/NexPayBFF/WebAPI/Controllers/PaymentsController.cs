@@ -48,7 +48,7 @@ public class PaymentsController
     public async Task<IEnumerable<ContractDTO>> GetContractsByUserId([FromRoute] string userId)
     {
         IEnumerable<ContractDTO> results = await _paymentsAPIService.GetContractsByUserId(userId);
-        results.Apply(_fxRatesAPIService.GetRatesById);
+        await results.Apply(_fxRatesAPIService.GetRatesById);
         return results;
     }
 
