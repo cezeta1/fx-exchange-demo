@@ -22,31 +22,31 @@ namespace FXRatesAPI.WebAPI;
 
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
-        {
-            services.AddControllers();
-            services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("CEZ_NexPayFxDB"))
-            , ServiceLifetime.Singleton);
+    {
+        services.AddControllers();
+        services.AddDbContext<AppDbContext>(options =>
+            options.UseSqlServer(Configuration.GetConnectionString("CEZ_NexPayFxDB"))
+        , ServiceLifetime.Singleton);
             
-            services.AddSingleton<CurrenciesService>();
-            services.AddSingleton<RatesService>();
+        services.AddSingleton<CurrenciesService>();
+        services.AddSingleton<RatesService>();
 
-            services.AddSingleton<CurrenciesRepository>();
-            services.AddSingleton<RatesRepository>();
+        services.AddSingleton<CurrenciesRepository>();
+        services.AddSingleton<RatesRepository>();
 
-            services.AddEndpointsApiExplorer();
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "CEZ.NexPayFxAPI", Version = "v1" });
+        services.AddEndpointsApiExplorer();
+        services.AddSwaggerGen(c =>
+        {
+            c.SwaggerDoc("v1", new OpenApiInfo { Title = "CEZ.NexPayFxAPI", Version = "v1" });
 
-            });
+        });
 
-            ConfigurationHelper.InitializeConfiguration(Configuration);
-            services.AddHttpContextAccessor();
+        services.AddHttpContextAccessor();
 
         // Checking if a CORS configuration was provided
         if (Configuration.GetChildren().Any(item => item.Key == "CORS"))
-            services.AddCors(options => {
+            services.AddCors(options =>
+            {
                 // Getting all the CORS policies provided
                 var policies = Configuration.GetSection("CORS").GetChildren().ToList();
                 foreach (var policy in policies)

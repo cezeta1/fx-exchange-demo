@@ -40,7 +40,6 @@ public class Startup
 
         });
 
-        ConfigurationHelper.InitializeConfiguration(Configuration);
         services.AddHttpContextAccessor();
 
         // Checking if a CORS configuration was provided
