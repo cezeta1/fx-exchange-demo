@@ -1,19 +1,25 @@
 ﻿using CZ.Common.Entities;
 using CZ.Common.Extensions;
+using Microsoft.Extensions.Options;
 using PaymentsAPI.Domain.DTOs;
 using PaymentsAPI.Domain.Params;
 
 namespace PaymentsAPI.Sdk;
+
+public class PaymentsAPIOptions
+{
+    public string BaseURL { get; set; } = String.Empty;
+}
 
 #pragma warning disable CS8603 // Possible null reference return.
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 public class PaymentsAPIService
 {
     private static HttpClient _httpClient;
-    public PaymentsAPIService()
+    public PaymentsAPIService(IOptions<PaymentsAPIOptions> options)
     {
         _httpClient = new() {
-            BaseAddress = new Uri("https://localhost:7005/api/"),
+            BaseAddress = new Uri(options.Value.BaseURL + "api/"),
         };
     }
 

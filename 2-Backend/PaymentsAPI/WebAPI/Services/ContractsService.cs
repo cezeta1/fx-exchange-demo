@@ -9,9 +9,11 @@ namespace PaymentsAPI.WebAPI.Services;
 public class ContractsService
 {
     private readonly ContractsRepository _contractsRepository;
-    public ContractsService(ContractsRepository contractsRepository)
+    private readonly EmailHelper _emailHelper;
+    public ContractsService(ContractsRepository contractsRepository, EmailHelper emailHelper)
     {
         _contractsRepository = contractsRepository;
+        _emailHelper = emailHelper;
     }
 
     public async Task<IEnumerable<Contract>> GetAllContracts()
@@ -41,8 +43,7 @@ public class ContractsService
     // Email Utils
     private async Task SendNotificationEmail(Contract c)
     {
-        EmailHelper emailHelper = new EmailHelper(/*Insert your email*/, /*Insert your credentials*/ );
-        await emailHelper.SendEmailAsync(new MailContents
+        await _emailHelper.SendEmailAsync(new MailContents
         {
             Sender = "julic206@gmail.com",
             Receiver = "julic206@gmail.com",

@@ -3,18 +3,27 @@ using MimeKit.Text;
 using MimeKit;
 using MailKit.Net.Smtp;
 using CZ.Common.Entities;
+using Microsoft.Extensions.Options;
 
 namespace CZ.Common.Utilities;
+
+public class EmailHelperOptions
+{
+    public const string SectionName = "EmailHelperOptions";
+
+    public string SmtpSourceAddress { get; set; } = String.Empty;
+    public string SmtpPW { get; set; } = String.Empty;
+}
 
 public class EmailHelper
 {
     private SmtpCredentials _smtpCredentials;
 
-    public EmailHelper(string sourceAddress, string pw) {
+    public EmailHelper(IOptions<EmailHelperOptions> options) {
         _smtpCredentials = new SmtpCredentials
         {
-            Address = sourceAddress,
-            Password = pw
+            Address = options.Value.SmtpSourceAddress,
+            Password = options.Value.SmtpPW
         };
     }
 

@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CZ.Common" Version="1.0.9" />
+    <PackageReference Include="CZ.Common" Version="1.0.10" />
     <PackageReference Include="FXRatesAPI.Sdk" Version="1.0.8" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>

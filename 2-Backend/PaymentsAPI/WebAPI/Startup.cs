@@ -3,6 +3,7 @@ using Microsoft.OpenApi.Models;
 using PaymentsAPI.WebAPI.Services;
 using PaymentsAPI.Persistence;
 using Microsoft.EntityFrameworkCore;
+using CZ.Common.Utilities;
 
 namespace PaymentsAPI.WebAPI;
 
@@ -26,16 +27,18 @@ public class Startup
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddControllers();
-        //services.AddDbContext<AppDbContext>(options =>
-        //    options.UseSqlServer(Configuration.GetConnectionString("CEZ_NexPayPaymentsDB")),
-        //    ServiceLifetime.Transient);
-
         services.AddDbContext<AppDbContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("CEZ_NexPayPaymentsDB"))
         , ServiceLifetime.Singleton);
 
-        services.AddSingleton<ContractsService>();
+        // Helpers
+        services.Configure<EmailHelperOptions>(Configuration.GetSection(EmailHelperOptions.SectionName));
+        services.AddSingleton<EmailHelper>();
 
+        // Services
+        services.AddSingleton<ContractsService>();
+        
+        // Repositories
         services.AddSingleton<ContractsRepository>();
 
         services.AddEndpointsApiExplorer();
