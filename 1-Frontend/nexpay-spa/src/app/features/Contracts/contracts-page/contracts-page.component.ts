@@ -1,11 +1,5 @@
 import { CommonModule } from '@angular/common';
-import {
-  Component,
-  EventEmitter,
-  OnDestroy,
-  OnInit,
-  TemplateRef,
-} from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit } from '@angular/core';
 import { Contract } from '../../../interfaces/PaymentsAPI/contract.interface';
 import { SubSink } from 'subsink';
 import { PaymentAPIService } from '../../../services/paymentAPI.service';
@@ -15,7 +9,6 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzTableSortFn, NzTableSortOrder } from 'ng-zorro-antd/table';
 import { CZTagComponent } from '../../../components/shared/cz-tag/cz-tag.component';
-import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NewContractsModalComponent } from '../new-contract/new-contract.component';
 import { CZModalService } from '../../../services/modal.service';
@@ -75,8 +68,8 @@ interface ColumnConfig<T> {
       <tbody>
         <tr *ngFor="let data of filterTable.data">
           <td>{{ data.id }}</td>
-          <td>{{ data.rate.currencyFrom.symbol ?? '-' }}</td>
-          <td>{{ data.rate.currencyTo.symbol ?? '-' }}</td>
+          <td>{{ data?.rate?.currencyFrom?.symbol ?? '-' }}</td>
+          <td>{{ data?.rate?.currencyTo?.symbol ?? '-' }}</td>
           <td>{{ data.amount }}</td>
           <td>{{ data.rate.exchangeRate }}</td>
           <td>{{ data.convertedAmount }}</td>

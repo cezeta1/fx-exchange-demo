@@ -4,6 +4,7 @@ import { UserLoginComponent } from '../user-profile/user-login/user-login.compon
 import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { ActivatedRoute, Router } from '@angular/router';
+import { RoutesEnum } from '../../app.routes';
 
 interface MenuOption {
   id: number;
@@ -30,19 +31,19 @@ interface MenuOption {
     </ul>
   `,
 })
-export class SideMenuComponent {
+export class SideMenuComponent implements OnInit {
   protected menuItems: MenuOption[] = [
     {
       id: 0,
       name: 'Contracts',
       icon: 'bank',
-      route: 'contracts',
+      route: RoutesEnum.Contracts,
     },
     {
       id: 1,
       name: 'Admin',
       icon: 'control',
-      route: 'admin',
+      route: RoutesEnum.Admin,
     },
   ];
   protected currentSection: number = 0;
@@ -50,9 +51,11 @@ export class SideMenuComponent {
   constructor(private router: Router, private route: ActivatedRoute) {}
 
   // TODO: OnInit, implement route recognition, and select menu item accordingly
+  ngOnInit() {}
 
   protected onMenuRedirect(item: MenuOption) {
     this.currentSection = item.id;
+    debugger;
     this.router.navigateByUrl(item.route);
   }
 }
