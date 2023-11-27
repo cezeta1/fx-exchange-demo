@@ -32,3 +32,11 @@ This project was generated with Angular CLI version 17.0.2, using Ng-Zorro as UI
 
 ## Screenshots
 
+![image](https://github.com/Cezeta-hub/nexpay-demo/assets/73889711/664b1f36-ab78-4d9b-a228-c0ebec86070c)
+
+![image](https://github.com/Cezeta-hub/nexpay-demo/assets/73889711/b765935d-86a6-47f0-aaf2-70ba2b7874d4)
+
+![image](https://github.com/Cezeta-hub/nexpay-demo/assets/73889711/d403ccb1-7da1-44cb-b780-15fa588ea391)
+
+![image](https://github.com/Cezeta-hub/nexpay-demo/assets/73889711/c422e3a7-0a66-4599-ac1b-adcab0a341ce)
+
