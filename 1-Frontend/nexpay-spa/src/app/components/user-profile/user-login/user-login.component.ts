@@ -4,8 +4,10 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { authenticator } from '../../../auth/authenticator';
-import { AccountInfo } from '@azure/msal-browser';
+import { AccountInfo, EventMessage, EventType } from '@azure/msal-browser';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
+import { MsalBroadcastService } from '@azure/msal-angular';
+import { filter, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'user-login',
@@ -71,9 +73,23 @@ export class UserLoginComponent {
   protected authenticator = authenticator;
   protected currentUser: any = {};
 
-  constructor() {}
+  constructor(private msalBroadcastService: MsalBroadcastService) {}
 
   ngOnInit() {
+    // debugger;
+    // this.msalBroadcastService.msalSubject$
+    //   .pipe(
+    //     filter((msg: EventMessage) => msg.eventType === EventType.LOGIN_SUCCESS)
+    //   )
+    //   .subscribe((result: EventMessage) => {
+    //     this._fillInUserData();
+    //   });
+    // this.authenticator.onLoginSuccess.subscribe(
+    //   (result: EventMessage | null) => {
+    //     debugger;
+    //     this._fillInUserData();
+    //   }
+    // );
     if (authenticator.isLoggedIn()) this._fillInUserData();
   }
 

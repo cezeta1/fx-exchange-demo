@@ -106,10 +106,8 @@ export class ContractsPageComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this._loadUserContracts();
     this._initTableConfig();
-    this.contracts = [...this.contracts, ...this.contracts];
-    this.contracts = [...this.contracts, ...this.contracts];
+    this._loadUserContracts();
   }
   ngOnDestroy(): void {
     this.subs.unsubscribe();

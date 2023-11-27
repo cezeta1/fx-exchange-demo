@@ -18,12 +18,12 @@ export const routes: Routes = [
   {
     path: RoutesEnum.Contracts,
     component: ContractsPageComponent,
-    canActivate: [MsalGuard],
+    // canActivate: [MsalGuard],
   },
   {
     path: RoutesEnum.Admin,
     component: AdminPageComponent,
-    canActivate: [MsalGuard],
+    // canActivate: [MsalGuard],
   },
   { path: '**', component: NotFoundComponent },
 ];

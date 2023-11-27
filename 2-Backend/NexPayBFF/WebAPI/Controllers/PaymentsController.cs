@@ -33,8 +33,11 @@ public class PaymentsController
     [HttpGet("contracts/all")]
     [ProducesResponseType(typeof(IEnumerable<ContractDTO>), StatusCodes.Status200OK)]
     public async Task<IEnumerable<ContractDTO>> GetAllContracts()
-        => await _paymentsAPIService.GetAllContracts();
-
+    {
+        IEnumerable<ContractDTO> results = await _paymentsAPIService.GetAllContracts();
+        await results.Apply(_fxRatesAPIService.GetRatesById);
+        return results;
+    }
 
     /// <summary>
     /// Gets all Contracts assigned to a user
@@ -45,10 +48,7 @@ public class PaymentsController
     public async Task<IEnumerable<ContractDTO>> GetContractsByUserId([FromRoute] string userId)
     {
         IEnumerable<ContractDTO> results = await _paymentsAPIService.GetContractsByUserId(userId);
-        IEnumerable<RateDTO> rates = await _fxRatesAPIService.GetRatesById(results.Select(x => x.RateId));
-
-        results.Apply(rates);
-
+        results.Apply(_fxRatesAPIService.GetRatesById);
         return results;
     }
 

@@ -50,12 +50,12 @@ export class SideMenuComponent implements OnInit {
 
   constructor(private router: Router, private route: ActivatedRoute) {}
 
-  // TODO: OnInit, implement route recognition, and select menu item accordingly
-  ngOnInit() {}
+  ngOnInit() {
+    // TODO: OnInit, implement route recognition, and select menu item accordingly
+  }
 
   protected onMenuRedirect(item: MenuOption) {
     this.currentSection = item.id;
-    debugger;
     this.router.navigateByUrl(item.route);
   }
 }
