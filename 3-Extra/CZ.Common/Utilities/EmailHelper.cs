@@ -8,7 +8,6 @@ namespace CZ.Common.Utilities;
 
 public class EmailHelper
 {
-    //rltn okpg yphq aepf
     private SmtpCredentials _smtpCredentials;
 
     public EmailHelper(string sourceAddress, string pw) {
