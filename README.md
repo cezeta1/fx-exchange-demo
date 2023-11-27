@@ -29,3 +29,6 @@ Developed with .NET 8.0 using swagger for endpoint documentation. Use of the [re
 This project was generated with Angular CLI version 17.0.2, using Ng-Zorro as UI Library.
 
  - Run `npm run serve` for a dev server. Navigate to http://localhost:4200/. The app will automatically reload if you change any of the source files.
+
+## Screenshots
+
