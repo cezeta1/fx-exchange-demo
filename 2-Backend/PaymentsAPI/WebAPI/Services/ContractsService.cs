@@ -41,7 +41,7 @@ public class ContractsService
     // Email Utils
     private async Task SendNotificationEmail(Contract c)
     {
-        EmailHelper emailHelper = new EmailHelper("julic206@gmail.com", "rltn okpg yphq aepf");
+        EmailHelper emailHelper = new EmailHelper(/*Insert your email*/, /*Insert your credentials*/ );
         await emailHelper.SendEmailAsync(new MailContents
         {
             Sender = "julic206@gmail.com",
