@@ -1,7 +1,13 @@
 import { Routes } from '@angular/router';
 import { ContractsPageComponent } from './features/Contracts/contracts-page/contracts-page.component';
 import { AdminPageComponent } from './features/Admin/admin-page/admin-page.component';
+import { NotFoundComponent } from './components/not-found/not-found.component';
 import { MsalGuard } from '@azure/msal-angular';
+
+export enum RoutesEnum {
+  Contracts = 'contracts',
+  Admin = 'admin',
+}
 
 export const routes: Routes = [
   {
@@ -10,13 +16,14 @@ export const routes: Routes = [
     redirectTo: 'contracts',
   },
   {
-    path: 'contracts',
+    path: RoutesEnum.Contracts,
     component: ContractsPageComponent,
     // canActivate: [MsalGuard],
   },
   {
-    path: 'admin',
+    path: RoutesEnum.Admin,
     component: AdminPageComponent,
     // canActivate: [MsalGuard],
   },
+  { path: '**', component: NotFoundComponent },
 ];

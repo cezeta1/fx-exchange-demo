@@ -4,8 +4,8 @@ import { SubSink } from 'subsink';
 import { PaymentAPIService } from '../../../services/paymentAPI.service';
 
 import { NzButtonModule } from 'ng-zorro-antd/button';
-
 import { NzModalModule, NzModalRef } from 'ng-zorro-antd/modal';
+
 import { NotificationService } from '../../../services/notifications.service';
 import { FxRatesAPIService } from '../../../services/fxRatesAPI.service';
 import { Currency } from '../../../interfaces/FxRatesAPI/currency.interface';

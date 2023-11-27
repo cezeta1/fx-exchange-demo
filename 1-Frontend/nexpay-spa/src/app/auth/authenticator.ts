@@ -3,9 +3,14 @@ import {
   MsalInterceptorConfiguration,
   ProtectedResourceScopes,
 } from '@azure/msal-angular';
-import { PublicClientApplication, InteractionType } from '@azure/msal-browser';
+import {
+  PublicClientApplication,
+  InteractionType,
+  EventMessage,
+} from '@azure/msal-browser';
 import { getClaimsFromStorage } from '../utils/storage-utils';
 import { loginRequest, msalConfig, protectedResources } from './auth-config';
+import { BehaviorSubject } from 'rxjs';
 
 //* --- MSAL Instance Configuration --- *//
 
@@ -74,10 +79,18 @@ export function MSALGuardConfigFactory(): MsalGuardConfiguration {
   };
 }
 
+const onLoginSuccessEmitter = new BehaviorSubject<EventMessage | null>(null);
+
 /* ----------------------------------- */
 var bearerToken!: string;
 export const authenticator = {
-  initialize: () => msalInstance.initialize(),
+  initialize: () => {
+    msalInstance.initialize();
+    // if (!msalInstance.getActiveAccount()) {
+    //   console.log('NOT SIGNED IN!');
+    //   msalInstance.loginRedirect();
+    // }
+  },
   signIn: async () => {
     await msalInstance
       .loginPopup(loginRequest)
@@ -89,6 +102,8 @@ export const authenticator = {
       })
       .catch((error) => console.log(error));
   },
+
+  onLoginSuccess: onLoginSuccessEmitter.asObservable(),
   signOut: () => msalInstance.logoutPopup(),
   getCurrentAccount: () => msalInstance.getActiveAccount(),
   getCurrentUserId: () => msalInstance.getActiveAccount()?.localAccountId,

@@ -29,9 +29,9 @@ export class PaymentAPIService {
       );
   }
 
-  public getAllContracts(userId: string): Observable<Contract[]> {
+  public getAllContracts(): Observable<Contract[]> {
     return this.http
-      .get<Contract[]>(environment.NexPayBFF + `contracts`, {})
+      .get<Contract[]>(environment.NexPayBFF + `contracts/all`, {})
       .pipe(
         tap({
           next: (data) => {},
