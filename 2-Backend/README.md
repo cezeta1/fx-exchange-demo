@@ -39,11 +39,21 @@ In particular, for the following projects, add the following properties and fill
 {
   ... ,
   "ConnectionStrings": {
-    "CEZ_NexPayPaymentsDB": "<The Connection String to your local database>"
+    "CEZ_NexPayPaymentsDB": "<The Connection String to your local 'CEZ_NexPayPaymentsDB' database>"
   },
   "EmailHelperOptions": {
     "SmtpSourceAddress": "<SMTP address>",
     "SmtpPW": "<SMTP key>"
+  }
+}
+```
+
+ - **FXRatesAPI:**
+```
+{
+  ... ,
+  "ConnectionStrings": {
+    "CEZ_NexPayFxDB": "<The Connection String to your local 'CEZ_NexPayFXDB' database>"
   }
 }
 ```
