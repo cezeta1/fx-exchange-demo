@@ -1,7 +1,10 @@
+// Angular
 import { Routes } from '@angular/router';
+// Components
 import { ContractsPageComponent } from './features/Contracts/contracts-page/contracts-page.component';
 import { AdminPageComponent } from './features/Admin/admin-page/admin-page.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
+// MSAL
 import { MsalGuard } from '@azure/msal-angular';
 
 export enum RoutesEnum {

@@ -1,11 +1,15 @@
+// Angular
 import { Injectable } from '@angular/core';
-import { Observable, tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../common/environment';
-import { NotificationService } from './notifications.service';
+// Interfaces
 import { Rate } from '../interfaces/FxRatesAPI/rate.interface';
 import { Currency } from '../interfaces/FxRatesAPI/currency.interface';
 import { GetRateQuotePayload } from '../interfaces/FxRatesAPI/Payloads/get-rate-quote-payload.interface';
+// Services
+import { NotificationService } from './notifications.service';
+// Other
+import { Observable, tap } from 'rxjs';
+import { environment } from '../../common/environment';
 
 @Injectable({
   providedIn: 'root',

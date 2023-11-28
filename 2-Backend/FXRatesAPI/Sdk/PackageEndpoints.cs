@@ -1,21 +1,26 @@
 ﻿using CZ.Common.Extensions;
 using FXRatesAPI.Domain.DTOs;
 using FXRatesAPI.Domain.Params;
-using System.Linq;
+using Microsoft.Extensions.Options;
 using System.Web;
 
 namespace FXRatesAPI.Sdk;
+
+public class FXRatesAPIOptions
+{
+    public string BaseURL { get; set; } = String.Empty;
+}
 
 #pragma warning disable CS8603 // Possible null reference return.
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 public class FXRatesAPIService
 {
     private static HttpClient _httpClient;
-    public FXRatesAPIService()
+    public FXRatesAPIService(IOptions<FXRatesAPIOptions> options)
     {
         _httpClient = new()
         {
-            BaseAddress = new Uri("https://localhost:7006/api/"),
+            BaseAddress = new Uri(options.Value.BaseURL + "api/")
         };
     }
 
@@ -33,7 +38,6 @@ public class FXRatesAPIService
             query[$"ids[{i}]"] = ids.ElementAt(i).ToString();
         }
         builder.Query = query.ToString();
-        //string query = "?ids[]=" + string.Join("&ids[]=",ids.Select(x => x.ToString()));
         return await _httpClient.GetAsync<IEnumerable<RateDTO>>("rates"+builder.Query.ToString());
     } 
 

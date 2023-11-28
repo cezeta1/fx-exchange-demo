@@ -1,5 +1,7 @@
+// Angular
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+// NgZorro
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
 

@@ -1,9 +1,13 @@
+// Angular
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { UserLoginComponent } from '../user-profile/user-login/user-login.component';
+import { ActivatedRoute, Router } from '@angular/router';
+// NgZorro
 import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { NzIconModule } from 'ng-zorro-antd/icon';
-import { ActivatedRoute, Router } from '@angular/router';
+// Components
+import { UserLoginComponent } from '../user-profile/user-login/user-login.component';
+// Other
 import { RoutesEnum } from '../../app.routes';
 
 interface MenuOption {

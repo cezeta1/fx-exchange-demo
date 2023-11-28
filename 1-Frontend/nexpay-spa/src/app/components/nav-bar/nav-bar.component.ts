@@ -1,7 +1,10 @@
+// Angular
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { UserLoginComponent } from '../user-profile/user-login/user-login.component';
+// NgZorro
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
+// Components
+import { UserLoginComponent } from '../user-profile/user-login/user-login.component';
 
 @Component({
   selector: 'nav-bar',

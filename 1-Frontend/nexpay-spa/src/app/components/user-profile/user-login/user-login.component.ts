@@ -1,13 +1,16 @@
+// Angular
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+// NgZorro
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
-import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
-import { authenticator } from '../../../auth/authenticator';
-import { AccountInfo, EventMessage, EventType } from '@azure/msal-browser';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
+import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
+// MSAL
+import { AccountInfo } from '@azure/msal-browser';
 import { MsalBroadcastService } from '@azure/msal-angular';
-import { filter, takeUntil } from 'rxjs';
+// Other
+import { authenticator } from '../../../auth/authenticator';
 
 @Component({
   selector: 'user-login',

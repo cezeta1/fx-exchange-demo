@@ -33,6 +33,18 @@ public class RatesService
         newRate.CurrencyToId = currs.ElementAt(1).Id;
 
         // Get current exchange from external API
+        decimal currentRate = await GetRateFromExternalAPIAsync(currs);
+        if (currentRate != -1)
+            newRate.ExchangeRate = currentRate;
+        else throw new Exception("Current Rate not found.");
+
+        newRate = await _ratesRepository.CreateRate(newRate);
+        return newRate;
+    }
+
+    // Utils
+    private async Task<decimal> GetRateFromExternalAPIAsync(IEnumerable<Currency> currs)
+    {
         decimal currentRate = -1;
         using (var client = new HttpClient())
         {
@@ -53,11 +65,6 @@ public class RatesService
                     currentRate = jsonResult.Rates.ElementAt(0).Value;
             }
         }
-        if (currentRate != -1)
-            newRate.ExchangeRate = currentRate;
-        else throw new Exception("Current Rate not found.");
-
-        newRate = await _ratesRepository.CreateRate(newRate);
-        return newRate;
+        return currentRate;
     }
 }
