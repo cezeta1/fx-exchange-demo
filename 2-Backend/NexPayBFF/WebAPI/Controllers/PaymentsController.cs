@@ -10,6 +10,7 @@ using PaymentsAPI.Sdk;
 
 namespace NexPayBFF.WebAPI.Controllers;
 
+[Authorize]
 [EnableCors("GeneralPolicy")]
 [Route("api/")]
 [ApiController]
@@ -30,7 +31,6 @@ public class PaymentsController
     /// Gets all Contracts
     /// </summary>
     /// <returns>A list of all Contracts</returns>
-    [Authorize]
     [HttpGet("contracts/all")]
     [ProducesResponseType(typeof(IEnumerable<ContractDTO>), StatusCodes.Status200OK)]
     public async Task<IEnumerable<ContractDTO>> GetAllContracts()
@@ -44,7 +44,6 @@ public class PaymentsController
     /// Gets all Contracts assigned to a user
     /// </summary>
     /// <returns>A list of all Contracts assigned to a user</returns>
-    [Authorize]
     [HttpGet("users/{userId}/contracts")]
     [ProducesResponseType(typeof(IEnumerable<ContractDTO>), StatusCodes.Status200OK)]
     public async Task<IEnumerable<ContractDTO>> GetContractsByUserId([FromRoute] string userId)
@@ -58,7 +57,6 @@ public class PaymentsController
     /// Gets a Contract by Id
     /// </summary>
     /// <returns>The Contract with provided Id</returns>
-    [Authorize]
     [HttpGet("contracts/{id}")]
     [ProducesResponseType(typeof(ContractDTO), StatusCodes.Status200OK)]
     public async Task<ContractDTO> GetContractById([FromRoute] string id)
@@ -68,7 +66,6 @@ public class PaymentsController
     /// Gets all Contract Status Options
     /// </summary>
     /// <returns>A list of all Contract Statuses</returns>
-    [Authorize]
     [HttpGet("statuses/options")]
     [ProducesResponseType(typeof(IEnumerable<Select>), StatusCodes.Status200OK)]
     public async Task<IEnumerable<Select>> GetContractStatusOptions()
@@ -79,7 +76,6 @@ public class PaymentsController
     /// </summary>
     /// <param name="param"></param>
     /// <returns>A new valid Contract for the given currencies</returns>
-    [Authorize]
     [HttpPost("contracts")]
     [ProducesResponseType(typeof(ContractDTO), StatusCodes.Status200OK)]
     public async Task<ContractDTO> CreateContract([FromBody] CreateContractParam param)
@@ -90,7 +86,6 @@ public class PaymentsController
     /// </summary>
     /// <param name="param"></param>
     /// <returns>The updated Contract</returns>
-    [Authorize]
     [HttpPut("contracts/{userId}")]
     [ProducesResponseType(typeof(ContractDTO), StatusCodes.Status200OK)]
     public async Task<ContractDTO> UpdateContractStatus([FromRoute] string userId, [FromBody] UpdateContractStatusParam param)
