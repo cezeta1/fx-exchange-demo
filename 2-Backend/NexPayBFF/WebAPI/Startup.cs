@@ -2,6 +2,8 @@
 using PaymentsAPI.Sdk;
 using FXRatesAPI.Sdk;
 using CZ.Common.Utilities;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Identity.Web;
 
 namespace NexPayBFF.WebAPI;
 
@@ -19,6 +21,17 @@ public class Startup
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
+        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddMicrosoftIdentityWebApi(options =>
+            {
+                Configuration.Bind("AzureAdB2C", options);
+
+                options.TokenValidationParameters.NameClaimType = "name";
+            },
+            options => {
+                Configuration.Bind("AzureAdB2C", options);
+            });
+
         services.AddControllers();
 
         // Services
@@ -48,6 +61,7 @@ public class Startup
         app.UseHttpsRedirection();
 
         app.UseRouting();
+        app.UseAuthentication();
         app.UseAuthorization();
         app.UseCors("CorsAPI");
         app.UseEndpoints(endpoints =>

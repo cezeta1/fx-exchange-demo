@@ -96,6 +96,9 @@ export const authenticator = {
       .loginPopup(loginRequest)
       .then((response) => {
         if (response.account) {
+          // TODO: this is not safe, use AcquireTokenSilent callback to get the token
+          bearerToken = response.accessToken;
+          debugger;
           msalInstance.setActiveAccount(response.account);
         }
         return msalInstance.getActiveAccount();
