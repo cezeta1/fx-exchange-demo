@@ -262,5 +262,6 @@ FakesAssemblies/
 # Visual Studio 6 workspace options file
 *.opt
 
-FXRatesAPI/Persistence/FXRatesAPI - Backup.Persistence.csproj
+* - Backup.Persistence.csproj
 _localfeed
+*.Development.json
