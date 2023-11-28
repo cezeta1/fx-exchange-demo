@@ -1,21 +1,25 @@
+// Angular
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter } from '@angular/core';
-import { Contract } from '../../../interfaces/PaymentsAPI/contract.interface';
-import { ContractStatusEnum } from '../../../interfaces/PaymentsAPI/contract-status.enum';
-import { NewContractsModalComponent } from '../../Contracts/new-contract/new-contract.component';
-import { authenticator } from '../../../auth/authenticator';
-import { CZModalService } from '../../../services/modal.service';
-import { PaymentAPIService } from '../../../services/paymentAPI.service';
-import { SubSink } from 'subsink';
-import { NzButtonModule } from 'ng-zorro-antd/button';
+import { Component } from '@angular/core';
+// NgZorro
 import {
   NzTableModule,
   NzTableSortFn,
   NzTableSortOrder,
 } from 'ng-zorro-antd/table';
-import { CZTagComponent } from '../../../components/shared/cz-tag/cz-tag.component';
 import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+// Components
+import { CZTagComponent } from '../../../components/shared/cz-tag/cz-tag.component';
+// Interfaces
+import { Contract } from '../../../interfaces/PaymentsAPI/contract.interface';
+import { ContractStatusEnum } from '../../../interfaces/PaymentsAPI/contract-status.enum';
+// Services
+import { PaymentAPIService } from '../../../services/paymentAPI.service';
 import { NotificationService } from '../../../services/notifications.service';
+// Other
+import { SubSink } from 'subsink';
+import { authenticator } from '../../../auth/authenticator';
 
 interface ColumnConfig<T> {
   name: string;

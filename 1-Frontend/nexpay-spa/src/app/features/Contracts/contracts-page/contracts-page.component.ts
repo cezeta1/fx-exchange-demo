@@ -1,17 +1,22 @@
+// Angular
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, OnDestroy, OnInit } from '@angular/core';
-import { Contract } from '../../../interfaces/PaymentsAPI/contract.interface';
-import { SubSink } from 'subsink';
-import { PaymentAPIService } from '../../../services/paymentAPI.service';
-import { ContractStatusEnum } from '../../../interfaces/PaymentsAPI/contract-status.enum';
-
+// NgZorro
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzTableSortFn, NzTableSortOrder } from 'ng-zorro-antd/table';
-import { CZTagComponent } from '../../../components/shared/cz-tag/cz-tag.component';
 import { NzModalModule } from 'ng-zorro-antd/modal';
+// Components
 import { NewContractsModalComponent } from '../new-contract/new-contract.component';
+import { CZTagComponent } from '../../../components/shared/cz-tag/cz-tag.component';
+// Interfaces
+import { Contract } from '../../../interfaces/PaymentsAPI/contract.interface';
+import { ContractStatusEnum } from '../../../interfaces/PaymentsAPI/contract-status.enum';
+// Services
+import { PaymentAPIService } from '../../../services/paymentAPI.service';
 import { CZModalService } from '../../../services/modal.service';
+// Other
+import { SubSink } from 'subsink';
 import { authenticator } from '../../../auth/authenticator';
 
 interface ColumnConfig<T> {

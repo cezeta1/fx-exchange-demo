@@ -1,3 +1,4 @@
+// Angular
 import { ApplicationConfig, importProvidersFrom } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import {
@@ -7,14 +8,16 @@ import {
 } from '@angular/common/http';
 import { provideClientHydration } from '@angular/platform-browser';
 import { provideAnimations } from '@angular/platform-browser/animations';
-import { routes } from './app.routes';
-import { authInterceptorFn } from './auth-interceptor';
+// MSAL
 import { MsalModule } from '@azure/msal-angular';
+import { authInterceptorFn } from './auth-interceptor';
 import {
   MSALGuardConfigFactory,
   MSALInterceptorConfigFactory,
   msalInstance,
 } from './auth/authenticator';
+// Other
+import { routes } from './app.routes';
 
 /* --- NgZorro Configs --- */
 import { NzConfig, provideNzConfig } from 'ng-zorro-antd/core/config';

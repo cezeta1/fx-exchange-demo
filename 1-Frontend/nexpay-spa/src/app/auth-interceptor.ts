@@ -1,4 +1,6 @@
+// Angular
 import { HttpHeaders, HttpInterceptorFn } from '@angular/common/http';
+// Other
 import { authenticator } from './auth/authenticator';
 
 export const authInterceptorFn: HttpInterceptorFn = (req, next) => {

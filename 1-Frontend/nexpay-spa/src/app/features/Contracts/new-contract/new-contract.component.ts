@@ -1,18 +1,21 @@
+// Angular
 import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { SubSink } from 'subsink';
-import { PaymentAPIService } from '../../../services/paymentAPI.service';
-
+// NgZorro
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzModalModule, NzModalRef } from 'ng-zorro-antd/modal';
-
-import { NotificationService } from '../../../services/notifications.service';
-import { FxRatesAPIService } from '../../../services/fxRatesAPI.service';
-import { Currency } from '../../../interfaces/FxRatesAPI/currency.interface';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 import { NzTagModule } from 'ng-zorro-antd/tag';
+// Interfaces
+import { Currency } from '../../../interfaces/FxRatesAPI/currency.interface';
+// Services
+import { PaymentAPIService } from '../../../services/paymentAPI.service';
+import { NotificationService } from '../../../services/notifications.service';
+import { FxRatesAPIService } from '../../../services/fxRatesAPI.service';
+// Other
+import { SubSink } from 'subsink';
 
 import {
   FormControl,

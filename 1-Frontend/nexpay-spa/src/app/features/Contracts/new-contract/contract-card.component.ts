@@ -1,9 +1,13 @@
+// Angular
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
-import { Rate } from '../../../interfaces/FxRatesAPI/rate.interface';
+// NgZorro
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzSkeletonModule } from 'ng-zorro-antd/skeleton';
+// Components
 import { CZValidUntilTagComponent } from './valid-until-tag.component';
+// Interfaces
+import { Rate } from '../../../interfaces/FxRatesAPI/rate.interface';
 
 @Component({
   selector: 'cz-contract-card',

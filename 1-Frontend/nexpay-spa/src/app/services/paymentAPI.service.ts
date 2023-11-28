@@ -1,11 +1,15 @@
+// Angular
 import { Injectable } from '@angular/core';
-import { Observable, tap } from 'rxjs';
-import { Contract } from '../interfaces/PaymentsAPI/contract.interface';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../common/environment';
-import { NotificationService } from './notifications.service';
+// Interfaces
+import { Contract } from '../interfaces/PaymentsAPI/contract.interface';
 import { CreateContractPayload } from '../interfaces/PaymentsAPI/Payloads/create-contract-payload.interface';
 import { UpdateContractStatusPayload } from '../interfaces/PaymentsAPI/Payloads/update-contract-status-payload.interface';
+// Services
+import { NotificationService } from './notifications.service';
+// Other
+import { Observable, tap } from 'rxjs';
+import { environment } from '../../common/environment';
 
 @Injectable({
   providedIn: 'root',
