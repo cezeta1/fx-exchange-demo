@@ -1,13 +1,24 @@
 TODO:
 
  * AUTHENTICATION (backend)
-
+ * Figure out why logo disappears after login
  * Improve interface annotations for controllers
- * Add in-depth data validation for API controllers' inputs
- * 
- * 
+
+SPA
+ * Saving the token in a variable in authenticator.ts is not safe, use
+      AcquireTokenSilent callback to get the token
+
+BFF
+ * After validation is implemented, add user validation on:
+	- Creation of Contracts:
+		. UserId from Contract and Rate must be the same
+		. Rate must ve valid
+	- Reading of Contracts:
+		. User must be admin or owner of Contract
+	- Updating Contract status:
+		. User must be admin
+ * Update Contract status automatically when it Expires, either by checking on user read or
+     by running a timed job (like Quartz's CronTrigger).
 
 Common
  * HttpClientExtensions -- Add query object mapping support
- * 
- * 

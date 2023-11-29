@@ -10,7 +10,7 @@ import { provideClientHydration } from '@angular/platform-browser';
 import { provideAnimations } from '@angular/platform-browser/animations';
 // MSAL
 import { MsalModule } from '@azure/msal-angular';
-import { authInterceptorFn } from './auth-interceptor';
+import { authInterceptorFn } from './auth/auth-interceptor';
 import {
   MSALGuardConfigFactory,
   MSALInterceptorConfigFactory,

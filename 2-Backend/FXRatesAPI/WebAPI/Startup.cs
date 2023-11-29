@@ -40,7 +40,7 @@ public class Startup
         services.AddHttpContextAccessor();
         services = _corsConfigHelper.ConfigureCors(services, Configuration);
     }
-        
+
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
         if (env.IsDevelopment())

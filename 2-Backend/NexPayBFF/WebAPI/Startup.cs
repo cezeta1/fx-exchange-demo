@@ -24,12 +24,13 @@ public class Startup
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddMicrosoftIdentityWebApi(options =>
             {
-                Configuration.Bind("AzureAdB2C", options);
+                Configuration.Bind("AzureAd", options);
 
                 options.TokenValidationParameters.NameClaimType = "name";
             },
-            options => {
-                Configuration.Bind("AzureAdB2C", options);
+            options =>
+            {
+                Configuration.Bind("AzureAd", options);
             });
 
         services.AddControllers();
@@ -44,11 +45,20 @@ public class Startup
         services.AddSwaggerGen(c =>
         {
             c.SwaggerDoc("v1", new OpenApiInfo { Title = "CEZ.NexPayBFF", Version = "v1" });
-
         }); 
 
         services.AddHttpContextAccessor();
         services = _corsConfigHelper.ConfigureCors(services, Configuration);
+        //services.AddCors(options =>
+        //{
+        //    options.AddPolicy("AllowAllHeaders",
+        //        builder =>
+        //        {
+        //            builder.AllowAnyOrigin()
+        //                   .AllowAnyHeader()
+        //                   .AllowAnyMethod();
+        //        });
+        //});
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -63,7 +73,7 @@ public class Startup
         app.UseRouting();
         app.UseAuthentication();
         app.UseAuthorization();
-        app.UseCors("CorsAPI");
+        app.UseCors("GeneralPolicy");
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapControllers();
