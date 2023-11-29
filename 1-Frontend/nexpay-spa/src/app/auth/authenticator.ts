@@ -46,6 +46,7 @@ export function MSALInterceptorConfigFactory(): MsalInterceptorConfiguration {
     protectedResourceMap,
     authRequest: (msalService, httpReq, originalAuthRequest) => {
       const resource = new URL(httpReq.url).hostname;
+      debugger;
       let claim =
         msalService.instance.getActiveAccount()! &&
         getClaimsFromStorage(
@@ -63,7 +64,7 @@ export function MSALInterceptorConfigFactory(): MsalInterceptorConfiguration {
           : undefined;
       return {
         ...originalAuthRequest,
-        claims: claim,
+        // claims: claim,
         authority: `https://login.microsoftonline.com/${
           originalAuthRequest.account?.tenantId ?? 'organizations'
         }`,
@@ -97,8 +98,7 @@ export const authenticator = {
       .then((response) => {
         if (response.account) {
           // TODO: this is not safe, use AcquireTokenSilent callback to get the token
-          bearerToken = response.accessToken;
-          debugger;
+          bearerToken = response.idToken;
           msalInstance.setActiveAccount(response.account);
         }
         return msalInstance.getActiveAccount();

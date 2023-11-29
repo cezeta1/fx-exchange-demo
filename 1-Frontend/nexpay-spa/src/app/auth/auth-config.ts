@@ -11,7 +11,9 @@ import {
 export const msalConfig: Configuration = {
   auth: {
     clientId: 'f648ff3f-ca7c-4189-b4d0-3f9dc0ce88ea', // This is the ONLY mandatory field that you need to supply.
-    authority: 'https://login.microsoftonline.com/organizations',
+    authority:
+      'https://login.microsoftonline.com/cznexpaytenanttest.onmicrosoft.com',
+    // authority: 'https://login.microsoftonline.com/organizations',
     redirectUri: 'http://localhost:4200',
     postLogoutRedirectUri: 'http://localhost:4200',
     clientCapabilities: ['CP1'], // This lets the resource server know that this client can handle claim challenges.
@@ -48,8 +50,7 @@ export const protectedResources = {
   },
 };
 
-//  https://login.microsoftonline.com/<TENANT_ID>/oauth2/v2.0/authorize?client_id=<CLIENT_ID>&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login
-//  SPA -- https://login.microsoftonline.com/cznexpaytenanttest.onmicrosoft.com/oauth2/v2.0/authorize?client_id=f648ff3f-ca7c-4189-b4d0-3f9dc0ce88ea&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login
+//  https://login.microsoftonline.com/cznexpaytenanttest.onmicrosoft.com/oauth2/v2.0/authorize?client_id=f648ff3f-ca7c-4189-b4d0-3f9dc0ce88ea&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login
 
 /*
  * Scopes you add here will be prompted for consent during sign-in.
