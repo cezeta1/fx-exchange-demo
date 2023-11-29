@@ -48,17 +48,7 @@ public class Startup
         }); 
 
         services.AddHttpContextAccessor();
-        services = _corsConfigHelper.ConfigureCors(services, Configuration);
-        //services.AddCors(options =>
-        //{
-        //    options.AddPolicy("AllowAllHeaders",
-        //        builder =>
-        //        {
-        //            builder.AllowAnyOrigin()
-        //                   .AllowAnyHeader()
-        //                   .AllowAnyMethod();
-        //        });
-        //});
+        _corsConfigHelper.ConfigureCors(services, Configuration);
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -71,9 +61,9 @@ public class Startup
         app.UseHttpsRedirection();
 
         app.UseRouting();
+        app.UseCors("GeneralPolicy");
         app.UseAuthentication();
         app.UseAuthorization();
-        app.UseCors("GeneralPolicy");
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapControllers();
