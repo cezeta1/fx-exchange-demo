@@ -28,6 +28,7 @@ import {
   ControlFill,
   LinkedinFill,
   GithubFill,
+  UserOutline,
 } from '@ant-design/icons-angular/icons';
 const ngZorroConfig: NzConfig = {
   notification: { nzPlacement: 'bottomLeft' },
@@ -37,6 +38,7 @@ const icons: IconDefinition[] = [
   ControlFill,
   LinkedinFill,
   GithubFill,
+  UserOutline,
 ];
 /* ---------------- */
 

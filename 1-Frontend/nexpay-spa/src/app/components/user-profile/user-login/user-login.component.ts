@@ -53,6 +53,7 @@ import { authenticator } from '../../../auth/authenticator';
     </nz-dropdown-menu>
     } @else {
     <nz-avatar [nzSize]="42" nzIcon="user"></nz-avatar>
+    <span nz-icon nzType="user" nzTheme="outline"></span>
     }
   `,
   styles: `

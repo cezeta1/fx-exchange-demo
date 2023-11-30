@@ -105,6 +105,7 @@ export const authenticator = {
           msalInstance.loginRedirect(loginRequest);
         } else {
           // TODO add account selection if multiple accounts are available
+          bearerToken = currentAccounts[0].idToken ?? '-';
           msalInstance.setActiveAccount(currentAccounts[0]);
           onLoginSuccessEmitter.next(msalInstance.getActiveAccount());
         }
