@@ -60,4 +60,5 @@ export const protectedResources = {
  */
 export const loginRequest: PopupRequest | RedirectRequest = {
   scopes: ['User.Read'],
+  // 'api://36d3a9c4-77cc-4670-8df4-e30b2df9a160/NexPayBFF.Read',
 };

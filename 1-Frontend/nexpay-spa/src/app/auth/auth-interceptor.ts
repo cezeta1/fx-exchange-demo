@@ -2,9 +2,12 @@
 import { HttpHeaders, HttpInterceptorFn } from '@angular/common/http';
 // Other
 import { authenticator } from './authenticator';
-import { throwError } from 'rxjs';
+import { EMPTY, throwError } from 'rxjs';
 
 export const authInterceptorFn: HttpInterceptorFn = (req, next) => {
+  if (!authenticator.isLoggedIn()) {
+    return EMPTY;
+  }
   const auth_token = authenticator.getToken() ?? 'No Token';
   if (auth_token == 'No Token') {
     return throwError(

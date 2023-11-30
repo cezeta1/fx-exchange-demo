@@ -46,7 +46,6 @@ export function MSALInterceptorConfigFactory(): MsalInterceptorConfiguration {
     protectedResourceMap,
     authRequest: (msalService, httpReq, originalAuthRequest) => {
       const resource = new URL(httpReq.url).hostname;
-      debugger;
       let claim =
         msalService.instance.getActiveAccount()! &&
         getClaimsFromStorage(

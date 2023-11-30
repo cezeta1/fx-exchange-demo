@@ -8,7 +8,6 @@ import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 // MSAL
 import { AccountInfo } from '@azure/msal-browser';
-import { MsalBroadcastService } from '@azure/msal-angular';
 // Other
 import { authenticator } from '../../../auth/authenticator';
 
@@ -77,7 +76,7 @@ export class UserLoginComponent {
   protected authenticator = authenticator;
   protected currentUser: any = {};
 
-  constructor(private msalBroadcastService: MsalBroadcastService) {}
+  constructor() {}
 
   ngOnInit() {
     if (authenticator.isLoggedIn()) this._fillInUserData();
