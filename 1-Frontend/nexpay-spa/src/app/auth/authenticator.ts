@@ -6,9 +6,7 @@ import {
 import {
   PublicClientApplication,
   InteractionType,
-  EventMessage,
   AccountInfo,
-  EndSessionRequest,
 } from '@azure/msal-browser';
 import { getClaimsFromStorage } from '../utils/storage-utils';
 import { loginRequest, msalConfig, protectedResources } from './auth-config';
@@ -85,7 +83,6 @@ export function MSALGuardConfigFactory(): MsalGuardConfiguration {
 const onLoginSuccessEmitter = new BehaviorSubject<AccountInfo | null>(null);
 
 /* ----------------------------------- */
-var bearerToken!: string;
 export const authenticator = {
   initialize: () => {
     return msalInstance.initialize();
@@ -95,7 +92,6 @@ export const authenticator = {
       if (response !== null) {
         if (response?.account) {
           // TODO: this is not safe, use AcquireTokenSilent callback to get the token
-          bearerToken = response.idToken;
           msalInstance.setActiveAccount(response.account);
           onLoginSuccessEmitter.next(msalInstance.getActiveAccount());
         }
@@ -105,7 +101,6 @@ export const authenticator = {
           msalInstance.loginRedirect(loginRequest);
         } else {
           // TODO add account selection if multiple accounts are available
-          bearerToken = currentAccounts[0].idToken ?? '-';
           msalInstance.setActiveAccount(currentAccounts[0]);
           onLoginSuccessEmitter.next(msalInstance.getActiveAccount());
         }
@@ -117,10 +112,10 @@ export const authenticator = {
     msalInstance.logoutRedirect({
       account: msalInstance.getActiveAccount(),
       authority: loginRequest?.authority ?? '',
-      // onRedirectNavigate: (url: string) => true,
     }),
   getCurrentAccount: () => msalInstance.getActiveAccount(),
   getCurrentUserId: () => msalInstance.getActiveAccount()?.localAccountId,
   isLoggedIn: () => (msalInstance.getActiveAccount() ? true : false),
-  getToken: (): string => bearerToken,
+  getToken: (): string =>
+    msalInstance.getActiveAccount()?.idToken ?? 'No Token',
 };
