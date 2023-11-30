@@ -102,7 +102,16 @@ export class UserLoginComponent {
       tenantId: currentUser?.tenantId ?? '-',
     };
   }
-  private _getUserInitials(username?: string): string {
-    return username ?? '-';
+  private _getUserInitials(username?: string): string | null {
+    return (
+      (username ?? '')
+        .replace('.', ' ')
+        .match(/(^\S\S?|\s\S)?/g)
+        ?.map((v) => v.trim())
+        .join('')
+        .match(/(^\S|\S$)?/g)
+        ?.join('')
+        .toLocaleUpperCase() ?? 'NN'
+    );
   }
 }
