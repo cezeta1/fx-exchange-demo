@@ -54,6 +54,6 @@ export class AppComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    authenticator.initialize();
+    authenticator.initialize().then(authenticator.handleSignIn);
   }
 }
