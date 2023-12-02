@@ -37,7 +37,7 @@ public class PaymentsController
     {
         IEnumerable<ContractDTO> results = await _paymentsAPIService.GetAllContracts();
         await results.Apply(_fxRatesAPIService.GetRatesById);
-        return results;
+        return results.OrderByDescending(c => c.CreatedOn);
     }
 
     /// <summary>
@@ -50,7 +50,7 @@ public class PaymentsController
     {
         IEnumerable<ContractDTO> results = await _paymentsAPIService.GetContractsByUserId(userId);
         await results.Apply(_fxRatesAPIService.GetRatesById);
-        return results;
+        return results.OrderByDescending(c => c.CreatedOn);
     }
 
     /// <summary>

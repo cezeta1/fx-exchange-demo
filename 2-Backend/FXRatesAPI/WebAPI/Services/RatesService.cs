@@ -38,6 +38,12 @@ public class RatesService
             newRate.ExchangeRate = currentRate;
         else throw new Exception("Current Rate not found.");
 
+        /*
+          Custom logic to decide final exchange rate with commissions
+        */
+
+        newRate.Amount = param.Amount;
+
         newRate = await _ratesRepository.CreateRate(newRate);
         return newRate;
     }

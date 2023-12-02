@@ -23,17 +23,17 @@ $Version = "1.0.5"
 $OutputPath = "..\..\..\..\..\_localfeed"
 #>
 
-<#
+#<#
 $ProjectPath = ".\2-Backend\FXRatesAPI\Sdk"
 $ProjectName = "FXRatesAPI.Sdk"
-$Version = "1.0.10"
+$Version = "1.0.11"
 $OutputPath = "..\..\..\..\..\_localfeed"
 #>
 
-#<#
+<#
 $ProjectPath = ".\2-Backend\FXRatesAPI\Domain"
 $ProjectName = "FXRatesAPI.Domain"
-$Version = "1.0.10"
+$Version = "1.0.11"
 $OutputPath = "..\..\..\..\..\_localfeed"
 #>
 

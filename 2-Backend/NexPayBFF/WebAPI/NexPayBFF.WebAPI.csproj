@@ -9,7 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="CZ.Common" Version="1.0.11" />
-    <PackageReference Include="FXRatesAPI.Sdk" Version="1.0.10" />
+    <PackageReference Include="FXRatesAPI.Sdk" Version="1.0.11" />
     <PackageReference Include="Microsoft.Identity.Web" Version="2.16.0" />
     <PackageReference Include="PaymentsAPI.Sdk" Version="1.0.5" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />

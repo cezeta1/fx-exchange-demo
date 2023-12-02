@@ -12,4 +12,5 @@ public class RateDTO : EffectivenessDTO
     public Currency CurrencyFrom { get; set; }
     public Currency CurrencyTo { get; set; }
     public decimal ExchangeRate { get; set; }
+    public decimal Amount { get; set; }
 }
