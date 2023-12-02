@@ -57,8 +57,8 @@ public class Startup
         app.UseHttpsRedirection();
 
         app.UseRouting();
+        app.UseCors("GeneralPolicy");
         app.UseAuthorization();
-        app.UseCors("CorsAPI");
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapControllers();
