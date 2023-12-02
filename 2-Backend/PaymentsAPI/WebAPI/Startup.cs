@@ -23,17 +23,17 @@ public class Startup
         services.AddControllers();
         services.AddDbContext<AppDbContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("CEZ_NexPayPaymentsDB"))
-        , ServiceLifetime.Singleton);
+        , ServiceLifetime.Scoped);
 
         // Helpers
         services.Configure<EmailHelperOptions>(Configuration.GetSection(EmailHelperOptions.SectionName));
         services.AddSingleton<EmailHelper>();
 
         // Services
-        services.AddSingleton<ContractsService>();
+        services.AddScoped<IContractsService, ContractsService>();
         
         // Repositories
-        services.AddSingleton<ContractsRepository>();
+        services.AddScoped<IContractsRepository, ContractsRepository>();
 
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen(c =>

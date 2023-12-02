@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace PaymentsAPI.Repository;
 
-public class ContractsRepository
+public class ContractsRepository: IContractsRepository
 {
     private readonly AppDbContext _db;
     public ContractsRepository(AppDbContext context)
