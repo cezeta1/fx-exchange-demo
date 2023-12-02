@@ -11,9 +11,9 @@ namespace FXRatesAPI.WebAPI;
 public class RatesController : ControllerBase
 {
     private readonly ILogger<RatesController> _logger;
-    private RatesService _ratesService;
+    private IRatesService _ratesService;
 
-    public RatesController(ILogger<RatesController> logger, RatesService ratesService)
+    public RatesController(ILogger<RatesController> logger, IRatesService ratesService)
     {
         _logger = logger;
         _ratesService = ratesService;

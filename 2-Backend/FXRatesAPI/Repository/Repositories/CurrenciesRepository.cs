@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FXRatesAPI.Repository;
 
-public class CurrenciesRepository
+public class CurrenciesRepository: ICurrenciesRepository
 {
     private readonly AppDbContext _db;
     public CurrenciesRepository(AppDbContext context)

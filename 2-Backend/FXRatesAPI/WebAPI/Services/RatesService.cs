@@ -5,7 +5,7 @@ using System.Net.Http.Headers;
 
 namespace FXRatesAPI.WebAPI;
 
-public class RatesService
+public class RatesService : IRatesService
 {
     private readonly RatesRepository _ratesRepository;
     private readonly CurrenciesRepository _currenciesRepository;

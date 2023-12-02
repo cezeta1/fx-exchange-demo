@@ -3,7 +3,7 @@ using FXRatesAPI.Repository;
 
 namespace FXRatesAPI.WebAPI;
 
-public class CurrenciesService
+public class CurrenciesService : ICurrenciesService
 {
     private readonly CurrenciesRepository _currenciesRepository;
 
