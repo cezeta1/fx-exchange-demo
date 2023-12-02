@@ -90,7 +90,6 @@ export const authenticator = {
     await msalInstance.handleRedirectPromise().then((response) => {
       if (response !== null) {
         if (response?.account) {
-          debugger;
           msalInstance.setActiveAccount(response.account);
           onLoginSuccessEmitter.next(msalInstance.getActiveAccount());
         }
