@@ -6,11 +6,11 @@ using PaymentsAPI.Repository;
 
 namespace PaymentsAPI.WebAPI.Services;
 
-public class ContractsService
+public class ContractsService : IContractsService
 {
-    private readonly ContractsRepository _contractsRepository;
+    private readonly IContractsRepository _contractsRepository;
     private readonly EmailHelper _emailHelper;
-    public ContractsService(ContractsRepository contractsRepository, EmailHelper emailHelper)
+    public ContractsService(IContractsRepository contractsRepository, EmailHelper emailHelper)
     {
         _contractsRepository = contractsRepository;
         _emailHelper = emailHelper;

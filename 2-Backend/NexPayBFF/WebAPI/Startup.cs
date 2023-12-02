@@ -2,6 +2,8 @@
 using PaymentsAPI.Sdk;
 using FXRatesAPI.Sdk;
 using CZ.Common.Utilities;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Identity.Web;
 
 namespace NexPayBFF.WebAPI;
 
@@ -19,6 +21,24 @@ public class Startup
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
+        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddMicrosoftIdentityWebApi(options =>
+            {
+                Configuration.Bind("AzureAd", options);
+
+                options.TokenValidationParameters.NameClaimType = "name";
+            },
+            options =>
+            {
+                Configuration.Bind("AzureAd", options);
+            });
+
+        services.AddAuthorization(options =>
+        {
+            options.AddPolicy("RequireAdminRole",
+                 policy => policy.RequireRole("Admin.ReadWrite"));
+        });
+
         services.AddControllers();
 
         // Services
@@ -31,11 +51,10 @@ public class Startup
         services.AddSwaggerGen(c =>
         {
             c.SwaggerDoc("v1", new OpenApiInfo { Title = "CEZ.NexPayBFF", Version = "v1" });
-
         }); 
 
         services.AddHttpContextAccessor();
-        services = _corsConfigHelper.ConfigureCors(services, Configuration);
+        _corsConfigHelper.ConfigureCors(services, Configuration);
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -48,8 +67,9 @@ public class Startup
         app.UseHttpsRedirection();
 
         app.UseRouting();
+        app.UseCors("GeneralPolicy");
+        app.UseAuthentication();
         app.UseAuthorization();
-        app.UseCors("CorsAPI");
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapControllers();

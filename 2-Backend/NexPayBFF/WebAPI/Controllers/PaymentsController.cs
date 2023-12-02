@@ -1,6 +1,6 @@
 ﻿using CZ.Common.Entities;
-using FXRatesAPI.Domain.DTOs;
 using FXRatesAPI.Sdk;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using NexPayBFF.WebAPI.Extensions;
@@ -10,6 +10,7 @@ using PaymentsAPI.Sdk;
 
 namespace NexPayBFF.WebAPI.Controllers;
 
+[Authorize]
 [EnableCors("GeneralPolicy")]
 [Route("api/")]
 [ApiController]
@@ -30,13 +31,14 @@ public class PaymentsController
     /// Gets all Contracts
     /// </summary>
     /// <returns>A list of all Contracts</returns>
+    [Authorize(Policy = "RequireAdminRole")]
     [HttpGet("contracts/all")]
     [ProducesResponseType(typeof(IEnumerable<ContractDTO>), StatusCodes.Status200OK)]
     public async Task<IEnumerable<ContractDTO>> GetAllContracts()
     {
         IEnumerable<ContractDTO> results = await _paymentsAPIService.GetAllContracts();
         await results.Apply(_fxRatesAPIService.GetRatesById);
-        return results;
+        return results.OrderByDescending(c => c.CreatedOn);
     }
 
     /// <summary>
@@ -49,7 +51,7 @@ public class PaymentsController
     {
         IEnumerable<ContractDTO> results = await _paymentsAPIService.GetContractsByUserId(userId);
         await results.Apply(_fxRatesAPIService.GetRatesById);
-        return results;
+        return results.OrderByDescending(c => c.CreatedOn);
     }
 
     /// <summary>
@@ -85,6 +87,7 @@ public class PaymentsController
     /// </summary>
     /// <param name="param"></param>
     /// <returns>The updated Contract</returns>
+    [Authorize(Policy = "RequireAdminRole")]
     [HttpPut("contracts/{userId}")]
     [ProducesResponseType(typeof(ContractDTO), StatusCodes.Status200OK)]
     public async Task<ContractDTO> UpdateContractStatus([FromRoute] string userId, [FromBody] UpdateContractStatusParam param)

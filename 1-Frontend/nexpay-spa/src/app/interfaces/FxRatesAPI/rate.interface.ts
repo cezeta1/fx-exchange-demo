@@ -6,4 +6,5 @@ export interface Rate extends Effectiveness {
   currencyFrom: Currency;
   currencyTo: Currency;
   exchangeRate: number;
+  amount: number;
 }

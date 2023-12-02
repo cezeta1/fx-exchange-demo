@@ -10,9 +10,9 @@ namespace FXRatesAPI.WebAPI;
 public class CurrenciesController : ControllerBase
 {
     private readonly ILogger<CurrenciesController> _logger;
-    private CurrenciesService _currenciesService;
+    private ICurrenciesService _currenciesService;
 
-    public CurrenciesController(ILogger<CurrenciesController> logger, CurrenciesService currenciesService)
+    public CurrenciesController(ILogger<CurrenciesController> logger, ICurrenciesService currenciesService)
     {
         _logger = logger;
         _currenciesService = currenciesService;

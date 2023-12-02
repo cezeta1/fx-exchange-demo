@@ -5,11 +5,11 @@ using System.Net.Http.Headers;
 
 namespace FXRatesAPI.WebAPI;
 
-public class RatesService
+public class RatesService : IRatesService
 {
-    private readonly RatesRepository _ratesRepository;
-    private readonly CurrenciesRepository _currenciesRepository;
-    public RatesService(RatesRepository ratesRepository, CurrenciesRepository currenciesRepository)
+    private readonly IRatesRepository _ratesRepository;
+    private readonly ICurrenciesRepository _currenciesRepository;
+    public RatesService(IRatesRepository ratesRepository, ICurrenciesRepository currenciesRepository)
     {
         _ratesRepository = ratesRepository;
         _currenciesRepository = currenciesRepository;
@@ -37,6 +37,12 @@ public class RatesService
         if (currentRate != -1)
             newRate.ExchangeRate = currentRate;
         else throw new Exception("Current Rate not found.");
+
+        /*
+          Custom logic to decide final exchange rate with commissions
+        */
+
+        newRate.Amount = param.Amount;
 
         newRate = await _ratesRepository.CreateRate(newRate);
         return newRate;

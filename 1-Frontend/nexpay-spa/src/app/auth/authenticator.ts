@@ -6,7 +6,7 @@ import {
 import {
   PublicClientApplication,
   InteractionType,
-  EventMessage,
+  AccountInfo,
 } from '@azure/msal-browser';
 import { getClaimsFromStorage } from '../utils/storage-utils';
 import { loginRequest, msalConfig, protectedResources } from './auth-config';
@@ -63,7 +63,7 @@ export function MSALInterceptorConfigFactory(): MsalInterceptorConfiguration {
           : undefined;
       return {
         ...originalAuthRequest,
-        claims: claim,
+        // claims: claim,
         authority: `https://login.microsoftonline.com/${
           originalAuthRequest.account?.tenantId ?? 'organizations'
         }`,
@@ -79,34 +79,54 @@ export function MSALGuardConfigFactory(): MsalGuardConfiguration {
   };
 }
 
-const onLoginSuccessEmitter = new BehaviorSubject<EventMessage | null>(null);
+const onLoginSuccessEmitter = new BehaviorSubject<AccountInfo | null>(null);
 
 /* ----------------------------------- */
-var bearerToken!: string;
 export const authenticator = {
   initialize: () => {
-    msalInstance.initialize();
-    // if (!msalInstance.getActiveAccount()) {
-    //   console.log('NOT SIGNED IN!');
-    //   msalInstance.loginRedirect();
-    // }
+    return msalInstance.initialize();
   },
-  signIn: async () => {
-    await msalInstance
-      .loginPopup(loginRequest)
-      .then((response) => {
-        if (response.account) {
+  handleSignIn: async () => {
+    await msalInstance.handleRedirectPromise().then((response) => {
+      if (response !== null) {
+        if (response?.account) {
           msalInstance.setActiveAccount(response.account);
+          onLoginSuccessEmitter.next(msalInstance.getActiveAccount());
         }
-        return msalInstance.getActiveAccount();
-      })
-      .catch((error) => console.log(error));
+      } else {
+        const currentAccounts = msalInstance.getAllAccounts();
+        if (currentAccounts.length === 0) {
+          msalInstance.loginRedirect(loginRequest);
+        } else {
+          // TODO add account selection if multiple accounts are available
+          msalInstance.setActiveAccount(currentAccounts[0]);
+          onLoginSuccessEmitter.next(msalInstance.getActiveAccount());
+        }
+      }
+    });
   },
-
   onLoginSuccess: onLoginSuccessEmitter.asObservable(),
-  signOut: () => msalInstance.logoutPopup(),
+  signOut: () =>
+    msalInstance.logoutRedirect({
+      account: msalInstance.getActiveAccount(),
+      authority: loginRequest?.authority ?? '',
+    }),
   getCurrentAccount: () => msalInstance.getActiveAccount(),
   getCurrentUserId: () => msalInstance.getActiveAccount()?.localAccountId,
   isLoggedIn: () => (msalInstance.getActiveAccount() ? true : false),
-  getToken: (): string => bearerToken,
+  getToken: (): string =>
+    msalInstance.getActiveAccount()?.idToken ?? 'No Token',
+  getUserAuthority: (): UserAuthorityEnum => {
+    const acc = msalInstance.getActiveAccount();
+    return (
+      (acc?.idTokenClaims?.roles?.some((r: string) => r.includes('Admin'))
+        ? UserAuthorityEnum.Admin
+        : UserAuthorityEnum.User) ?? undefined
+    );
+  },
 };
+
+export enum UserAuthorityEnum {
+  Admin = 'admin',
+  User = 'user',
+}

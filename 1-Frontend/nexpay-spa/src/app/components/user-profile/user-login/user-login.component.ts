@@ -8,7 +8,6 @@ import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 // MSAL
 import { AccountInfo } from '@azure/msal-browser';
-import { MsalBroadcastService } from '@azure/msal-angular';
 // Other
 import { authenticator } from '../../../auth/authenticator';
 
@@ -52,7 +51,8 @@ import { authenticator } from '../../../auth/authenticator';
       </ul>
     </nz-dropdown-menu>
     } @else {
-    <button nz-button nzType="primary" (click)="onLogin()">Login</button>
+    <nz-avatar [nzSize]="42" nzIcon="user"></nz-avatar>
+    <span nz-icon nzType="user" nzTheme="outline"></span>
     }
   `,
   styles: `
@@ -76,43 +76,41 @@ export class UserLoginComponent {
   protected authenticator = authenticator;
   protected currentUser: any = {};
 
-  constructor(private msalBroadcastService: MsalBroadcastService) {}
+  constructor() {}
 
   ngOnInit() {
-    // debugger;
-    // this.msalBroadcastService.msalSubject$
-    //   .pipe(
-    //     filter((msg: EventMessage) => msg.eventType === EventType.LOGIN_SUCCESS)
-    //   )
-    //   .subscribe((result: EventMessage) => {
-    //     this._fillInUserData();
-    //   });
-    // this.authenticator.onLoginSuccess.subscribe(
-    //   (result: EventMessage | null) => {
-    //     debugger;
-    //     this._fillInUserData();
-    //   }
-    // );
     if (authenticator.isLoggedIn()) this._fillInUserData();
+    else
+      authenticator.onLoginSuccess.subscribe(
+        (currentUser: AccountInfo | null) => {
+          if (currentUser) this._fillInUserData(currentUser);
+        }
+      );
   }
 
-  protected onLogin(): void {
-    authenticator.signIn().then(() => this._fillInUserData());
-  }
   protected onLogout(): void {
     authenticator.signOut();
   }
 
-  private _fillInUserData(): void {
-    const acc: AccountInfo | null = authenticator.getCurrentAccount();
+  private _fillInUserData(currentUser?: AccountInfo | null): void {
+    if (!currentUser) currentUser = authenticator.getCurrentAccount();
     this.currentUser = {
-      id: acc?.localAccountId ?? '-',
-      fullName: acc?.name ?? '-',
-      initials: this._getUserInitials(acc?.name) ?? '-',
-      tenantId: acc?.tenantId ?? '-',
+      id: currentUser?.localAccountId ?? '-',
+      fullName: currentUser?.name ?? '-',
+      initials: this._getUserInitials(currentUser?.name) ?? '-',
+      tenantId: currentUser?.tenantId ?? '-',
     };
   }
-  private _getUserInitials(username?: string): string {
-    return username ?? '-';
+  private _getUserInitials(username?: string): string | null {
+    return (
+      (username ?? '')
+        .replace('.', ' ')
+        .match(/(^\S\S?|\s\S)?/g)
+        ?.map((v) => v.trim())
+        .join('')
+        .match(/(^\S|\S$)?/g)
+        ?.join('')
+        .toLocaleUpperCase() ?? 'NN'
+    );
   }
 }

@@ -1,12 +1,14 @@
 ﻿using FXRatesAPI.Domain.DTOs;
 using FXRatesAPI.Domain.Params;
 using FXRatesAPI.Sdk;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using PaymentsAPI.Domain.DTOs;
 
 namespace NexPayBFF.WebAPI.Controllers;
 
+[Authorize]
+//[RequiredScope("tasks.read")]
 [EnableCors("GeneralPolicy")]
 [Route("api/")]
 [ApiController]
@@ -34,7 +36,7 @@ public class FxRatesController
     /// Gets a Rate quote by Id.
     /// </summary>
     /// <param name="id"></param>
-    /// <returns></returns>
+    /// <returns>The Rate quote</returns>
     [HttpGet("rates/{id}")]
     [ProducesResponseType(typeof(RateDTO), StatusCodes.Status200OK)]
     public async Task<RateDTO> GetRateById([FromRoute] string id)

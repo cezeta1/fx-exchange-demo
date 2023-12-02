@@ -3,11 +3,11 @@ using FXRatesAPI.Repository;
 
 namespace FXRatesAPI.WebAPI;
 
-public class CurrenciesService
+public class CurrenciesService : ICurrenciesService
 {
-    private readonly CurrenciesRepository _currenciesRepository;
+    private readonly ICurrenciesRepository _currenciesRepository;
 
-    public CurrenciesService(CurrenciesRepository currenciesRepository)
+    public CurrenciesService(ICurrenciesRepository currenciesRepository)
     {
         _currenciesRepository = currenciesRepository;
     }

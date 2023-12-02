@@ -17,6 +17,7 @@ public class Rate : Effectiveness
     public virtual Currency CurrencyTo { get; set; }
 
     public decimal ExchangeRate { get; set; }
+    public decimal Amount { get;set; }
 
     public RateDTO toDTO()
     {
@@ -26,8 +27,9 @@ public class Rate : Effectiveness
             CurrencyFrom = this.CurrencyFrom,
             CurrencyTo = this.CurrencyTo,
             ExchangeRate = this.ExchangeRate,
+            Amount = this.Amount,
             CreatedOn = this.CreatedOn,
-            ExpiredOn = this.ExpiredOn
+            ExpiredOn = this.ExpiredOn,
         };
     }
 }

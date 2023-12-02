@@ -31,6 +31,7 @@ import { CreateContractPayload } from '../../../interfaces/PaymentsAPI/Payloads/
 import { GetRateQuotePayload } from '../../../interfaces/FxRatesAPI/Payloads/get-rate-quote-payload.interface';
 import { authenticator } from '../../../auth/authenticator';
 import { CEZ_Validators } from '../../../utils/validators';
+import { debounceTime, distinctUntilChanged } from 'rxjs';
 
 @Component({
   selector: 'new-contract-modal',
@@ -175,24 +176,25 @@ export class NewContractsModalComponent implements OnInit, OnDestroy {
       CEZ_Validators.notEqualValidator(this.getControl('fromCurr')),
     ]);
     this.newContractForm.disable();
+    this.newContractForm.updateValueAndValidity();
   }
   private _subscribeFormChanges(): void {
-    this.subs.sink = this.newContractForm.valueChanges.subscribe({
-      next: (newVal: any) => {
-        if (this.newContractForm.valid) {
-          this._getFxRate();
-        }
-        const fi = this._currencyOptions.findIndex(
-          (c) => c.id === newVal.fromCurr
-        );
-        const ti = this._currencyOptions.findIndex(
-          (c) => c.id === newVal.toCurr
-        );
-        this.selectedFromCurrency = this._currencyOptions[fi] ?? undefined;
-        this.selectedToCurrency = this._currencyOptions[ti] ?? undefined;
-        if (newVal.amount > 0) this._updateCurrencyOptions();
-      },
-    });
+    this.subs.add(
+      this.getControl('fromCurr')?.valueChanges.subscribe((val: any) =>
+        this._onDropdownChanges(true, val)
+      ),
+      this.getControl('toCurr')?.valueChanges.subscribe((val: any) =>
+        this._onDropdownChanges(false, val)
+      ),
+      this.getControl('amount')
+        ?.valueChanges.pipe(debounceTime(500))
+        .pipe(distinctUntilChanged())
+        .subscribe((value: number) => {
+          if (this.newContractForm.valid) {
+            this._getFxRate();
+          }
+        })
+    );
   }
   private _loadCurrencies(): void {
     this.subs.sink = this.fxRatesAPIService.getCurrencyOptions().subscribe({
@@ -203,15 +205,26 @@ export class NewContractsModalComponent implements OnInit, OnDestroy {
       },
     });
   }
-  private _updateCurrencyOptions(): void {
-    this.fromCurrencies = this._currencyOptions.filter(
-      (c) => c.id !== this.getControlValue('toCurr')
-    );
-    this.toCurrencies = this._currencyOptions.filter(
-      (c) => c.id !== this.getControlValue('fromCurr')
-    );
-  }
+  private _onDropdownChanges(isFrom: boolean, newVal: number): void {
+    const idx = this._currencyOptions.findIndex((c) => c.id === newVal);
+    this[isFrom ? 'selectedFromCurrency' : 'selectedToCurrency'] =
+      this._currencyOptions[idx] ?? undefined;
 
+    if (
+      this.getControlValue('fromCurr') !== null &&
+      this.getControlValue('toCurr') !== null &&
+      this.getControlValue('amount') !== 0
+    ) {
+      this._updateCurrencyOptions();
+      this._getFxRate();
+    }
+  }
+  private _updateCurrencyOptions(): void {
+    const filterFunc = (ctrl: string) => (c: Currency) =>
+      c.id !== this.getControlValue(ctrl);
+    this.fromCurrencies = this._currencyOptions.filter(filterFunc('toCurr'));
+    this.toCurrencies = this._currencyOptions.filter(filterFunc('fromCurr'));
+  }
   private _getFxRate() {
     this.currentRate = undefined;
     const payload: GetRateQuotePayload = {

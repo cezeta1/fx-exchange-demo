@@ -10,7 +10,7 @@ import { provideClientHydration } from '@angular/platform-browser';
 import { provideAnimations } from '@angular/platform-browser/animations';
 // MSAL
 import { MsalModule } from '@azure/msal-angular';
-import { authInterceptorFn } from './auth-interceptor';
+import { authInterceptorFn } from './auth/auth-interceptor';
 import {
   MSALGuardConfigFactory,
   MSALInterceptorConfigFactory,
@@ -28,6 +28,7 @@ import {
   ControlFill,
   LinkedinFill,
   GithubFill,
+  UserOutline,
 } from '@ant-design/icons-angular/icons';
 const ngZorroConfig: NzConfig = {
   notification: { nzPlacement: 'bottomLeft' },
@@ -37,6 +38,7 @@ const icons: IconDefinition[] = [
   ControlFill,
   LinkedinFill,
   GithubFill,
+  UserOutline,
 ];
 /* ---------------- */
 

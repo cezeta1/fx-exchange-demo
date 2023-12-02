@@ -1,6 +1,7 @@
 ﻿using CZ.Common.Utilities;
 using FXRatesAPI.Persistence;
 using FXRatesAPI.Repository;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
@@ -22,13 +23,13 @@ public class Startup
         services.AddControllers();
         services.AddDbContext<AppDbContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("CEZ_NexPayFxDB"))
-            , ServiceLifetime.Singleton);
+            , ServiceLifetime.Scoped);
             
-        services.AddSingleton<CurrenciesService>();
-        services.AddSingleton<RatesService>();
+        services.AddScoped<ICurrenciesService, CurrenciesService>();
+        services.AddScoped<IRatesService, RatesService>();
 
-        services.AddSingleton<CurrenciesRepository>();
-        services.AddSingleton<RatesRepository>();
+        services.AddScoped<ICurrenciesRepository, CurrenciesRepository>();
+        services.AddScoped<IRatesRepository, RatesRepository>();
 
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen(c =>
@@ -40,7 +41,7 @@ public class Startup
         services.AddHttpContextAccessor();
         services = _corsConfigHelper.ConfigureCors(services, Configuration);
     }
-        
+
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
         if (env.IsDevelopment())
@@ -51,8 +52,8 @@ public class Startup
         app.UseHttpsRedirection();
 
         app.UseRouting();
+        app.UseCors("GeneralPolicy");
         app.UseAuthorization();
-        app.UseCors("CorsAPI");
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapControllers();

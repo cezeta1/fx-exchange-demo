@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FXRatesAPI.Repository;
 
-public class RatesRepository
+public class RatesRepository: IRatesRepository
 {
     private readonly AppDbContext _db;
     public RatesRepository(AppDbContext context)
@@ -28,10 +28,9 @@ public class RatesRepository
                                                   .Include(r => r.CurrencyTo)
                                                   .Where(r => ids.Contains(r.Id))
                                                   .ToListAsync();
-        return result;
-        //return result.Count() == ids.Count() ? 
-        //    result :
-        //    throw new ApplicationException("Some Rates were not found. Some Ids are not valid");
+        return result.Count() == ids.Count() ?
+            result :
+            throw new ApplicationException("Some Rates were not found. Some Ids are not valid");
     }
 
     public async Task<Rate> CreateRate(Rate newRate)
