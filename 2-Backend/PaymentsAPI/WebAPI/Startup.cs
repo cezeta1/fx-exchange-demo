@@ -31,7 +31,7 @@ public class Startup
 
         // Services
         services.AddScoped<IContractsService, ContractsService>();
-        
+
         // Repositories
         services.AddScoped<IContractsRepository, ContractsRepository>();
 

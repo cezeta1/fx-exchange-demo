@@ -17,9 +17,9 @@ namespace PaymentsAPI.WebAPI;
 public class ContractsController : ControllerBase
 {
     private readonly ILogger<ContractsController> _logger;
-    private ContractsService _contractsService;
+    private readonly IContractsService _contractsService;
 
-    public ContractsController(ILogger<ContractsController> logger, ContractsService contractsService)
+    public ContractsController(ILogger<ContractsController> logger, IContractsService contractsService)
     {
         _logger = logger;
         _contractsService = contractsService;
