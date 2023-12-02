@@ -9,31 +9,31 @@ $Version = "1.0.11"
 $OutputPath = "..\..\..\..\_localfeed"
 #>
 
-<#
+#<#
 $ProjectPath = ".\2-Backend\PaymentsAPI\Sdk"
 $ProjectName = "PaymentsAPI.Sdk"
-$Version = "1.0.5"
+$Version = "1.0.6"
 $OutputPath = "..\..\..\..\..\_localfeed"
 #>
 
 <#
 $ProjectPath = ".\2-Backend\PaymentsAPI\Domain"
 $ProjectName = "PaymentsAPI.Domain"
-$Version = "1.0.5"
+$Version = "1.0.6"
 $OutputPath = "..\..\..\..\..\_localfeed"
 #>
 
-#<#
+<#
 $ProjectPath = ".\2-Backend\FXRatesAPI\Sdk"
 $ProjectName = "FXRatesAPI.Sdk"
-$Version = "1.0.11"
+$Version = "1.0.12"
 $OutputPath = "..\..\..\..\..\_localfeed"
 #>
 
 <#
 $ProjectPath = ".\2-Backend\FXRatesAPI\Domain"
 $ProjectName = "FXRatesAPI.Domain"
-$Version = "1.0.11"
+$Version = "1.0.12"
 $OutputPath = "..\..\..\..\..\_localfeed"
 #>
 

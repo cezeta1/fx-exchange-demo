@@ -32,6 +32,7 @@ public class Startup
             {
                 Configuration.Bind("AzureAd", options);
             });
+
         services.AddAuthorization(options =>
         {
             options.AddPolicy("RequireAdminRole",
