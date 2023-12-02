@@ -90,7 +90,7 @@ export const authenticator = {
     await msalInstance.handleRedirectPromise().then((response) => {
       if (response !== null) {
         if (response?.account) {
-          // TODO: this is not safe, use AcquireTokenSilent callback to get the token
+          debugger;
           msalInstance.setActiveAccount(response.account);
           onLoginSuccessEmitter.next(msalInstance.getActiveAccount());
         }
@@ -117,4 +117,17 @@ export const authenticator = {
   isLoggedIn: () => (msalInstance.getActiveAccount() ? true : false),
   getToken: (): string =>
     msalInstance.getActiveAccount()?.idToken ?? 'No Token',
+  getUserAuthority: (): UserAuthorityEnum => {
+    const acc = msalInstance.getActiveAccount();
+    return (
+      (acc?.idTokenClaims?.roles?.some((r: string) => r.includes('Admin'))
+        ? UserAuthorityEnum.Admin
+        : UserAuthorityEnum.User) ?? undefined
+    );
+  },
 };
+
+export enum UserAuthorityEnum {
+  Admin = 'admin',
+  User = 'user',
+}
