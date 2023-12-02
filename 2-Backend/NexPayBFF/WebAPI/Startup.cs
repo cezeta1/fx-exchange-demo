@@ -32,6 +32,11 @@ public class Startup
             {
                 Configuration.Bind("AzureAd", options);
             });
+        services.AddAuthorization(options =>
+        {
+            options.AddPolicy("RequireAdminRole",
+                 policy => policy.RequireRole("Admin.ReadWrite"));
+        });
 
         services.AddControllers();
 

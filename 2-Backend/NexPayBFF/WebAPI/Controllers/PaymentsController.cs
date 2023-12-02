@@ -31,6 +31,7 @@ public class PaymentsController
     /// Gets all Contracts
     /// </summary>
     /// <returns>A list of all Contracts</returns>
+    [Authorize(Policy = "RequireAdminRole")]
     [HttpGet("contracts/all")]
     [ProducesResponseType(typeof(IEnumerable<ContractDTO>), StatusCodes.Status200OK)]
     public async Task<IEnumerable<ContractDTO>> GetAllContracts()
@@ -86,6 +87,7 @@ public class PaymentsController
     /// </summary>
     /// <param name="param"></param>
     /// <returns>The updated Contract</returns>
+    [Authorize(Policy = "RequireAdminRole")]
     [HttpPut("contracts/{userId}")]
     [ProducesResponseType(typeof(ContractDTO), StatusCodes.Status200OK)]
     public async Task<ContractDTO> UpdateContractStatus([FromRoute] string userId, [FromBody] UpdateContractStatusParam param)
