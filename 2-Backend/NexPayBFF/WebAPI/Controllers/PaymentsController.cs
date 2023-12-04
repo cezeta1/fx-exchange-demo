@@ -110,8 +110,11 @@ public class PaymentsController
     /// <param name="param"></param>
     /// <returns>The updated Contract</returns>
     [Authorize(Policy = "RequireAdminRole")]
-    [HttpPut("contracts/{userId}")]
+    [HttpPut("contracts/{contractId}")]
     [ProducesResponseType(typeof(ContractDTO), StatusCodes.Status200OK)]
-    public async Task<ContractDTO> UpdateContractStatus([FromRoute] string userId, [FromBody] UpdateContractStatusParam param)
-        => await _paymentsAPIService.UpdateContractStatus(userId,param);
+    public async Task<ContractDTO> UpdateContractStatus([FromBody] UpdateContractStatusParam param)
+    {
+        param.AdminId = _userHelper.GetCurrentUser().Id;
+        return await _paymentsAPIService.UpdateContractStatus(param);
+    } 
 }

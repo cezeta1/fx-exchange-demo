@@ -67,11 +67,21 @@ interface ColumnConfig<T> {
           <td>{{ data.id }}</td>
           <td>{{ data.createdBy.fullName }}</td>
           <td>{{ data.approvedBy?.fullName ?? '-' }}</td>
-          <td>{{ data?.rate?.currencyFrom?.symbol ?? '-' }}</td>
-          <td>{{ data?.rate?.currencyTo?.symbol ?? '-' }}</td>
-          <td>{{ data.amount }}</td>
-          <td>{{ data.rate.exchangeRate }}</td>
-          <td>{{ data.convertedAmount }}</td>
+          <td class="cz-table-cell">
+            {{
+              (data.amount | number : '1.2') +
+                ' ' +
+                data?.rate?.currencyFrom?.symbol
+            }}
+          </td>
+          <td class="cz-table-cell">{{ data.rate.exchangeRate }}</td>
+          <td class="cz-table-cell">
+            {{
+              (data.amount * data.rate.exchangeRate | number : '1.2') +
+                ' ' +
+                data?.rate?.currencyTo?.symbol
+            }}
+          </td>
           <td>
             <cz-tag
               [type]="getStatusTagType(data.status)"
@@ -79,6 +89,7 @@ interface ColumnConfig<T> {
             ></cz-tag>
           </td>
           <td>
+            @if (data.status === ContractStatusEnum.Pending) {
             <nz-button-group>
               <button
                 nz-button
@@ -95,6 +106,7 @@ interface ColumnConfig<T> {
                 <span nz-icon nzType="close" nzTheme="outline"></span>
               </button>
             </nz-button-group>
+            }
           </td>
         </tr>
       </tbody>
@@ -102,7 +114,7 @@ interface ColumnConfig<T> {
   `,
   styles: `
     .cz-table-cell {
-      text-overflow: ellipsis;
+      text-align: right;
     }
   `,
 })
@@ -151,7 +163,7 @@ export class AdminPageComponent {
         sortDirections: ['ascend', 'descend', null],
       },
       {
-        name: 'Approved By',
+        name: 'Approved/Rejected By',
         sortOrder: null,
         sortFn: (a: Contract, b: Contract) => {
           const aName = a.approvedBy?.fullName;
@@ -163,20 +175,20 @@ export class AdminPageComponent {
         },
         sortDirections: ['ascend', 'descend', null],
       },
-      {
-        name: 'From',
-        sortOrder: null,
-        sortFn: (a: Contract, b: Contract) =>
-          a.rate.currencyFrom.name.localeCompare(b.rate.currencyFrom.name),
-        sortDirections: ['ascend', 'descend', null],
-      },
-      {
-        name: 'To',
-        sortOrder: null,
-        sortFn: (a: Contract, b: Contract) =>
-          a.rate.currencyTo.name.localeCompare(b.rate.currencyTo.name),
-        sortDirections: ['ascend', 'descend', null],
-      },
+      // {
+      //   name: 'From',
+      //   sortOrder: null,
+      //   sortFn: (a: Contract, b: Contract) =>
+      //     a.rate.currencyFrom.name.localeCompare(b.rate.currencyFrom.name),
+      //   sortDirections: ['ascend', 'descend', null],
+      // },
+      // {
+      //   name: 'To',
+      //   sortOrder: null,
+      //   sortFn: (a: Contract, b: Contract) =>
+      //     a.rate.currencyTo.name.localeCompare(b.rate.currencyTo.name),
+      //   sortDirections: ['ascend', 'descend', null],
+      // },
       {
         name: 'Amount',
         sortOrder: null,

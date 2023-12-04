@@ -76,8 +76,8 @@ public class ContractsController : ControllerBase
     /// </summary>
     /// <param name="param"></param>
     /// <returns>The updated Contract</returns>
-    [HttpPut("contracts/{userId}")]
+    [HttpPut("contracts/{contractId}")]
     [ProducesResponseType(typeof(ContractDTO), StatusCodes.Status200OK)]
-    public async Task<ContractDTO> UpdateContractStatus([FromRoute] string userId, [FromBody] UpdateContractStatusParam param)
+    public async Task<ContractDTO> UpdateContractStatus([FromRoute] string contractId, [FromBody] UpdateContractStatusParam param)
         => (await _contractsService.UpdateContractStatus(param)).toDTO();
 }

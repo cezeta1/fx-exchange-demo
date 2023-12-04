@@ -35,8 +35,8 @@ public static class ContractDTOExtensions
     {
         var allRates = await getRates(cs.Select(x => x.RateId));
         IEnumerable<Guid> allUserIds = cs.SelectMany(x => new List<Guid?>{x.CreatedById,x.ApprovedById})
-                                         .Where(x => x.HasValue).Select(x => (Guid)x)
-                                         .Distinct();
+                                         .Where(x => x.HasValue && x.Value != Guid.Empty).Select(x => (Guid)x)
+                                         .Distinct().ToList();
         var allUsers = new List<AzureUser>();
         for (int i = 0; i < allUserIds.Count(); i++)
         {

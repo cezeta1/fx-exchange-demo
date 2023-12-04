@@ -9,17 +9,17 @@ $Version = "1.0.17"
 $OutputPath = "..\..\..\..\_localfeed"
 #>
 
-<#
+#<#
 $ProjectPath = ".\2-Backend\PaymentsAPI\Sdk"
 $ProjectName = "PaymentsAPI.Sdk"
-$Version = "1.0.9"
+$Version = "1.0.10"
 $OutputPath = "..\..\..\..\..\_localfeed"
 #>
 
-#<#
+<#
 $ProjectPath = ".\2-Backend\PaymentsAPI\Domain"
 $ProjectName = "PaymentsAPI.Domain"
-$Version = "1.0.9"
+$Version = "1.0.10"
 $OutputPath = "..\..\..\..\..\_localfeed"
 #>
 

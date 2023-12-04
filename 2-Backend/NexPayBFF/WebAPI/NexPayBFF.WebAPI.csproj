@@ -13,7 +13,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
     <PackageReference Include="Microsoft.Graph" Version="5.36.0" />
     <PackageReference Include="Microsoft.Identity.Web" Version="2.16.0" />
-    <PackageReference Include="PaymentsAPI.Sdk" Version="1.0.9" />
+    <PackageReference Include="PaymentsAPI.Sdk" Version="1.0.10" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 
