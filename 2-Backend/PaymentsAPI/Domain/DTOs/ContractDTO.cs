@@ -7,8 +7,10 @@ namespace PaymentsAPI.Domain.DTOs;
 public class ContractDTO: EffectivenessDTO
 {
     public Guid Id { get; set; }
-    public Guid UserId { get; set; }
-    public AzureUser? User { get; set; }
+    public Guid CreatedById { get; set; }
+    public AzureUser? CreatedBy { get; set; }
+    public Guid? ApprovedById { get; set; }
+    public AzureUser? ApprovedBy { get; set; }
 
     public ContractStatus Status { get; set; }
     public string StatusName { get => (new ContractStatus()).GetDescription(Status); }

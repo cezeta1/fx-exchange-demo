@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
 	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 	<Title>PaymentsAPI.Sdk</Title>
-	<Version>1.0.7</Version>
+	<Version>1.0.9</Version>
 	<Description>A library to access PaymentsAPI Endpoints</Description>
   </PropertyGroup>
 

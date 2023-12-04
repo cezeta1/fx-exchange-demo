@@ -1,13 +1,16 @@
 import { ContractStatusEnum } from './contract-status.enum';
-import { Currency } from '../FxRatesAPI/currency.interface';
 import { Effectiveness } from '../Common/effectiveness.interface';
-import { User } from '../Common/user.interface';
+import { AzureUser } from '../Common/user.interface';
 import { Rate } from '../FxRatesAPI/rate.interface';
 
 export interface Contract extends Effectiveness {
   id?: string;
-  userId: string;
-  user: User;
+
+  createdById: string;
+  createdBy: AzureUser;
+
+  approvedById?: string;
+  approvedBy?: AzureUser;
 
   status: ContractStatusEnum;
   statusName: string;
@@ -17,9 +20,4 @@ export interface Contract extends Effectiveness {
 
   amount: number;
   convertedAmount: number;
-  // createdBy: string;
-  // createdByName: string;
-
-  // approvedBy: string;
-  // approvedByName: string;
 }

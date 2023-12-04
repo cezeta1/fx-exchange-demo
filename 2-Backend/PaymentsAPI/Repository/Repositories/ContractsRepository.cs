@@ -16,7 +16,7 @@ public class ContractsRepository: IContractsRepository
         => await _db.Contracts.ToListAsync();
     
     public async Task<IEnumerable<Contract>> GetContractsByUserId(Guid userId)
-        => await _db.Contracts.Where(c => c.UserId == userId).ToListAsync();
+        => await _db.Contracts.Where(c => c.CreatedById == userId).ToListAsync();
     
     public async Task<Contract> GetContractById(Guid id)
         => await _db.Contracts.Where(c => c.Id == id)
@@ -30,10 +30,11 @@ public class ContractsRepository: IContractsRepository
         return newContract;
     }
 
-    public async Task<Contract> UpdateContractStatus(Guid contractId, ContractStatus newStatus)
+    public async Task<Contract> UpdateContractStatus(Guid contractId, Guid adminId, ContractStatus newStatus)
     {
         Contract cont = await GetContractById(contractId);
         cont.Status = newStatus;
+        cont.ApprovedById = adminId;
         _db.Contracts.Update(cont);
         await _db.SaveChangesAsync();
         return cont;

@@ -65,7 +65,8 @@ interface ColumnConfig<T> {
       <tbody>
         <tr *ngFor="let data of filterTable.data">
           <td>{{ data.id }}</td>
-          <td>{{ data.userId }}</td>
+          <td>{{ data.createdBy.fullName }}</td>
+          <td>{{ data.approvedBy?.fullName ?? '-' }}</td>
           <td>{{ data?.rate?.currencyFrom?.symbol ?? '-' }}</td>
           <td>{{ data?.rate?.currencyTo?.symbol ?? '-' }}</td>
           <td>{{ data.amount }}</td>
@@ -145,7 +146,21 @@ export class AdminPageComponent {
       {
         name: 'Created By',
         sortOrder: null,
-        sortFn: (a: Contract, b: Contract) => (a.userId > b.userId ? 1 : -1),
+        sortFn: (a: Contract, b: Contract) =>
+          a.createdBy.fullName > b.createdBy.fullName ? 1 : -1,
+        sortDirections: ['ascend', 'descend', null],
+      },
+      {
+        name: 'Approved By',
+        sortOrder: null,
+        sortFn: (a: Contract, b: Contract) => {
+          const aName = a.approvedBy?.fullName;
+          const bName = b.approvedBy?.fullName;
+          if (!aName && !bName) return 1;
+          if (!aName) return 1;
+          if (!bName) return -1;
+          return aName > bName ? 1 : -1;
+        },
         sortDirections: ['ascend', 'descend', null],
       },
       {

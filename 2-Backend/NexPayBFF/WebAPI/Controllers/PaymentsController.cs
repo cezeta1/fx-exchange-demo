@@ -78,7 +78,7 @@ public class PaymentsController
     public async Task<ContractDTO> GetContractById([FromRoute] string id)
     {
         ContractDTO contract = await _paymentsAPIService.GetContractById(id);
-        contract.User = await _userHelper.GetAzureUserByIdAsync(contract.UserId);
+        contract.Apply(_fxRatesAPIService.GetRateById, _userHelper.GetAzureUserByIdAsync);
         return contract;
     }
 
