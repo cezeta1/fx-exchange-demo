@@ -73,11 +73,21 @@ interface ColumnConfig<T> {
       <tbody>
         <tr *ngFor="let data of filterTable.data">
           <td>{{ data.id }}</td>
-          <td>{{ data?.rate?.currencyFrom?.symbol ?? '-' }}</td>
-          <td>{{ data?.rate?.currencyTo?.symbol ?? '-' }}</td>
-          <td>{{ data.amount }}</td>
-          <td>{{ data.rate.exchangeRate }}</td>
-          <td>{{ data.convertedAmount }}</td>
+          <td class="cz-table-cell">
+            {{
+              (data.amount | number : '1.2') +
+                ' ' +
+                data?.rate?.currencyFrom?.symbol
+            }}
+          </td>
+          <td class="cz-table-cell">{{ data.rate.exchangeRate }}</td>
+          <td class="cz-table-cell">
+            {{
+              (data.amount * data.rate.exchangeRate | number : '1.2') +
+                ' ' +
+                data?.rate?.currencyTo?.symbol
+            }}
+          </td>
           <td>
             <cz-tag
               [type]="getStatusTagType(data.status)"
@@ -94,6 +104,9 @@ interface ColumnConfig<T> {
       width: 100%; 
       justify-content: end;
       margin-bottom: 10px;
+    }
+    .cz-table-cell {
+      text-align: right;
     }
   `,
 })
@@ -150,20 +163,20 @@ export class ContractsPageComponent implements OnInit, OnDestroy {
         sortFn: null,
         sortDirections: [null],
       },
-      {
-        name: 'From',
-        sortOrder: null,
-        sortFn: (a: Contract, b: Contract) =>
-          a.rate.currencyFrom.name.localeCompare(b.rate.currencyFrom.name),
-        sortDirections: ['ascend', 'descend', null],
-      },
-      {
-        name: 'To',
-        sortOrder: null,
-        sortFn: (a: Contract, b: Contract) =>
-          a.rate.currencyTo.name.localeCompare(b.rate.currencyTo.name),
-        sortDirections: ['ascend', 'descend', null],
-      },
+      // {
+      //   name: 'From',
+      //   sortOrder: null,
+      //   sortFn: (a: Contract, b: Contract) =>
+      //     a.rate.currencyFrom.name.localeCompare(b.rate.currencyFrom.name),
+      //   sortDirections: ['ascend', 'descend', null],
+      // },
+      // {
+      //   name: 'To',
+      //   sortOrder: null,
+      //   sortFn: (a: Contract, b: Contract) =>
+      //     a.rate.currencyTo.name.localeCompare(b.rate.currencyTo.name),
+      //   sortDirections: ['ascend', 'descend', null],
+      // },
       {
         name: 'Amount',
         sortOrder: null,
