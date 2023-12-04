@@ -9,6 +9,9 @@ public class RateDTO : EffectivenessDTO
         CurrencyTo = new Currency();
     }
     public Guid Id { get; set; }
+
+    public Guid UserId { get; set; }
+
     public Currency CurrencyFrom { get; set; }
     public Currency CurrencyTo { get; set; }
     public decimal ExchangeRate { get; set; }

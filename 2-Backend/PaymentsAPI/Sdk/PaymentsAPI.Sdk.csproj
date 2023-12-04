@@ -5,12 +5,12 @@
     <Nullable>enable</Nullable>
 	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 	<Title>PaymentsAPI.Sdk</Title>
-	<Version>1.0.6</Version>
+	<Version>1.0.7</Version>
 	<Description>A library to access PaymentsAPI Endpoints</Description>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CZ.Common" Version="1.0.9" />
+    <PackageReference Include="CZ.Common" Version="1.0.13" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="8.0.0" />
   </ItemGroup>
 

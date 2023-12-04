@@ -26,8 +26,8 @@ public class RatesController : ControllerBase
     /// <returns></returns>
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(RateDTO), StatusCodes.Status200OK)]
-    public async Task<JsonResult> GetRateById([FromRoute] string id)
-        => new JsonResult((await _ratesService.GetRateById(Guid.Parse(id))).toDTO());
+    public async Task<RateDTO> GetRateById([FromRoute] string id)
+        => (await _ratesService.GetRateById(Guid.Parse(id))).toDTO();
 
     /// <summary>
     /// Gets multiple Rates by Id.
@@ -36,8 +36,8 @@ public class RatesController : ControllerBase
     /// <returns></returns>
     [HttpGet("")]
     [ProducesResponseType(typeof(IEnumerable<RateDTO>), StatusCodes.Status200OK)]
-    public async Task<JsonResult> GetRatesById([FromQuery] IEnumerable<Guid> ids)
-        => new JsonResult((await _ratesService.GetRatesById(ids)).Select(r => r.toDTO()));
+    public async Task<IEnumerable<RateDTO>> GetRatesById([FromQuery] IEnumerable<Guid> ids)
+        => (await _ratesService.GetRatesById(ids)).Select(r => r.toDTO());
 
     /// <summary>
     /// Creates a Rate quote between two currencies. Valid only for a given amount of time.
@@ -46,6 +46,6 @@ public class RatesController : ControllerBase
     /// <returns>A new valid quote for the given currencies</returns>
     [HttpPost]
     [ProducesResponseType(typeof(RateDTO), StatusCodes.Status200OK)]
-    public async Task<JsonResult> GetRateQuoteAsync([FromBody] GetRateQuoteParam param)
-        => new JsonResult((await _ratesService.CreateRateQuote(param)).toDTO());
+    public async Task<RateDTO> GetRateQuoteAsync([FromBody] GetRateQuoteParam param)
+        => (await _ratesService.CreateRateQuote(param)).toDTO();
 }

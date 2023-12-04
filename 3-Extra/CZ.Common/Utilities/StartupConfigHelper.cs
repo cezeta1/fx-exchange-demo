@@ -1,20 +1,35 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Identity.Web;
 
 namespace CZ.Common.Utilities;
 
-public class CorsConfigHelper
+public class CorsConfiguration
 {
-    public CorsConfigHelper() {}
+    public string? AllowedOrigins { get; set; }
+    public string? AllowedMethods { get; set; }
+    public string? AllowedHeaders { get; set; }
+}
 
-    private class CorsConfiguration
+public class StartupConfigHelper
+{
+    public StartupConfigHelper() { }
+
+    public void ConfigureAuthentication(IServiceCollection services, IConfiguration Configuration)
     {
-        public string AllowedOrigins { get; set; }
-        public string AllowedMethods { get; set; }
-        public string AllowedHeaders { get; set; }
+        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddMicrosoftIdentityWebApi(options =>
+            {
+                Configuration.Bind("AzureAd", options);
+                options.TokenValidationParameters.NameClaimType = "name";
+            },
+            options =>
+            {
+                Configuration.Bind("AzureAd", options);
+            });
     }
-
-    public IServiceCollection ConfigureCors(IServiceCollection services,IConfiguration Configuration)
+    public void ConfigureCors(IServiceCollection services, IConfiguration Configuration)
     {
         // Checking if a CORS configuration was provided
         if (Configuration.GetChildren().Any(item => item.Key == "CORS"))
@@ -70,6 +85,6 @@ public class CorsConfigHelper
                 }
             });
         }
-        return services;
     }
+
 }

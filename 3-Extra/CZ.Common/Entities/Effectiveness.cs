@@ -1,4 +1,5 @@
 ﻿namespace CZ.Common.Entities;
+
 public class Effectiveness
 {
     public Effectiveness()

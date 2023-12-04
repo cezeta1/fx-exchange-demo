@@ -11,6 +11,8 @@ public class Rate : Effectiveness
     }
     public Guid Id { get; set; }
 
+    public Guid UserId { get; set; }
+
     public int CurrencyFromId { get; set; }
     public virtual Currency CurrencyFrom { get; set; }
     public int CurrencyToId { get; set; }
@@ -24,6 +26,7 @@ public class Rate : Effectiveness
         return new RateDTO
         {
             Id = this.Id,
+            UserId = this.UserId,
             CurrencyFrom = this.CurrencyFrom,
             CurrencyTo = this.CurrencyTo,
             ExchangeRate = this.ExchangeRate,

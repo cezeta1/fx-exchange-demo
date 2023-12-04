@@ -6,16 +6,18 @@
     <Nullable>enable</Nullable>
 	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 	<Title>PaymentsAPI.Domain</Title>
-	<Version>1.0.6</Version>
+	<Version>1.0.7</Version>
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Interfaces\" />
+    <Compile Remove="Interfaces\**" />
+    <EmbeddedResource Remove="Interfaces\**" />
+    <None Remove="Interfaces\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="CZ.Common" Version="1.0.9" />
-    <PackageReference Include="FXRatesAPI.Sdk" Version="1.0.3" />
+    <PackageReference Include="CZ.Common" Version="1.0.13" />
+    <PackageReference Include="FXRatesAPI.Sdk" Version="1.0.15" />
   </ItemGroup>
 
 </Project>

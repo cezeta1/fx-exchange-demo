@@ -10,28 +10,18 @@ namespace NexPayBFF.WebAPI;
 public class Startup
 {
     public IConfiguration Configuration { get; }
-    private CorsConfigHelper _corsConfigHelper;
+    private StartupConfigHelper _startupConfigHelper;
 
     public Startup(IConfiguration configuration)
     {
         Configuration = configuration;
-        _corsConfigHelper = new CorsConfigHelper();
+        _startupConfigHelper = new StartupConfigHelper();
     }
 
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddMicrosoftIdentityWebApi(options =>
-            {
-                Configuration.Bind("AzureAd", options);
-
-                options.TokenValidationParameters.NameClaimType = "name";
-            },
-            options =>
-            {
-                Configuration.Bind("AzureAd", options);
-            });
+        _startupConfigHelper.ConfigureAuthentication(services, Configuration);
 
         services.AddAuthorization(options =>
         {
@@ -42,6 +32,9 @@ public class Startup
         services.AddControllers();
 
         // Services
+        services.Configure<UserHelperOptions>(Configuration.GetSection(UserHelperOptions.SectionName));
+        services.AddSingleton<UserHelper>();
+
         services.Configure<PaymentsAPIOptions>(Configuration.GetSection("PaymentsAPI"));
         services.Configure<FXRatesAPIOptions>(Configuration.GetSection("FXRatesAPI"));
         services.AddSingleton<PaymentsAPIService>();
@@ -54,7 +47,7 @@ public class Startup
         }); 
 
         services.AddHttpContextAccessor();
-        _corsConfigHelper.ConfigureCors(services, Configuration);
+        _startupConfigHelper.ConfigureCors(services, Configuration);
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

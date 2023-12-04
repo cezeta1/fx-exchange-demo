@@ -8,7 +8,7 @@ public class ContractDTO: EffectivenessDTO
 {
     public Guid Id { get; set; }
     public Guid UserId { get; set; }
-    public User? User { get; set; }
+    public AzureUser? User { get; set; }
 
     public ContractStatus Status { get; set; }
     public string StatusName { get => (new ContractStatus()).GetDescription(Status); }
