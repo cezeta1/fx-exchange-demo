@@ -31,8 +31,6 @@ public class ContractEntityTypeConfiguration : IEntityTypeConfiguration<Contract
         builder
             .Property(r => r.Id).IsRequired().ValueGeneratedNever();
         builder
-            .Property(r => r.UserId).IsRequired().ValueGeneratedNever();
-        builder
             .Property(r => r.Amount).HasPrecision(19, 4);
     }
 }

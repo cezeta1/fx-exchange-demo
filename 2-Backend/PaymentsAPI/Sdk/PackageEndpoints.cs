@@ -38,8 +38,8 @@ public class PaymentsAPIService
     public async Task<ContractDTO> CreateContract(CreateContractParam param)
         => await _httpClient.PostAsync<ContractDTO, CreateContractParam>("contracts", param);
 
-    public async Task<ContractDTO> UpdateContractStatus(string userId, UpdateContractStatusParam param)
-        => await _httpClient.PutAsync<ContractDTO, UpdateContractStatusParam>($"contracts/{userId}", param);
+    public async Task<ContractDTO> UpdateContractStatus(UpdateContractStatusParam param)
+        => await _httpClient.PutAsync<ContractDTO, UpdateContractStatusParam>($"contracts/{param.ContractId}", param);
 }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 #pragma warning restore CS8603 // Possible null reference return.

@@ -68,16 +68,16 @@ public class ContractsController : ControllerBase
     /// <returns>A new valid Contract for the given currencies</returns>
     [HttpPost("contracts")]
     [ProducesResponseType(typeof(ContractDTO), StatusCodes.Status200OK)]
-    public async Task<JsonResult> CreateContract([FromBody] CreateContractParam param)
-        => new JsonResult((await _contractsService.CreateContract(param)).toDTO());
+    public async Task<ContractDTO> CreateContract([FromBody] CreateContractParam param)
+        => (await _contractsService.CreateContract(param)).toDTO();
 
     /// <summary>
     /// Updates a Contract's status. 
     /// </summary>
     /// <param name="param"></param>
     /// <returns>The updated Contract</returns>
-    [HttpPut("contracts/{userId}")]
+    [HttpPut("contracts/{contractId}")]
     [ProducesResponseType(typeof(ContractDTO), StatusCodes.Status200OK)]
-    public async Task<JsonResult> UpdateContractStatus([FromRoute] string userId, [FromBody] UpdateContractStatusParam param)
-        => new JsonResult((await _contractsService.UpdateContractStatus(param)).toDTO());
+    public async Task<ContractDTO> UpdateContractStatus([FromRoute] string contractId, [FromBody] UpdateContractStatusParam param)
+        => (await _contractsService.UpdateContractStatus(param)).toDTO();
 }

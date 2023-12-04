@@ -38,7 +38,7 @@ public class ContractsService : IContractsService
     }
 
     public async Task<Contract> UpdateContractStatus(UpdateContractStatusParam param)
-        => await _contractsRepository.UpdateContractStatus(param.ContractId,param.NewStatus);
+        => await _contractsRepository.UpdateContractStatus(param.ContractId, param.AdminId, param.NewStatus);
 
     // Email Utils
     private async Task SendNotificationEmail(Contract c)
@@ -48,7 +48,7 @@ public class ContractsService : IContractsService
             Sender = "julic206@gmail.com",
             Receiver = "julic206@gmail.com",
             Subject = "A new Contract has been created",
-            Body = $"User {c.UserId} placed a new Contract (id: {c.Id}) at {c.CreatedOn.ToLocalTime()}. \r\nPlease visit our page to review and update status."
+            Body = $"User {c.CreatedById} placed a new Contract (id: {c.Id}) at {c.CreatedOn.ToLocalTime()}. \r\nPlease visit our page to review and update status."
         });
     } 
 }

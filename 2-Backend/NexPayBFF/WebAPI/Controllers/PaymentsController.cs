@@ -8,6 +8,9 @@ using PaymentsAPI.Domain.DTOs;
 using PaymentsAPI.Domain.Params;
 using PaymentsAPI.Sdk;
 
+using CZ.Common.Utilities;
+
+
 namespace NexPayBFF.WebAPI.Controllers;
 
 [Authorize]
@@ -19,12 +22,20 @@ public class PaymentsController
     private readonly ILogger<PaymentsController> _logger;
     private readonly PaymentsAPIService _paymentsAPIService;
     private readonly FXRatesAPIService _fxRatesAPIService;
+    private readonly UserHelper _userHelper;
 
-    public PaymentsController(ILogger<PaymentsController> logger, PaymentsAPIService paymentsAPIService, FXRatesAPIService fXRatesAPIService)
+    public PaymentsController(
+        ILogger<PaymentsController> logger,
+        PaymentsAPIService paymentsAPIService, 
+        FXRatesAPIService fXRatesAPIService,
+        IHttpContextAccessor contextAccessor,
+        UserHelper userHelper)
     {
         _logger = logger;
         _paymentsAPIService = paymentsAPIService;
         _fxRatesAPIService = fXRatesAPIService;
+        //_userHelper = new UserHelper(contextAccessor);
+        _userHelper = userHelper;
     }
 
     /// <summary>
@@ -37,7 +48,7 @@ public class PaymentsController
     public async Task<IEnumerable<ContractDTO>> GetAllContracts()
     {
         IEnumerable<ContractDTO> results = await _paymentsAPIService.GetAllContracts();
-        await results.Apply(_fxRatesAPIService.GetRatesById);
+        await results.Apply(_fxRatesAPIService.GetRatesById, _userHelper.GetAzureUserByIdAsync);
         return results.OrderByDescending(c => c.CreatedOn);
     }
 
@@ -48,9 +59,13 @@ public class PaymentsController
     [HttpGet("users/{userId}/contracts")]
     [ProducesResponseType(typeof(IEnumerable<ContractDTO>), StatusCodes.Status200OK)]
     public async Task<IEnumerable<ContractDTO>> GetContractsByUserId([FromRoute] string userId)
-    {
+    {   
+        // Security Validation
+        if (userId != _userHelper.GetUserId())
+            throw new Exception($"Current user is unauthorized to get Contracts for userId: {userId}");
+        
         IEnumerable<ContractDTO> results = await _paymentsAPIService.GetContractsByUserId(userId);
-        await results.Apply(_fxRatesAPIService.GetRatesById);
+        await results.Apply(_fxRatesAPIService.GetRatesById,_userHelper.GetAzureUserByIdAsync);
         return results.OrderByDescending(c => c.CreatedOn);
     }
 
@@ -61,7 +76,11 @@ public class PaymentsController
     [HttpGet("contracts/{id}")]
     [ProducesResponseType(typeof(ContractDTO), StatusCodes.Status200OK)]
     public async Task<ContractDTO> GetContractById([FromRoute] string id)
-        => await _paymentsAPIService.GetContractById(id);
+    {
+        ContractDTO contract = await _paymentsAPIService.GetContractById(id);
+        contract.Apply(_fxRatesAPIService.GetRateById, _userHelper.GetAzureUserByIdAsync);
+        return contract;
+    }
 
     /// <summary>
     /// Gets all Contract Status Options
@@ -80,7 +99,10 @@ public class PaymentsController
     [HttpPost("contracts")]
     [ProducesResponseType(typeof(ContractDTO), StatusCodes.Status200OK)]
     public async Task<ContractDTO> CreateContract([FromBody] CreateContractParam param)
-        => await _paymentsAPIService.CreateContract(param);
+    {
+        await param.Validate(_fxRatesAPIService.GetRateById);
+        return await _paymentsAPIService.CreateContract(param);
+    } 
 
     /// <summary>
     /// Updates a Contract's status. 
@@ -88,8 +110,11 @@ public class PaymentsController
     /// <param name="param"></param>
     /// <returns>The updated Contract</returns>
     [Authorize(Policy = "RequireAdminRole")]
-    [HttpPut("contracts/{userId}")]
+    [HttpPut("contracts/{contractId}")]
     [ProducesResponseType(typeof(ContractDTO), StatusCodes.Status200OK)]
-    public async Task<ContractDTO> UpdateContractStatus([FromRoute] string userId, [FromBody] UpdateContractStatusParam param)
-        => await _paymentsAPIService.UpdateContractStatus(userId,param);
+    public async Task<ContractDTO> UpdateContractStatus([FromBody] UpdateContractStatusParam param)
+    {
+        param.AdminId = _userHelper.GetCurrentUser().Id;
+        return await _paymentsAPIService.UpdateContractStatus(param);
+    } 
 }

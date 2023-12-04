@@ -65,12 +65,23 @@ interface ColumnConfig<T> {
       <tbody>
         <tr *ngFor="let data of filterTable.data">
           <td>{{ data.id }}</td>
-          <td>{{ data.userId }}</td>
-          <td>{{ data?.rate?.currencyFrom?.symbol ?? '-' }}</td>
-          <td>{{ data?.rate?.currencyTo?.symbol ?? '-' }}</td>
-          <td>{{ data.amount }}</td>
-          <td>{{ data.rate.exchangeRate }}</td>
-          <td>{{ data.convertedAmount }}</td>
+          <td>{{ data.createdBy.fullName }}</td>
+          <td>{{ data.approvedBy?.fullName ?? '-' }}</td>
+          <td class="cz-table-cell">
+            {{
+              (data.amount | number : '1.2') +
+                ' ' +
+                data?.rate?.currencyFrom?.symbol
+            }}
+          </td>
+          <td class="cz-table-cell">{{ data.rate.exchangeRate }}</td>
+          <td class="cz-table-cell">
+            {{
+              (data.amount * data.rate.exchangeRate | number : '1.2') +
+                ' ' +
+                data?.rate?.currencyTo?.symbol
+            }}
+          </td>
           <td>
             <cz-tag
               [type]="getStatusTagType(data.status)"
@@ -78,6 +89,7 @@ interface ColumnConfig<T> {
             ></cz-tag>
           </td>
           <td>
+            @if (data.status === ContractStatusEnum.Pending) {
             <nz-button-group>
               <button
                 nz-button
@@ -94,6 +106,7 @@ interface ColumnConfig<T> {
                 <span nz-icon nzType="close" nzTheme="outline"></span>
               </button>
             </nz-button-group>
+            }
           </td>
         </tr>
       </tbody>
@@ -101,7 +114,7 @@ interface ColumnConfig<T> {
   `,
   styles: `
     .cz-table-cell {
-      text-overflow: ellipsis;
+      text-align: right;
     }
   `,
 })
@@ -145,23 +158,37 @@ export class AdminPageComponent {
       {
         name: 'Created By',
         sortOrder: null,
-        sortFn: (a: Contract, b: Contract) => (a.userId > b.userId ? 1 : -1),
+        sortFn: (a: Contract, b: Contract) =>
+          a.createdBy.fullName > b.createdBy.fullName ? 1 : -1,
         sortDirections: ['ascend', 'descend', null],
       },
       {
-        name: 'From',
+        name: 'Approved/Rejected By',
         sortOrder: null,
-        sortFn: (a: Contract, b: Contract) =>
-          a.rate.currencyFrom.name.localeCompare(b.rate.currencyFrom.name),
+        sortFn: (a: Contract, b: Contract) => {
+          const aName = a.approvedBy?.fullName;
+          const bName = b.approvedBy?.fullName;
+          if (!aName && !bName) return 1;
+          if (!aName) return 1;
+          if (!bName) return -1;
+          return aName > bName ? 1 : -1;
+        },
         sortDirections: ['ascend', 'descend', null],
       },
-      {
-        name: 'To',
-        sortOrder: null,
-        sortFn: (a: Contract, b: Contract) =>
-          a.rate.currencyTo.name.localeCompare(b.rate.currencyTo.name),
-        sortDirections: ['ascend', 'descend', null],
-      },
+      // {
+      //   name: 'From',
+      //   sortOrder: null,
+      //   sortFn: (a: Contract, b: Contract) =>
+      //     a.rate.currencyFrom.name.localeCompare(b.rate.currencyFrom.name),
+      //   sortDirections: ['ascend', 'descend', null],
+      // },
+      // {
+      //   name: 'To',
+      //   sortOrder: null,
+      //   sortFn: (a: Contract, b: Contract) =>
+      //     a.rate.currencyTo.name.localeCompare(b.rate.currencyTo.name),
+      //   sortDirections: ['ascend', 'descend', null],
+      // },
       {
         name: 'Amount',
         sortOrder: null,

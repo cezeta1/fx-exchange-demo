@@ -26,7 +26,7 @@ public class FXRatesAPIService
 
     // Rates
     public async Task<RateDTO> GetRateById(string id)
-        => await _httpClient.GetAsync<RateDTO>("rates/{id}");
+        => await _httpClient.GetAsync<RateDTO>($"rates/{id}");
 
     public async Task<IEnumerable<RateDTO>> GetRatesById(IEnumerable<Guid> ids)
     {

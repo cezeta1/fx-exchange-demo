@@ -20,10 +20,11 @@ public class EmailHelper
     private SmtpCredentials _smtpCredentials;
 
     public EmailHelper(IOptions<EmailHelperOptions> options) {
+        string errorBit = "missing from EmailHelper config";
         _smtpCredentials = new SmtpCredentials
         {
-            Address = options.Value.SmtpSourceAddress,
-            Password = options.Value.SmtpPW
+            Address = options.Value.SmtpSourceAddress ?? throw new Exception($"Smtp Source Address {errorBit}"),
+            Password = options.Value.SmtpPW ?? throw new Exception($"Smtp Password {errorBit}")
         };
     }
 

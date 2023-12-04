@@ -5,16 +5,19 @@ namespace PaymentsAPI.Domain;
 
 public class Contract: Effectiveness
 {
+    public Contract() { }
+
     public Contract(Guid userId) {
             Id = Guid.NewGuid();
-            UserId = userId;
+            CreatedById = userId;
             Status = ContractStatus.Pending;
             CreatedOn = DateTime.Now;
             ExpiredOn = DateTime.Now.AddDays(7);
     }
     public Guid Id { get; set; }
 
-    public Guid UserId { get; set; }
+    public Guid CreatedById { get; set; }
+    public Guid? ApprovedById { get; set; }
     
     public ContractStatus Status { get; set; }
 
@@ -25,13 +28,14 @@ public class Contract: Effectiveness
     {
         return new ContractDTO
         {
-            Id = this.Id,
-            UserId = this.UserId,
-            Status = this.Status,
-            RateId = this.RateId,
-            Amount = this.Amount,
-            CreatedOn = this.CreatedOn,
-            ExpiredOn = this.ExpiredOn,
+            Id = Id,
+            CreatedById = CreatedById,
+            ApprovedById = ApprovedById,
+            Status = Status,
+            RateId = RateId,
+            Amount = Amount,
+            CreatedOn = CreatedOn,
+            ExpiredOn = ExpiredOn,
         };
     }
 }
