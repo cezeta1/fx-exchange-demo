@@ -4,13 +4,12 @@ import {
   ProtectedResourceScopes,
 } from '@azure/msal-angular';
 import {
-  PublicClientApplication,
-  InteractionType,
   AccountInfo,
+  InteractionType,
+  PublicClientApplication,
 } from '@azure/msal-browser';
-import { getClaimsFromStorage } from '../utils/storage-utils';
-import { loginRequest, msalConfig, protectedResources } from './auth-config';
 import { BehaviorSubject } from 'rxjs';
+import { loginRequest, msalConfig, protectedResources } from './auth-config';
 
 //* --- MSAL Instance Configuration --- *//
 
@@ -46,21 +45,22 @@ export function MSALInterceptorConfigFactory(): MsalInterceptorConfiguration {
     protectedResourceMap,
     authRequest: (msalService, httpReq, originalAuthRequest) => {
       const resource = new URL(httpReq.url).hostname;
-      let claim =
-        msalService.instance.getActiveAccount()! &&
-        getClaimsFromStorage(
-          `cc.${msalConfig.auth.clientId}.${
-            msalService.instance.getActiveAccount()?.idTokenClaims?.oid
-          }.${resource}`
-        )
-          ? window.atob(
-              getClaimsFromStorage(
-                `cc.${msalConfig.auth.clientId}.${
-                  msalService.instance.getActiveAccount()?.idTokenClaims?.oid
-                }.${resource}`
-              )
-            )
-          : undefined;
+      // let claim =
+      //     msalService.instance.getActiveAccount()! &&
+      //     getClaimsFromStorage(
+      //       `cc.${msalConfig.auth.clientId}.${
+      //         msalService.instance.getActiveAccount()?.idTokenClaims?.oid
+      //       }.${resource}`
+      //     )
+      //     ? window.atob(
+      //         getClaimsFromStorage(
+      //           `cc.${msalConfig.auth.clientId}.${
+      //             msalService.instance.getActiveAccount()?.idTokenClaims?.oid
+      //           }.${resource}`
+      //         )
+      //       )
+      //     : undefined;
+
       return {
         ...originalAuthRequest,
         // claims: claim,
@@ -83,21 +83,22 @@ const onLoginSuccessEmitter = new BehaviorSubject<AccountInfo | null>(null);
 
 /* ----------------------------------- */
 export const authenticator = {
-  initialize: () => {
-    return msalInstance.initialize();
-  },
+  
+  initialize: () => 
+    msalInstance.initialize(),
+
   handleSignIn: async () => {
     await msalInstance.handleRedirectPromise().then((response) => {
-      if (response !== null) {
-        if (response?.account) {
-          msalInstance.setActiveAccount(response.account);
-          onLoginSuccessEmitter.next(msalInstance.getActiveAccount());
-        }
+      if (response !== null && response?.account) {
+        msalInstance.setActiveAccount(response.account);
+        onLoginSuccessEmitter.next(msalInstance.getActiveAccount());
       } else {
-        const currentAccounts = msalInstance.getAllAccounts();
-        if (currentAccounts.length === 0) {
+        const currentAccounts = msalInstance
+          .getAllAccounts();
+        
+        if (currentAccounts.length === 0)
           msalInstance.loginRedirect(loginRequest);
-        } else {
+        else {
           // TODO add account selection if multiple accounts are available
           msalInstance.setActiveAccount(currentAccounts[0]);
           onLoginSuccessEmitter.next(msalInstance.getActiveAccount());
@@ -105,17 +106,22 @@ export const authenticator = {
       }
     });
   },
+
   onLoginSuccess: onLoginSuccessEmitter.asObservable(),
+
   signOut: () =>
     msalInstance.logoutRedirect({
       account: msalInstance.getActiveAccount(),
       authority: loginRequest?.authority ?? '',
     }),
+
   getCurrentAccount: () => msalInstance.getActiveAccount(),
   getCurrentUserId: () => msalInstance.getActiveAccount()?.localAccountId,
   isLoggedIn: () => (msalInstance.getActiveAccount() ? true : false),
+  
   getToken: (): string =>
     msalInstance.getActiveAccount()?.idToken ?? 'No Token',
+  
   getUserAuthority: (): UserAuthorityEnum => {
     const acc = msalInstance.getActiveAccount();
     return (

@@ -1,7 +1,7 @@
-import { ContractStatusEnum } from './contract-status.enum';
 import { Effectiveness } from '../Common/effectiveness.interface';
 import { AzureUser } from '../Common/user.interface';
 import { Rate } from '../FxRatesAPI/rate.interface';
+import { ContractStatusEnum } from './contract-status.enum';
 
 export interface Contract extends Effectiveness {
   id?: string;

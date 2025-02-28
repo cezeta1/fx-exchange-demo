@@ -1,15 +1,15 @@
 // Angular
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, inject, Injector, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 // NgZorro
-import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzMenuModule } from 'ng-zorro-antd/menu';
 // Components
-import { UserLoginComponent } from '../user-profile/user-login/user-login.component';
 // Other
 import { RoutesEnum } from '../../app.routes';
-import { UserAuthorityEnum, authenticator } from '../../auth/authenticator';
+import { authenticator, UserAuthorityEnum } from '../../auth/authenticator';
+import { cz_takeUntilDestroyed } from '../../utils/utils';
 
 interface MenuOption {
   id: number;
@@ -21,8 +21,11 @@ interface MenuOption {
 
 @Component({
   selector: 'side-menu',
-  standalone: true,
-  imports: [CommonModule, NzMenuModule, NzIconModule, UserLoginComponent],
+  imports: [
+    CommonModule,
+    NzMenuModule,
+    NzIconModule
+  ],
   template: `
     <ul nz-menu nzMode="inline">
       <li
@@ -38,6 +41,10 @@ interface MenuOption {
   `,
 })
 export class SideMenuComponent implements OnInit {
+
+  private _inj = inject(Injector);
+  private _router = inject(Router);
+
   protected allMenuItems: MenuOption[] = [
     {
       id: 0,
@@ -53,24 +60,23 @@ export class SideMenuComponent implements OnInit {
       needsAdmin: true,
     },
   ];
+  
   protected menuItems: MenuOption[] = [];
   protected currentSection: number = 0;
 
-  constructor(private router: Router, private route: ActivatedRoute) {}
-
   ngOnInit() {
     // TODO: OnInit, implement route recognition, and select menu item accordingly
-    authenticator.onLoginSuccess.subscribe(() => {
-      if (authenticator.getUserAuthority() === UserAuthorityEnum.User) {
-        this.menuItems = [...this.allMenuItems.filter((mI) => !mI.needsAdmin)];
-      } else {
-        this.menuItems = [...this.allMenuItems];
-      }
-    });
+    authenticator.onLoginSuccess
+      .pipe(cz_takeUntilDestroyed(this._inj))
+      .subscribe(() => {
+        this.menuItems = (authenticator.getUserAuthority() === UserAuthorityEnum.User) 
+          ? [...this.allMenuItems.filter((mI) => !mI.needsAdmin)]
+          : [...this.allMenuItems];     
+      });
   }
 
   protected onMenuRedirect(item: MenuOption) {
     this.currentSection = item.id;
-    this.router.navigateByUrl(item.route);
+    this._router.navigateByUrl(item.route);
   }
 }

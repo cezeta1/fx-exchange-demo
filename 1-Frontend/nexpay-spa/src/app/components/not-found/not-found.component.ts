@@ -1,12 +1,10 @@
 // Angular
-import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterOutlet } from '@angular/router';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-root',
-  standalone: true,
-  imports: [CommonModule, RouterOutlet],
+  imports: [CommonModule],
   template: `
     <div class="cz-not-found">
       <div class="cz-404">404</div>
@@ -29,8 +27,4 @@ import { Router, RouterOutlet } from '@angular/router';
     }
   `,
 })
-export class NotFoundComponent implements OnInit {
-  constructor(private router: Router) {}
-
-  ngOnInit(): void {}
-}
+export class NotFoundComponent {}

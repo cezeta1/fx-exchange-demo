@@ -1,39 +1,35 @@
 // Angular
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject, Injector } from '@angular/core';
 // NgZorro
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzIconModule } from 'ng-zorro-antd/icon';
 import {
   NzTableModule,
   NzTableSortFn,
   NzTableSortOrder,
 } from 'ng-zorro-antd/table';
-import { NzIconModule } from 'ng-zorro-antd/icon';
-import { NzButtonModule } from 'ng-zorro-antd/button';
 // Components
 import { CZTagComponent } from '../../../components/shared/cz-tag/cz-tag.component';
 // Interfaces
-import { Contract } from '../../../interfaces/PaymentsAPI/contract.interface';
 import { ContractStatusEnum } from '../../../interfaces/PaymentsAPI/contract-status.enum';
+import { Contract } from '../../../interfaces/PaymentsAPI/contract.interface';
 // Services
-import { PaymentAPIService } from '../../../services/paymentAPI.service';
 import { NotificationService } from '../../../services/notifications.service';
+import { PaymentAPIService } from '../../../services/paymentAPI.service';
 // Other
-import { SubSink } from 'subsink';
 import { authenticator } from '../../../auth/authenticator';
+import { cz_takeUntilDestroyed } from '../../../utils/utils';
 
 interface ColumnConfig<T> {
   name: string;
   sortOrder: NzTableSortOrder | null;
   sortFn: NzTableSortFn<T> | null;
   sortDirections: NzTableSortOrder[];
-  // listOfFilter: NzTableFilterList;
-  // filterFn: NzTableFilterFn<T> | null;
-  // filterMultiple: boolean;
 }
 
 @Component({
   selector: 'admin-page',
-  standalone: true,
   imports: [
     CommonModule,
     NzButtonModule,
@@ -90,22 +86,22 @@ interface ColumnConfig<T> {
           </td>
           <td>
             @if (data.status === ContractStatusEnum.Pending) {
-            <nz-button-group>
-              <button
-                nz-button
-                nzType="primary"
-                (click)="onChangeStatus(data.id, ContractStatusEnum.Completed)"
-              >
-                <span nz-icon nzType="check" nzTheme="outline"></span>
-              </button>
-              <button
-                nz-button
-                nzType="default"
-                (click)="onChangeStatus(data.id, ContractStatusEnum.Cancelled)"
-              >
-                <span nz-icon nzType="close" nzTheme="outline"></span>
-              </button>
-            </nz-button-group>
+              <nz-button-group>
+                <button
+                  nz-button
+                  nzType="primary"
+                  (click)="onChangeStatus(data.id, ContractStatusEnum.Completed)"
+                >
+                  <span nz-icon nzType="check" nzTheme="outline"></span>
+                </button>
+                <button
+                  nz-button
+                  nzType="default"
+                  (click)="onChangeStatus(data.id, ContractStatusEnum.Cancelled)"
+                >
+                  <span nz-icon nzType="close" nzTheme="outline"></span>
+                </button>
+              </nz-button-group>
             }
           </td>
         </tr>
@@ -119,34 +115,34 @@ interface ColumnConfig<T> {
   `,
 })
 export class AdminPageComponent {
+
+  private _inj = inject(Injector);
+  private notificationService = inject( NotificationService);
+  private paymentAPIService = inject(PaymentAPIService);
+
   protected ContractStatusEnum = ContractStatusEnum;
-  private subs = new SubSink();
-
   protected contracts: Contract[] = [];
-
   protected tableColumns: ColumnConfig<Contract>[] = [];
-
-  constructor(
-    private notificationService: NotificationService,
-    private paymentAPIService: PaymentAPIService
-  ) {}
 
   ngOnInit(): void {
     this._initTableConfig();
     this._loadAllContracts();
   }
-  ngOnDestroy(): void {
-    this.subs.unsubscribe();
+ 
+  private _loadAllContracts(): void {
+    if (!authenticator.getCurrentUserId()) 
+      return;
+    
+    this.paymentAPIService
+      .getAllContracts()
+      .pipe(cz_takeUntilDestroyed(this._inj))
+      .subscribe({
+        next: (data: Contract[]) => {
+          this.contracts = [...data];
+        },
+      });
   }
 
-  private _loadAllContracts(): void {
-    if (!authenticator.getCurrentUserId()) return;
-    this.subs.sink = this.paymentAPIService.getAllContracts().subscribe({
-      next: (data: Contract[]) => {
-        this.contracts = [...data];
-      },
-    });
-  }
   private _initTableConfig(): void {
     this.tableColumns = [
       {
@@ -175,20 +171,6 @@ export class AdminPageComponent {
         },
         sortDirections: ['ascend', 'descend', null],
       },
-      // {
-      //   name: 'From',
-      //   sortOrder: null,
-      //   sortFn: (a: Contract, b: Contract) =>
-      //     a.rate.currencyFrom.name.localeCompare(b.rate.currencyFrom.name),
-      //   sortDirections: ['ascend', 'descend', null],
-      // },
-      // {
-      //   name: 'To',
-      //   sortOrder: null,
-      //   sortFn: (a: Contract, b: Contract) =>
-      //     a.rate.currencyTo.name.localeCompare(b.rate.currencyTo.name),
-      //   sortDirections: ['ascend', 'descend', null],
-      // },
       {
         name: 'Amount',
         sortOrder: null,
@@ -231,12 +213,15 @@ export class AdminPageComponent {
     cId: string | undefined,
     newStatus: ContractStatusEnum
   ) {
-    if (!cId) return;
+    if (!cId) 
+      return;
+    
     this.paymentAPIService
       .updateContractStatus({
         contractId: cId,
         newStatus: newStatus,
       })
+      .pipe(cz_takeUntilDestroyed(this._inj))
       .subscribe(() => {
         this.notificationService.showSuccess('Success');
         this._loadAllContracts();

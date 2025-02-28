@@ -1,37 +1,32 @@
 // Angular
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, inject, Injector, OnInit } from '@angular/core';
 // NgZorro
 import { NzButtonModule } from 'ng-zorro-antd/button';
-import { NzTableModule } from 'ng-zorro-antd/table';
-import { NzTableSortFn, NzTableSortOrder } from 'ng-zorro-antd/table';
 import { NzModalModule } from 'ng-zorro-antd/modal';
+import { NzTableModule, NzTableSortFn, NzTableSortOrder } from 'ng-zorro-antd/table';
 // Components
-import { NewContractsModalComponent } from '../new-contract/new-contract.component';
 import { CZTagComponent } from '../../../components/shared/cz-tag/cz-tag.component';
+import { NewContractsModalComponent } from '../new-contract/new-contract.component';
 // Interfaces
-import { Contract } from '../../../interfaces/PaymentsAPI/contract.interface';
 import { ContractStatusEnum } from '../../../interfaces/PaymentsAPI/contract-status.enum';
+import { Contract } from '../../../interfaces/PaymentsAPI/contract.interface';
 // Services
-import { PaymentAPIService } from '../../../services/paymentAPI.service';
 import { CZModalService } from '../../../services/modal.service';
+import { PaymentAPIService } from '../../../services/paymentAPI.service';
 // Other
-import { SubSink } from 'subsink';
 import { authenticator } from '../../../auth/authenticator';
+import { cz_takeUntilDestroyed } from '../../../utils/utils';
 
 interface ColumnConfig<T> {
   name: string;
   sortOrder: NzTableSortOrder | null;
   sortFn: NzTableSortFn<T> | null;
   sortDirections: NzTableSortOrder[];
-  // listOfFilter: NzTableFilterList;
-  // filterFn: NzTableFilterFn<T> | null;
-  // filterMultiple: boolean;
 }
 
 @Component({
   selector: 'contracts-page',
-  standalone: true,
   imports: [
     CommonModule,
     NzButtonModule,
@@ -110,31 +105,27 @@ interface ColumnConfig<T> {
     }
   `,
 })
-export class ContractsPageComponent implements OnInit, OnDestroy {
+export class ContractsPageComponent implements OnInit {
+  private _inj = inject(Injector);
+  private paymentAPIService = inject(PaymentAPIService);
+  private modalService = inject(CZModalService);
+
   protected ContractStatusEnum = ContractStatusEnum;
-  private subs = new SubSink();
-
   protected contracts: Contract[] = [];
-
-  protected tableColumns: ColumnConfig<Contract>[] = [];
-
-  constructor(
-    private paymentAPIService: PaymentAPIService,
-    private modalService: CZModalService
-  ) {}
+  protected tableColumns: ColumnConfig<Contract>[] = [];  
 
   ngOnInit(): void {
     this._initTableConfig();
     this._loadUserContracts();
   }
-  ngOnDestroy(): void {
-    this.subs.unsubscribe();
-  }
 
   private _loadUserContracts(): void {
-    if (!authenticator.getCurrentUserId()) return;
-    this.subs.sink = this.paymentAPIService
+    if (!authenticator.getCurrentUserId()) 
+      return;
+    
+    this.paymentAPIService
       .getUserContracts(authenticator.getCurrentUserId() ?? '-')
+      .pipe(cz_takeUntilDestroyed(this._inj))
       .subscribe({
         next: (data: Contract[]) => {
           this.contracts = [...data];
@@ -143,16 +134,22 @@ export class ContractsPageComponent implements OnInit, OnDestroy {
   }
 
   private _onModalCloseEmitter: EventEmitter<any> = new EventEmitter();
+  
   protected onNewContract(): void {
+    
     this.modalService.createModal(
       <any>NewContractsModalComponent,
       this._onModalCloseEmitter
     );
-    this.subs.sink = this._onModalCloseEmitter.subscribe({
-      next: (reloadTable: boolean) => {
-        if (reloadTable) this._loadUserContracts();
-      },
-    });
+
+    this._onModalCloseEmitter
+      .pipe(cz_takeUntilDestroyed(this._inj))
+      .subscribe({
+        next: (reloadTable: boolean) => {
+          if (reloadTable) 
+            this._loadUserContracts();
+        },
+      });
   }
 
   private _initTableConfig(): void {
@@ -163,20 +160,6 @@ export class ContractsPageComponent implements OnInit, OnDestroy {
         sortFn: null,
         sortDirections: [null],
       },
-      // {
-      //   name: 'From',
-      //   sortOrder: null,
-      //   sortFn: (a: Contract, b: Contract) =>
-      //     a.rate.currencyFrom.name.localeCompare(b.rate.currencyFrom.name),
-      //   sortDirections: ['ascend', 'descend', null],
-      // },
-      // {
-      //   name: 'To',
-      //   sortOrder: null,
-      //   sortFn: (a: Contract, b: Contract) =>
-      //     a.rate.currencyTo.name.localeCompare(b.rate.currencyTo.name),
-      //   sortDirections: ['ascend', 'descend', null],
-      // },
       {
         name: 'Amount',
         sortOrder: null,

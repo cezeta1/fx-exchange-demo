@@ -1,17 +1,16 @@
 // Angular
-import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
 // NgZorro
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
 
 @Component({
   selector: 'page-footer',
-  standalone: true,
   imports: [CommonModule, NzLayoutModule, NzIconModule],
   template: `
     <nz-footer class="cz-footer">
-      Julián Czerweny ©2023 ||
+      Julián Czerweny ©2025 ||
       <a
         href="https://github.com/Cezeta-hub"
         target="_blank"

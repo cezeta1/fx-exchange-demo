@@ -1,19 +1,19 @@
 // Angular
-import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, inject, Injector } from '@angular/core';
 // NgZorro
-import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
+import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 // MSAL
 import { AccountInfo } from '@azure/msal-browser';
 // Other
 import { authenticator } from '../../../auth/authenticator';
+import { cz_takeUntilDestroyed } from '../../../utils/utils';
 
 @Component({
   selector: 'user-login',
-  standalone: true,
   imports: [
     CommonModule,
     NzAvatarModule,
@@ -23,36 +23,36 @@ import { authenticator } from '../../../auth/authenticator';
   ],
   template: `
     @if (authenticator.isLoggedIn()) {
-    <a
-      nz-dropdown
-      nzTrigger="click"
-      [nzDropdownMenu]="menu"
-      nzPlacement="bottomRight"
-      nzOverlayClassName="cz-profile-menu"
-    >
-      <nz-avatar [nzText]="currentUser.initials" [nzSize]="42"></nz-avatar>
-    </a>
-    <nz-dropdown-menu #menu="nzDropdownMenu">
-      <ul nz-menu nzSelectable>
-        <li>
-          <div style="display:flex; flex-direction: column; margin: 5px 15px">
-            <span class="cz-label">User Id</span>
-            <span class="cz-value">{{ currentUser.id }}</span>
-            <nz-divider class="cz-divider"></nz-divider>
-            <span class="cz-label">UserName</span>
-            <span class="cz-value">{{ currentUser.fullName }}</span>
-            <nz-divider class="cz-divider"></nz-divider>
-            <span class="cz-label">Tenant Id</span>
-            <span class="cz-value">{{ currentUser.tenantId }}</span>
-          </div>
-        </li>
-        <li nz-menu-divider></li>
-        <li nz-menu-item (click)="onLogout()">Logout</li>
-      </ul>
-    </nz-dropdown-menu>
+      <a
+        nz-dropdown
+        nzTrigger="click"
+        [nzDropdownMenu]="menu"
+        nzPlacement="bottomRight"
+        nzOverlayClassName="cz-profile-menu"
+      >
+        <nz-avatar [nzText]="currentUser.initials" [nzSize]="42"></nz-avatar>
+      </a>
+      <nz-dropdown-menu #menu="nzDropdownMenu">
+        <ul nz-menu nzSelectable>
+          <li>
+            <div style="display:flex; flex-direction: column; margin: 5px 15px">
+              <span class="cz-label">User Id</span>
+              <span class="cz-value">{{ currentUser.id }}</span>
+              <nz-divider class="cz-divider"></nz-divider>
+              <span class="cz-label">UserName</span>
+              <span class="cz-value">{{ currentUser.fullName }}</span>
+              <nz-divider class="cz-divider"></nz-divider>
+              <span class="cz-label">Tenant Id</span>
+              <span class="cz-value">{{ currentUser.tenantId }}</span>
+            </div>
+          </li>
+          <li nz-menu-divider></li>
+          <li nz-menu-item (click)="onLogout()">Logout</li>
+        </ul>
+      </nz-dropdown-menu>
     } @else {
-    <nz-avatar [nzSize]="42" nzIcon="user"></nz-avatar>
-    <span nz-icon nzType="user" nzTheme="outline"></span>
+      <nz-avatar [nzSize]="42" nzIcon="user"></nz-avatar>
+      <span nz-icon nzType="user" nzTheme="outline"></span>
     }
   `,
   styles: `
@@ -73,19 +73,23 @@ import { authenticator } from '../../../auth/authenticator';
   `,
 })
 export class UserLoginComponent {
+  private _inj = inject(Injector);
+
   protected authenticator = authenticator;
   protected currentUser: any = {};
 
-  constructor() {}
-
   ngOnInit() {
-    if (authenticator.isLoggedIn()) this._fillInUserData();
+    if (authenticator.isLoggedIn()) 
+      this._fillInUserData();
     else
-      authenticator.onLoginSuccess.subscribe(
-        (currentUser: AccountInfo | null) => {
-          if (currentUser) this._fillInUserData(currentUser);
-        }
-      );
+      authenticator.onLoginSuccess
+        .pipe(cz_takeUntilDestroyed(this._inj))
+        .subscribe(
+          (currentUser: AccountInfo | null) => {
+            if (currentUser)
+              this._fillInUserData(currentUser);
+          }
+        );
   }
 
   protected onLogout(): void {
@@ -101,16 +105,15 @@ export class UserLoginComponent {
       tenantId: currentUser?.tenantId ?? '-',
     };
   }
-  private _getUserInitials(username?: string): string | null {
-    return (
-      (username ?? '')
-        .replace('.', ' ')
-        .match(/(^\S\S?|\s\S)?/g)
-        ?.map((v) => v.trim())
-        .join('')
-        .match(/(^\S|\S$)?/g)
-        ?.join('')
-        .toLocaleUpperCase() ?? 'NN'
+
+  private _getUserInitials = (username?: string): string | null => 
+    ((username ?? '')
+      .replace('.', ' ')
+      .match(/(^\S\S?|\s\S)?/g)
+      ?.map((v) => v.trim())
+      .join('')
+      .match(/(^\S|\S$)?/g)
+      ?.join('')
+      .toLocaleUpperCase() ?? 'NN'
     );
-  }
 }

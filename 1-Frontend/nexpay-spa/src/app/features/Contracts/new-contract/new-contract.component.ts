@@ -1,21 +1,19 @@
 // Angular
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, Injector, OnInit } from '@angular/core';
 // NgZorro
 import { NzButtonModule } from 'ng-zorro-antd/button';
-import { NzModalModule, NzModalRef } from 'ng-zorro-antd/modal';
 import { NzFormModule } from 'ng-zorro-antd/form';
-import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
+import { NzModalModule, NzModalRef } from 'ng-zorro-antd/modal';
+import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 // Interfaces
 import { Currency } from '../../../interfaces/FxRatesAPI/currency.interface';
 // Services
-import { PaymentAPIService } from '../../../services/paymentAPI.service';
-import { NotificationService } from '../../../services/notifications.service';
 import { FxRatesAPIService } from '../../../services/fxRatesAPI.service';
-// Other
-import { SubSink } from 'subsink';
+import { NotificationService } from '../../../services/notifications.service';
+import { PaymentAPIService } from '../../../services/paymentAPI.service';
 
 import {
   FormControl,
@@ -24,18 +22,19 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+
+import { debounceTime, distinctUntilChanged } from 'rxjs';
+import { authenticator } from '../../../auth/authenticator';
+import { GetRateQuotePayload } from '../../../interfaces/FxRatesAPI/Payloads/get-rate-quote-payload.interface';
 import { Rate } from '../../../interfaces/FxRatesAPI/rate.interface';
-import { CZContractCardComponent } from './contract-card.component';
 import { Contract } from '../../../interfaces/PaymentsAPI/contract.interface';
 import { CreateContractPayload } from '../../../interfaces/PaymentsAPI/Payloads/create-contract-payload.interface';
-import { GetRateQuotePayload } from '../../../interfaces/FxRatesAPI/Payloads/get-rate-quote-payload.interface';
-import { authenticator } from '../../../auth/authenticator';
+import { cz_takeUntilDestroyed } from '../../../utils/utils';
 import { CEZ_Validators } from '../../../utils/validators';
-import { debounceTime, distinctUntilChanged } from 'rxjs';
+import { CZContractCardComponent } from './contract-card.component';
 
 @Component({
   selector: 'new-contract-modal',
-  standalone: true,
   imports: [
     CommonModule,
     FormsModule,
@@ -74,16 +73,13 @@ import { debounceTime, distinctUntilChanged } from 'rxjs';
         <nz-form-item>
           <nz-form-label [nzSpan]="6" nzFor="amount">Amount</nz-form-label>
           <nz-form-control [nzSpan]="14">
-            <nz-input-number-group
-              style="width:100%"
-              [nzAddOnBefore]="selectedFromCurrency?.symbol ?? ' '"
+            <nz-input-number 
+              name="amount"
+              formControlName="amount"
+              [nzMin]="0"
             >
-              <nz-input-number
-                name="amount"
-                formControlName="amount"
-                [nzMin]="0"
-              ></nz-input-number>
-            </nz-input-number-group>
+              <span nzInputAddonBefore>{{ selectedFromCurrency?.symbol ?? ' ' }}</span>
+            </nz-input-number>
           </nz-form-control>
         </nz-form-item>
 
@@ -93,13 +89,13 @@ import { debounceTime, distinctUntilChanged } from 'rxjs';
           <nz-form-control [nzSpan]="14" nzErrorTip="Required">
             <nz-select formControlName="toCurr" id="toCurr">
               @for (tCurr of toCurrencies; track $index) {
-              <nz-option
-                nzCustomContent
-                [nzLabel]="tCurr.name"
-                [nzValue]="tCurr.id"
-              >
-                {{ tCurr.symbol }} - {{ tCurr.name }}
-              </nz-option>
+                <nz-option
+                  nzCustomContent
+                  [nzLabel]="tCurr.name"
+                  [nzValue]="tCurr.id"
+                >
+                  {{ tCurr.symbol }} - {{ tCurr.name }}
+                </nz-option>
               }
             </nz-select>
           </nz-form-control>
@@ -130,8 +126,13 @@ import { debounceTime, distinctUntilChanged } from 'rxjs';
   `,
   styles: ``,
 })
-export class NewContractsModalComponent implements OnInit, OnDestroy {
-  private subs = new SubSink();
+export class NewContractsModalComponent implements OnInit {
+  private _inj = inject(Injector);
+  
+  private paymentAPIService = inject(PaymentAPIService);
+  private fxRatesAPIService = inject(FxRatesAPIService);
+  private notificationsService = inject(NotificationService);
+  private modal = inject(NzModalRef);
 
   protected isConfirmLoading: boolean = false;
   protected loadingRate!: boolean;
@@ -147,64 +148,70 @@ export class NewContractsModalComponent implements OnInit, OnDestroy {
   protected currentRate?: Rate;
   protected finalAmount!: number;
 
-  constructor(
-    private paymentAPIService: PaymentAPIService,
-    private fxRatesAPIService: FxRatesAPIService,
-    private notificationsService: NotificationService,
-    private modal: NzModalRef
-  ) {}
-
   ngOnInit(): void {
     this._initForm();
     this._subscribeFormChanges();
     this._loadCurrencies();
   }
-  ngOnDestroy(): void {
-    this.subs.unsubscribe();
-  }
 
   private _initForm(): void {
+
     this.newContractForm = new FormGroup({
       fromCurr: new FormControl(null, [Validators.required]),
       toCurr: new FormControl(null, Validators.required),
       amount: new FormControl(0, [Validators.required, Validators.min(1)]),
     });
+    
     this.getControl('fromCurr')?.addValidators([
       CEZ_Validators.notEqualValidator(this.getControl('toCurr')),
     ]);
+    
     this.getControl('toCurr')?.addValidators([
       CEZ_Validators.notEqualValidator(this.getControl('fromCurr')),
     ]);
+    
     this.newContractForm.disable();
     this.newContractForm.updateValueAndValidity();
   }
+
   private _subscribeFormChanges(): void {
-    this.subs.add(
-      this.getControl('fromCurr')?.valueChanges.subscribe((val: any) =>
+    this.getControl('fromCurr')?.valueChanges
+      .pipe(cz_takeUntilDestroyed(this._inj))  
+      .subscribe((val: any) =>
         this._onDropdownChanges(true, val)
-      ),
-      this.getControl('toCurr')?.valueChanges.subscribe((val: any) =>
+      );
+
+    this.getControl('toCurr')?.valueChanges
+      .pipe(cz_takeUntilDestroyed(this._inj))
+      .subscribe((val: any) =>
         this._onDropdownChanges(false, val)
-      ),
-      this.getControl('amount')
-        ?.valueChanges.pipe(debounceTime(500))
-        .pipe(distinctUntilChanged())
-        .subscribe((value: number) => {
-          if (this.newContractForm.valid) {
-            this._getFxRate();
-          }
-        })
-    );
+      );
+
+    this.getControl('amount')?.valueChanges
+      .pipe(
+        debounceTime(500),
+        distinctUntilChanged(),
+        cz_takeUntilDestroyed(this._inj)
+      )
+      .subscribe((value: number) => {
+        if (this.newContractForm.valid)
+          this._getFxRate();
+      });
   }
+
   private _loadCurrencies(): void {
-    this.subs.sink = this.fxRatesAPIService.getCurrencyOptions().subscribe({
-      next: (data: Currency[]) => {
-        this._currencyOptions = [...data];
-        this.newContractForm.enable();
-        this._updateCurrencyOptions();
-      },
-    });
+    this.fxRatesAPIService
+      .getCurrencyOptions()
+      .pipe(cz_takeUntilDestroyed(this._inj))
+      .subscribe({
+        next: (data: Currency[]) => {
+          this._currencyOptions = [...data];
+          this.newContractForm.enable();
+          this._updateCurrencyOptions();
+        },
+      });
   }
+  
   private _onDropdownChanges(isFrom: boolean, newVal: number): void {
     const idx = this._currencyOptions.findIndex((c) => c.id === newVal);
     this[isFrom ? 'selectedFromCurrency' : 'selectedToCurrency'] =
@@ -219,12 +226,14 @@ export class NewContractsModalComponent implements OnInit, OnDestroy {
       this._getFxRate();
     }
   }
+
   private _updateCurrencyOptions(): void {
     const filterFunc = (ctrl: string) => (c: Currency) =>
       c.id !== this.getControlValue(ctrl);
     this.fromCurrencies = this._currencyOptions.filter(filterFunc('toCurr'));
     this.toCurrencies = this._currencyOptions.filter(filterFunc('fromCurr'));
   }
+
   private _getFxRate() {
     this.currentRate = undefined;
     const payload: GetRateQuotePayload = {
@@ -232,47 +241,60 @@ export class NewContractsModalComponent implements OnInit, OnDestroy {
       toId: this.getControlValue('toCurr'),
       amount: this.getControlValue('amount'),
     };
+
     this.loadingRate = true;
-    this.subs.sink = this.fxRatesAPIService.getRateQuote(payload).subscribe({
-      next: (rate: Rate) => {
-        this.currentRate = { ...rate };
-        this.loadingRate = false;
-      },
-      error: () => {
-        this.loadingRate = false;
-      },
-    });
+    
+    this.fxRatesAPIService
+      .getRateQuote(payload)
+      .pipe(cz_takeUntilDestroyed(this._inj))
+      .subscribe({
+        next: (rate: Rate) => {
+          this.currentRate = { ...rate };
+          this.loadingRate = false;
+        },
+        error: () => this.loadingRate = false,
+      });
   }
 
   // On Actions
   protected onConfirm() {
     this.isConfirmLoading = true;
-    if (!this.currentRate?.id) return;
+    
+    if (!this.currentRate?.id) 
+      return;
+    
     // Create new Contract
+    
     let payload: CreateContractPayload = {
       userId: authenticator.getCurrentUserId() ?? '-',
       rateId: this.currentRate?.id,
       amount: this.getControlValue('amount'),
     };
-    this.paymentAPIService.createContract(payload).subscribe({
-      next: (rate: Contract) => {
-        this.notificationsService.showSuccess('Success!');
-        this.isConfirmLoading = false;
-        this._destroyModal(true);
-      },
-      error: (error) => {
-        this.isConfirmLoading = false;
-      },
-    });
+
+    this.paymentAPIService
+      .createContract(payload)
+      .pipe(cz_takeUntilDestroyed(this._inj))
+      .subscribe({
+        next: (_: Contract) => {
+          this.notificationsService.showSuccess('Success!');
+          this.isConfirmLoading = false;
+          this._destroyModal(true);
+        },
+        error: () => this.isConfirmLoading = false
+      });
   }
+
   protected onCancel() {
     this._destroyModal(false);
   }
 
   // Utils
-  protected getControl = (name: string) => this.newContractForm.get(name);
+  protected getControl = (name: string) => 
+    this.newContractForm.get(name);
+  
   protected getControlValue = (name: string) =>
     this.newContractForm.get(name)?.value;
+  
   protected get isValid() {
     return (
       this.newContractForm.valid &&
@@ -280,6 +302,7 @@ export class NewContractsModalComponent implements OnInit, OnDestroy {
       new Date() < (this.currentRate?.expiredOn ?? 0)
     );
   }
+  
   private _destroyModal(result?: any) {
     this.modal.destroy(result);
   }

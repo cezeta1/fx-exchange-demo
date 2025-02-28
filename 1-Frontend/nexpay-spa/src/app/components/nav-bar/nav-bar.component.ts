@@ -8,7 +8,6 @@ import { UserLoginComponent } from '../user-profile/user-login/user-login.compon
 
 @Component({
   selector: 'nav-bar',
-  standalone: true,
   imports: [CommonModule, NzLayoutModule, UserLoginComponent],
   template: `
     <nz-header>
@@ -16,22 +15,22 @@ import { UserLoginComponent } from '../user-profile/user-login/user-login.compon
         <img
           class="cz-app-logo"
           src="../assets/icons/logo-white.png"
-          alt="NexPay logo"
+          alt="logo"
         />
       </a>
       <user-login class="cz-user-login-component"></user-login>
     </nz-header>
   `,
   styles: `
-        .cz-app-logo {
-            height: 100%;
-            float: left;
-            padding: 10px 0;
-            margin-left: -25px;
-        }
-        .cz-user-login-component {
-            float: right;
-        }
-    `,
+    .cz-app-logo {
+      height: 100%;
+      float: left;
+      padding: 10px 0;
+      margin-left: -25px;
+    }
+    .cz-user-login-component {
+      float: right;
+    }
+  `,
 })
 export class NavBarComponent {}

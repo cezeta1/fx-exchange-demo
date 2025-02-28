@@ -1,41 +1,32 @@
 // Angular
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
 // Interfaces
-import { Rate } from '../interfaces/FxRatesAPI/rate.interface';
 import { Currency } from '../interfaces/FxRatesAPI/currency.interface';
 import { GetRateQuotePayload } from '../interfaces/FxRatesAPI/Payloads/get-rate-quote-payload.interface';
+import { Rate } from '../interfaces/FxRatesAPI/rate.interface';
 // Services
 import { NotificationService } from './notifications.service';
 // Other
 import { Observable, tap } from 'rxjs';
 import { environment } from '../../common/environment';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class FxRatesAPIService {
-  constructor(
-    private http: HttpClient,
-    private notificationService: NotificationService
-  ) {}
 
-  public getCurrencyOptions(): Observable<Currency[]> {
-    return this.http
-      .get<Currency[]>(environment.NexPayBFF + `currencies/all`, {})
-      .pipe(
-        tap({
-          next: (data) => {},
-          error: (e) => {
-            this.notificationService.showError("Couldn't get Currencies");
-          },
-        })
+  private http = inject(HttpClient);
+  private notificationService = inject(NotificationService);
+
+  public getCurrencyOptions = (): Observable<Currency[]> => 
+    this.http
+      .get<Currency[]>(environment.BFF + `currencies/all`, {})
+      .pipe( 
+        tap({ error: _ => this.notificationService.showError("Couldn't get Currencies") })
       );
-  }
 
-  public getRateQuote(payload: GetRateQuotePayload): Observable<Rate> {
-    return this.http
-      .post<Rate>(environment.NexPayBFF + `rates`, { ...payload })
+  public getRateQuote = (payload: GetRateQuotePayload): Observable<Rate> => 
+    this.http
+      .post<Rate>(environment.BFF + `rates`, { ...payload })
       .pipe(
         tap({
           next: (data) => {
@@ -43,10 +34,7 @@ export class FxRatesAPIService {
             data.expiredOn = new Date(data.expiredOn);
             return data;
           },
-          error: (e) => {
-            this.notificationService.showError("Couldn't get the rate");
-          },
+          error: _ => this.notificationService.showError("Couldn't get the rate")
         })
       );
-  }
 }

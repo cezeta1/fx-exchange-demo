@@ -1,21 +1,20 @@
 // Angular
-import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 // NgZorro
+import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
-import { NzIconModule } from 'ng-zorro-antd/icon';
 // Components
-import { SideMenuComponent } from './components/side-menu/side-menu.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
+import { SideMenuComponent } from './components/side-menu/side-menu.component';
 // Other
 import { authenticator } from './auth/authenticator';
 
 @Component({
   selector: 'app-root',
-  standalone: true,
   imports: [
     CommonModule,
     RouterOutlet,
@@ -51,8 +50,6 @@ import { authenticator } from './auth/authenticator';
   `,
 })
 export class AppComponent implements OnInit {
-  constructor() {}
-
   ngOnInit(): void {
     authenticator.initialize().then(() => {
       authenticator.handleSignIn();

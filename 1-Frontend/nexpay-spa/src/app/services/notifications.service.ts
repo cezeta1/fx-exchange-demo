@@ -1,21 +1,19 @@
 // Angular
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 // NgZorro
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root'})
 export class NotificationService {
-  constructor(private notificationService: NzNotificationService) {}
+  private notificationService = inject(NzNotificationService);
 
-  public showSuccess(message: string, description?: string) {
+  public showSuccess = (message: string, description?: string) => 
     this.notificationService.success(message ?? '', description ?? '');
-  }
-  public showError(message: string, description?: string) {
+  
+  public showError = (message: string, description?: string) =>
     this.notificationService.error(message ?? '', description ?? '');
-  }
-  public showInfo(message: string, description?: string) {
+
+  public showInfo = (message: string, description?: string) =>
     this.notificationService.info(message ?? '', description ?? '');
-  }
 }
+

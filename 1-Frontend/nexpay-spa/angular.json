@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "nexpay-spa": {
+    "payments-platform-spa": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/nexpay-spa",
+            "outputPath": "dist/payments-platform-spa",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": ["zone.js"],
@@ -68,10 +68,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "nexpay-spa:build:production"
+              "buildTarget": "payments-platform-spa:build:production"
             },
             "development": {
-              "buildTarget": "nexpay-spa:build:development"
+              "buildTarget": "payments-platform-spa:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -79,7 +79,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "buildTarget": "nexpay-spa:build"
+            "buildTarget": "payments-platform-spa:build"
           }
         },
         "test": {

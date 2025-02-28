@@ -1,6 +1,6 @@
 // Angular
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
 // Interfaces
 import { Contract } from '../interfaces/PaymentsAPI/contract.interface';
 import { CreateContractPayload } from '../interfaces/PaymentsAPI/Payloads/create-contract-payload.interface';
@@ -11,73 +11,40 @@ import { NotificationService } from './notifications.service';
 import { Observable, tap } from 'rxjs';
 import { environment } from '../../common/environment';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class PaymentAPIService {
-  constructor(
-    private http: HttpClient,
-    private notificationService: NotificationService
-  ) {}
 
-  public getUserContracts(userId: string): Observable<Contract[]> {
-    return this.http
-      .get<Contract[]>(environment.NexPayBFF + `users/${userId}/contracts`, {})
+  private http = inject(HttpClient);
+  private notificationService = inject(NotificationService);
+
+  public getUserContracts = (userId: string): Observable<Contract[]> =>
+    this.http
+      .get<Contract[]>(environment.BFF + `users/${userId}/contracts`, {})
       .pipe(
-        tap({
-          next: (data) => {},
-          error: (e) => {
-            this.notificationService.showError("Couldn't get user Contracts");
-          },
-        })
+        tap({ error: _ => this.notificationService.showError("Couldn't get user Contracts") })
       );
-  }
 
-  public getAllContracts(): Observable<Contract[]> {
-    return this.http
-      .get<Contract[]>(environment.NexPayBFF + `contracts/all`, {})
+  public getAllContracts = (): Observable<Contract[]> => 
+    this.http
+      .get<Contract[]>(environment.BFF + `contracts/all`, {})
       .pipe(
-        tap({
-          next: (data) => {},
-          error: (e) => {
-            this.notificationService.showError(
-              "Couldn't get all user Contracts"
-            );
-          },
-        })
+        tap({ error: _ => this.notificationService.showError("Couldn't get all user Contracts")})
       );
-  }
 
-  public createContract(payload: CreateContractPayload): Observable<Contract> {
-    return this.http
-      .post<Contract>(environment.NexPayBFF + `contracts`, payload)
+  public createContract = (payload: CreateContractPayload): Observable<Contract> =>
+    this.http
+      .post<Contract>(environment.BFF + `contracts`, payload)
       .pipe(
-        tap({
-          next: (data) => {},
-          error: (e) => {
-            this.notificationService.showError("Couldn't create Contract");
-          },
-        })
+        tap({ error: _ => this.notificationService.showError("Couldn't create Contract") })
       );
-  }
 
-  public updateContractStatus(
-    payload: UpdateContractStatusPayload
-  ): Observable<Contract> {
-    return this.http
+  public updateContractStatus = (payload: UpdateContractStatusPayload): Observable<Contract> =>
+    this.http
       .put<Contract>(
-        environment.NexPayBFF + `contracts/${payload.contractId}`,
+        environment.BFF + `contracts/${payload.contractId}`,
         payload
       )
       .pipe(
-        tap({
-          next: (data) => {},
-          error: (e) => {
-            this.notificationService.showError(
-              "Couldn't update Contract status"
-            );
-          },
-        })
+        tap({ error: _ => this.notificationService.showError("Couldn't update Contract status") })
       );
-  }
 }
