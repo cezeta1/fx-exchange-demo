@@ -1,7 +1,7 @@
 $RootPath = $MyInvocation.MyCommand.Path
 $BackPath = "..\..\..\"
 
-<#
+#<#
 $ProjectPath = ".\3-Extra\CZ.Common"
 $BackPath = "..\..\"
 $ProjectName = "CZ.Common"
@@ -9,7 +9,7 @@ $Version = "1.0.17"
 $OutputPath = "..\..\..\..\_localfeed"
 #>
 
-#<#
+<#
 $ProjectPath = ".\2-Backend\PaymentsAPI\Sdk"
 $ProjectName = "PaymentsAPI.Sdk"
 $Version = "1.0.10"

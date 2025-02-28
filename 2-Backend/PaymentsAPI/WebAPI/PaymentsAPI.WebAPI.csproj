@@ -1,21 +1,22 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-	<InvariantGlobalization>false</InvariantGlobalization>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<InvariantGlobalization>false</InvariantGlobalization>
+		<LangVersion>Latest</LangVersion>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="CZ.Common" Version="1.0.13" />
-    <PackageReference Include="FXRatesAPI.Sdk" Version="1.0.15" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
-  </ItemGroup>
+	<ItemGroup>
+		<!--<PackageReference Include="CZ.Common" Version="1.0.13" />-->
+		<!--<PackageReference Include="FXRatesAPI.Sdk" Version="1.0.15" />-->
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Domain\PaymentsAPI.Domain.csproj" />
-    <ProjectReference Include="..\Repository\PaymentsAPI.Repository.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Domain\PaymentsAPI.Domain.csproj" />
+		<ProjectReference Include="..\Repository\PaymentsAPI.Repository.csproj" />
+	</ItemGroup>
 
 </Project>

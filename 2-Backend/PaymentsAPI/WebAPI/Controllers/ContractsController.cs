@@ -10,21 +10,14 @@ using PaymentsAPI.WebAPI.Services;
 
 namespace PaymentsAPI.WebAPI;
 
-
 [EnableCors("GeneralPolicy")]
 [Route("api/")]
 [ApiController]
-public class ContractsController : ControllerBase
+public class ContractsController(
+        ILogger<ContractsController> _logger,
+        IContractsService _contractsService) 
+    : ControllerBase
 {
-    private readonly ILogger<ContractsController> _logger;
-    private readonly IContractsService _contractsService;
-
-    public ContractsController(ILogger<ContractsController> logger, IContractsService contractsService)
-    {
-        _logger = logger;
-        _contractsService = contractsService;
-    }
-
     /// <summary>
     /// Gets all Contracts
     /// </summary>

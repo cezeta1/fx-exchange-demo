@@ -11,6 +11,7 @@ public class Startup
 {
     public IConfiguration Configuration { get; }
     private StartupConfigHelper _startupConfigHelper;
+    
     public Startup(IConfiguration configuration)
     {
         Configuration = configuration;
@@ -22,8 +23,8 @@ public class Startup
     {
         services.AddControllers();
         services.AddDbContext<AppDbContext>(options =>
-            options.UseSqlServer(Configuration.GetConnectionString("CEZ_NexPayPaymentsDB"))
-        , ServiceLifetime.Scoped);
+            options.UseSqlServer(Configuration.GetConnectionString("CEZ_NexPayPaymentsDB")), 
+            ServiceLifetime.Scoped);
 
         // Helpers
         services.Configure<EmailHelperOptions>(Configuration.GetSection(EmailHelperOptions.SectionName));
@@ -39,7 +40,6 @@ public class Startup
         services.AddSwaggerGen(c =>
         {
             c.SwaggerDoc("v1", new OpenApiInfo { Title = "CEZ.NexPayPaymentsAPI", Version = "v1" });
-
         });
 
         services.AddHttpContextAccessor();

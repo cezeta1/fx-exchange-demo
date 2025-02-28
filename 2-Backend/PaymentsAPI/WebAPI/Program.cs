@@ -1,18 +1,11 @@
 ﻿using PaymentsAPI.WebAPI;
 
-public class Program
+public static class Program
 {
     public static void Main(string[] args)
-    {
-        var host = CreateHostBuilder(args).Build();
+        => CreateHostBuilder(args).Build().Run();
 
-        host.Run();
-    }
-
-    public static IHostBuilder CreateHostBuilder(string[] args) =>
-        Host.CreateDefaultBuilder(args)
-            .ConfigureWebHostDefaults(webBuilder =>
-            {
-                webBuilder.UseStartup<Startup>();
-            });
+    public static IHostBuilder CreateHostBuilder(string[] args) 
+        => Host.CreateDefaultBuilder(args)
+            .ConfigureWebHostDefaults(wb => wb.UseStartup<Startup>());
 }
