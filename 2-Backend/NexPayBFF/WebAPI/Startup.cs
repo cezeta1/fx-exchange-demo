@@ -2,9 +2,6 @@
 using PaymentsAPI.Sdk;
 using FXRatesAPI.Sdk;
 using CZ.Common.Utilities;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Identity.Web;
-
 namespace NexPayBFF.WebAPI;
 
 public class Startup

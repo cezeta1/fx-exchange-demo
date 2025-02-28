@@ -5,23 +5,15 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
 namespace FXRatesAPI.WebAPI;
-public class Startup
+
+public class Startup(IConfiguration _configuration)
 {
-    public IConfiguration Configuration { get; }
-    private StartupConfigHelper _startupConfigHelper;
-
-    public Startup(IConfiguration configuration)
-    {
-        Configuration = configuration;
-        _startupConfigHelper = new StartupConfigHelper();
-    }
-
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddControllers();
         services.AddDbContext<AppDbContext>(options =>
-            options.UseSqlServer(Configuration.GetConnectionString("CEZ_NexPayFxDB"))
+            options.UseSqlServer(_configuration.GetConnectionString("CEZ_NexPayFxDB"))
             , ServiceLifetime.Scoped);
             
         services.AddScoped<ICurrenciesService, CurrenciesService>();
@@ -38,7 +30,7 @@ public class Startup
         });
 
         services.AddHttpContextAccessor();
-        _startupConfigHelper.ConfigureCors(services, Configuration);
+        StartupConfigHelper.ConfigureCors(services, _configuration);
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

@@ -1,7 +1,7 @@
 $RootPath = $MyInvocation.MyCommand.Path
 $BackPath = "..\..\..\"
 
-#<#
+<#
 $ProjectPath = ".\3-Extra\CZ.Common"
 $BackPath = "..\..\"
 $ProjectName = "CZ.Common"
@@ -12,28 +12,28 @@ $OutputPath = "..\..\..\..\_localfeed"
 <#
 $ProjectPath = ".\2-Backend\PaymentsAPI\Sdk"
 $ProjectName = "PaymentsAPI.Sdk"
-$Version = "1.0.10"
+$Version = "1.0.17"
 $OutputPath = "..\..\..\..\..\_localfeed"
 #>
 
-<#
+#<#
 $ProjectPath = ".\2-Backend\PaymentsAPI\Domain"
 $ProjectName = "PaymentsAPI.Domain"
-$Version = "1.0.10"
+$Version = "1.0.17"
 $OutputPath = "..\..\..\..\..\_localfeed"
 #>
 
 <#
 $ProjectPath = ".\2-Backend\FXRatesAPI\Sdk"
 $ProjectName = "FXRatesAPI.Sdk"
-$Version = "1.0.16"
+$Version = "1.0.17"
 $OutputPath = "..\..\..\..\..\_localfeed"
 #>
 
 <#
 $ProjectPath = ".\2-Backend\FXRatesAPI\Domain"
 $ProjectName = "FXRatesAPI.Domain"
-$Version = "1.0.16"
+$Version = "1.0.17"
 $OutputPath = "..\..\..\..\..\_localfeed"
 #>
 

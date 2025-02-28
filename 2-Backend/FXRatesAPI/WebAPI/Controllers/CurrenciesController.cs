@@ -7,17 +7,8 @@ namespace FXRatesAPI.WebAPI;
 [EnableCors("GeneralPolicy")]
 [Route("api/currencies/")]
 [ApiController]
-public class CurrenciesController : ControllerBase
+public class CurrenciesController(ICurrenciesService _currenciesService) : ControllerBase
 {
-    private readonly ILogger<CurrenciesController> _logger;
-    private ICurrenciesService _currenciesService;
-
-    public CurrenciesController(ILogger<CurrenciesController> logger, ICurrenciesService currenciesService)
-    {
-        _logger = logger;
-        _currenciesService = currenciesService;
-    }
-
     /// <summary>
     /// Gets all Currency options
     /// </summary>
@@ -25,5 +16,5 @@ public class CurrenciesController : ControllerBase
     [HttpGet("all")]
     [ProducesResponseType(typeof(IEnumerable<CurrencyDTO>), StatusCodes.Status200OK)]
     public async Task<IEnumerable<CurrencyDTO>> GetCurrencyOptionsAsync()
-        => (await _currenciesService.GetCurrencyOptions()).Select(c => c.toDTO());
+        => (await _currenciesService.GetCurrencyOptions()).Select(c => c.ToDTO());
 }

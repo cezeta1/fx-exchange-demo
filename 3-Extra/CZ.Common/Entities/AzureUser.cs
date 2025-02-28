@@ -2,7 +2,7 @@
 
 namespace CZ.Common.Entities;
 
-public class AzureUser(User? user)
+public class AzureUser(User? user = null)
 {
     public Guid Id { get; set; } = user?.Id != null ? Guid.Parse(user.Id) : Guid.Empty;
     public string FullName { get; set; } = user?.DisplayName ?? "";

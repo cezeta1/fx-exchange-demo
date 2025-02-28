@@ -9,8 +9,12 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<!--<PackageReference Include="CZ.Common" Version="1.0.13" />-->
-		<!--<PackageReference Include="FXRatesAPI.Sdk" Version="1.0.15" />-->
+		<PackageReference Include="CZ.Common" Version="1.0.17" />
+		<PackageReference Include="FXRatesAPI.Sdk" Version="1.0.17" />
+		<PackageReference Include="NuGet.CommandLine" Version="6.13.1">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
 	</ItemGroup>
 

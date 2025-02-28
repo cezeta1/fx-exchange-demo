@@ -5,15 +5,16 @@ namespace PaymentsAPI.Domain;
 
 public class Contract: Effectiveness
 {
-    public Contract() { }
+    public Contract(): base(null) { }
 
-    public Contract(Guid userId) {
-            Id = Guid.NewGuid();
-            CreatedById = userId;
-            Status = ContractStatus.Pending;
-            CreatedOn = DateTime.Now;
-            ExpiredOn = DateTime.Now.AddDays(7);
+    public Contract(Guid userId): base(null) {
+        Id = Guid.NewGuid();
+        CreatedById = userId;
+        Status = ContractStatus.Pending;
+        CreatedOn = DateTime.Now;
+        ExpiredOn = DateTime.Now.AddDays(7);
     }
+
     public Guid Id { get; set; }
 
     public Guid CreatedById { get; set; }
@@ -24,9 +25,8 @@ public class Contract: Effectiveness
     public Guid RateId { get; set; }
     public decimal Amount { get; set; }
 
-    public ContractDTO toDTO()
-    {
-        return new ContractDTO
+    public ContractDTO ToDTO() 
+        => new()
         {
             Id = Id,
             CreatedById = CreatedById,
@@ -37,5 +37,4 @@ public class Contract: Effectiveness
             CreatedOn = CreatedOn,
             ExpiredOn = ExpiredOn,
         };
-    }
 }

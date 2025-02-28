@@ -1,46 +1,40 @@
-﻿using CZ.Common.Utilities;
-using FXRatesAPI.Domain;
+﻿using FXRatesAPI.Domain;
 using FXRatesAPI.Domain.Params;
 using FXRatesAPI.Repository;
 using System.Net.Http.Headers;
 
 namespace FXRatesAPI.WebAPI;
 
-public class RatesService : IRatesService
+public class RatesService(
+        IRatesRepository _ratesRepository,
+        ICurrenciesRepository _currenciesRepository)
+    : IRatesService
 {
-    private readonly IRatesRepository _ratesRepository;
-    private readonly ICurrenciesRepository _currenciesRepository;
-
-    public RatesService(
-        IRatesRepository ratesRepository,
-        ICurrenciesRepository currenciesRepository)
-    {
-        _ratesRepository = ratesRepository;
-        _currenciesRepository = currenciesRepository;
-    }
-
     public async Task<IEnumerable<Rate>> GetAllRates()
         => await _ratesRepository.GetAllRates();
 
     public async Task<Rate> GetRateById(Guid id)
         => await _ratesRepository.GetRateById(id);
+
     public async Task<IEnumerable<Rate>> GetRatesById(IEnumerable<Guid> ids)
-    => await _ratesRepository.GetRatesById(ids);
+        => await _ratesRepository.GetRatesById(ids);
 
     public async Task<Rate> CreateRateQuote(GetRateQuoteParam param)
     {
-        Rate newRate = new Rate();
+        Rate newRate = new();
 
         // Get desired currencies
-        IEnumerable<Currency> currs = await _currenciesRepository.GetCurrenciesById([param.FromId,param.ToId]);
+        IEnumerable<Currency> currs = await _currenciesRepository.GetCurrenciesById([param.FromId, param.ToId]);
         newRate.CurrencyFromId = currs.ElementAt(0).Id;
         newRate.CurrencyToId = currs.ElementAt(1).Id;
 
         // Get current exchange from external API
-        decimal currentRate = await GetRateFromExternalAPIAsync(currs);
-        if (currentRate != -1)
-            newRate.ExchangeRate = currentRate;
-        else throw new Exception("Current Rate not found.");
+        decimal currentRate = await GetRateFromExternalAPI(currs);
+
+        if (currentRate == -1)
+            throw new Exception("Current Rate not found.");
+
+        newRate.ExchangeRate = currentRate;
 
         /*
           Custom logic to decide final exchange rate with commissions
@@ -49,12 +43,12 @@ public class RatesService : IRatesService
         newRate.UserId = param.UserId;
         newRate.Amount = param.Amount;
 
-        newRate = await _ratesRepository.CreateRate(newRate);
-        return newRate;
+        return await _ratesRepository.CreateRate(newRate);
     }
 
-    // Utils
-    private async Task<decimal> GetRateFromExternalAPIAsync(IEnumerable<Currency> currs)
+    // --- Utils --- //
+
+    private static async Task<decimal> GetRateFromExternalAPI(IEnumerable<Currency> currs)
     {
         decimal currentRate = -1;
         using (var client = new HttpClient())

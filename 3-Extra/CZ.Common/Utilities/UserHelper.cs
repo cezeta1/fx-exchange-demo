@@ -29,7 +29,7 @@ public class UserHelper(
             ?? throw new Exception($"User not found");
 
         return new AzureUser {
-            Id = Guid.Parse(this.GetUserId() ?? ""),
+            Id = Guid.Parse(GetUserId() ?? ""),
             FullName = user?.GetDisplayName() ?? "",
             // Email = 
         }; 

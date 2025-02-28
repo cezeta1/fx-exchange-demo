@@ -5,32 +5,15 @@ using FXRatesAPI.Sdk;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using NexPayBFF.WebAPI.Extensions;
 
 namespace NexPayBFF.WebAPI.Controllers;
 
 [Authorize]
-//[RequiredScope("tasks.read")]
 [EnableCors("GeneralPolicy")]
 [Route("api/")]
 [ApiController]
-public class FxRatesController
+public class FxRatesController(UserHelper _userHelper)
 {
-    private readonly ILogger<FxRatesController> _logger;
-    private readonly FXRatesAPIService _fxRatesAPIService;
-    private readonly UserHelper _userHelper;
-    public FxRatesController(
-        ILogger<FxRatesController> logger,
-        FXRatesAPIService fXRatesAPIService,
-        IHttpContextAccessor contextAccessor,
-        UserHelper userHelper
-    ) {
-        _logger = logger;
-        _fxRatesAPIService = fXRatesAPIService;
-        //_userHelper = new UserHelper(contextAccessor);
-        _userHelper = userHelper;
-    }
-
     /// <summary>
     /// Gets all Currency options
     /// </summary>
@@ -38,7 +21,7 @@ public class FxRatesController
     [HttpGet("currencies/all")]
     [ProducesResponseType(typeof(IEnumerable<CurrencyDTO>), StatusCodes.Status200OK)]
     public async Task<IEnumerable<CurrencyDTO>> GetCurrencyOptionsAsync()
-        => await _fxRatesAPIService.GetCurrencyOptionsAsync();
+        => await FXRatesAPIService.GetCurrencyOptions();
 
     /// <summary>
     /// Gets a Rate quote by Id.
@@ -48,7 +31,7 @@ public class FxRatesController
     [HttpGet("rates/{id}")]
     [ProducesResponseType(typeof(RateDTO), StatusCodes.Status200OK)]
     public async Task<RateDTO> GetRateById([FromRoute] string id)
-        => await _fxRatesAPIService.GetRateById(id);
+        => await FXRatesAPIService.GetRateById(id);
     
     /// <summary>
     /// Creates a Rate quote between two currencies. Valid only for a given amount of time.
@@ -60,6 +43,6 @@ public class FxRatesController
     public async Task<RateDTO> GetRateQuoteAsync([FromBody] GetRateQuoteParam param)
     {
         param.UserId = Guid.Parse(_userHelper.GetUserId() ?? throw new Exception("User Id cannot be found."));
-        return await _fxRatesAPIService.GetRateQuoteAsync(param);
+        return await FXRatesAPIService.GetRateQuote(param);
     }
 }

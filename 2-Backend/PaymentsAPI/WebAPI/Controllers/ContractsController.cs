@@ -25,7 +25,7 @@ public class ContractsController(
     [HttpGet("contracts/all")]
     [ProducesResponseType(typeof(IEnumerable<ContractDTO>), StatusCodes.Status200OK)]
     public async Task<IEnumerable<ContractDTO>> GetAllContracts()
-        => (await _contractsService.GetAllContracts()).Select(c => c.toDTO());
+        => (await _contractsService.GetAllContracts()).Select(c => c.ToDTO());
 
     /// <summary>
     /// Gets all Contracts assigned to a user
@@ -34,7 +34,7 @@ public class ContractsController(
     [HttpGet("users/{userId}/contracts")]
     [ProducesResponseType(typeof(IEnumerable<ContractDTO>), StatusCodes.Status200OK)]
     public async Task<IEnumerable<ContractDTO>> GetContractsByUserId([FromRoute] string userId)
-        => (await _contractsService.GetContractsByUserId(Guid.Parse(userId))).Select(c => c.toDTO());
+        => (await _contractsService.GetContractsByUserId(Guid.Parse(userId))).Select(c => c.ToDTO());
     
     /// <summary>
     /// Gets a Contract by Id
@@ -43,7 +43,7 @@ public class ContractsController(
     [HttpGet("contracts/{id}")]
     [ProducesResponseType(typeof(ContractDTO), StatusCodes.Status200OK)]
     public async Task<ContractDTO> GetContractById([FromRoute] string id)
-        => (await _contractsService.GetContractById(Guid.Parse(id))).toDTO();
+        => (await _contractsService.GetContractById(Guid.Parse(id))).ToDTO();
 
     /// <summary>
     /// Gets all Contract Status Options
@@ -62,7 +62,7 @@ public class ContractsController(
     [HttpPost("contracts")]
     [ProducesResponseType(typeof(ContractDTO), StatusCodes.Status200OK)]
     public async Task<ContractDTO> CreateContract([FromBody] CreateContractParam param)
-        => (await _contractsService.CreateContract(param)).toDTO();
+        => (await _contractsService.CreateContract(param)).ToDTO();
 
     /// <summary>
     /// Updates a Contract's status. 
@@ -72,5 +72,5 @@ public class ContractsController(
     [HttpPut("contracts/{contractId}")]
     [ProducesResponseType(typeof(ContractDTO), StatusCodes.Status200OK)]
     public async Task<ContractDTO> UpdateContractStatus([FromRoute] string contractId, [FromBody] UpdateContractStatusParam param)
-        => (await _contractsService.UpdateContractStatus(param)).toDTO();
+        => (await _contractsService.UpdateContractStatus(param)).ToDTO();
 }
