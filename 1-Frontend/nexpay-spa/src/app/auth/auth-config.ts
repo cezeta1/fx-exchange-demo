@@ -11,9 +11,8 @@ import {
 export const msalConfig: Configuration = {
   auth: {
     clientId: 'f648ff3f-ca7c-4189-b4d0-3f9dc0ce88ea', // This is the ONLY mandatory field that you need to supply.
-    authority:
-      'https://login.microsoftonline.com/cznexpaytenanttest.onmicrosoft.com',
-    // authority: 'https://login.microsoftonline.com/organizations',
+    authority: 'https://login.microsoftonline.com/cztenanttest.onmicrosoft.com',
+      // authority: 'https://login.microsoftonline.com/organizations',
     redirectUri: 'http://localhost:4200',
     postLogoutRedirectUri: 'http://localhost:4200',
     clientCapabilities: ['CP1'], // This lets the resource server know that this client can handle claim challenges.
@@ -23,7 +22,7 @@ export const msalConfig: Configuration = {
   },
   system: {
     loggerOptions: {
-      loggerCallback(logLevel: LogLevel, message: string) {
+      loggerCallback(_: LogLevel, message: string) {
         console.log(message);
       },
       // logLevel: LogLevel.Verbose,
@@ -38,19 +37,19 @@ export const msalConfig: Configuration = {
  * https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-browser/docs/resources-and-scopes.md
  */
 export const protectedResources = {
-  nexPayBFF: {
+  cezetaBFF: {
     endpoint: 'https://localhost:7000/api/',
     scopes: {
       read: [
-        'api://36d3a9c4-77cc-4670-8df4-e30b2df9a160/NexPayBFF.Read',
-        'api://36d3a9c4-77cc-4670-8df4-e30b2df9a160/NexPayBFF.ReadWrite',
+        'api://36d3a9c4-77cc-4670-8df4-e30b2df9a160/CezetaBFF.Read',
+        'api://36d3a9c4-77cc-4670-8df4-e30b2df9a160/CezetaBFF.ReadWrite',
       ],
-      write: ['api://36d3a9c4-77cc-4670-8df4-e30b2df9a160/NexPayBFF.ReadWrite'],
+      write: ['api://36d3a9c4-77cc-4670-8df4-e30b2df9a160/CezetaBFF.ReadWrite'],
     },
   },
 };
 
-//  https://login.microsoftonline.com/cznexpaytenanttest.onmicrosoft.com/oauth2/v2.0/authorize?client_id=f648ff3f-ca7c-4189-b4d0-3f9dc0ce88ea&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login
+//  https://login.microsoftonline.com/cztenanttest.onmicrosoft.com/oauth2/v2.0/authorize?client_id=f648ff3f-ca7c-4189-b4d0-3f9dc0ce88ea&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login
 
 /*
  * Scopes you add here will be prompted for consent during sign-in.
@@ -60,5 +59,5 @@ export const protectedResources = {
  */
 export const loginRequest: PopupRequest | RedirectRequest = {
   scopes: ['User.Read'],
-  // 'api://36d3a9c4-77cc-4670-8df4-e30b2df9a160/NexPayBFF.Read',
+  // 'api://36d3a9c4-77cc-4670-8df4-e30b2df9a160/CezetaBFF.Read',
 };

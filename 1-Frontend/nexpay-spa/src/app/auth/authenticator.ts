@@ -21,22 +21,22 @@ export function MSALInterceptorConfigFactory(): MsalInterceptorConfiguration {
     Array<string | ProtectedResourceScopes> | null
   >();
 
-  protectedResourceMap.set(protectedResources.nexPayBFF.endpoint, [
+  protectedResourceMap.set(protectedResources.cezetaBFF.endpoint, [
     {
       httpMethod: 'GET',
-      scopes: [...protectedResources.nexPayBFF.scopes.read],
+      scopes: [...protectedResources.cezetaBFF.scopes.read],
     },
     {
       httpMethod: 'POST',
-      scopes: [...protectedResources.nexPayBFF.scopes.write],
+      scopes: [...protectedResources.cezetaBFF.scopes.write],
     },
     {
       httpMethod: 'PUT',
-      scopes: [...protectedResources.nexPayBFF.scopes.write],
+      scopes: [...protectedResources.cezetaBFF.scopes.write],
     },
     {
       httpMethod: 'DELETE',
-      scopes: [...protectedResources.nexPayBFF.scopes.write],
+      scopes: [...protectedResources.cezetaBFF.scopes.write],
     },
   ]);
 
