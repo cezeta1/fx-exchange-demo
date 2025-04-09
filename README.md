@@ -32,10 +32,10 @@ This project was generated with Angular CLI version 17.0.2, using Ng-Zorro as UI
 
 ## Screenshots
 
-![285847691-664b1f36-ab78-4d9b-a228-c0ebec86070c](https://github.com/user-attachments/assets/73fbb646-4c3a-4ed7-987a-0d4afb826afa)
+![285847691-664b1f36-ab78-4d9b-a228-c0ebec86070c](https://github.com/user-attachments/assets/9847cdc5-7a4a-4601-962b-252a7eb97799)
 
 ![285847745-b765935d-86a6-47f0-aaf2-70ba2b7874d4](https://github.com/user-attachments/assets/20ef49ab-3a2a-40ef-ac39-4c3fbec9188d)
 
 ![286486799-f373284d-8288-40a4-bb37-277bcb4c94b1](https://github.com/user-attachments/assets/2af366cb-df50-400a-9157-cc8cdea66666)
 
-![285847926-c422e3a7-0a66-4599-ac1b-adcab0a341ce](https://github.com/user-attachments/assets/2d11404b-d5c0-4cc1-a211-93a75a525a88)
+![285847926-c422e3a7-0a66-4599-ac1b-adcab0a341ce](https://github.com/user-attachments/assets/1dadb45a-c0eb-4e09-9ce0-ff3df1ff2bbf)
