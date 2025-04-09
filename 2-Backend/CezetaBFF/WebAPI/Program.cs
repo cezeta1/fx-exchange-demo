@@ -1,4 +1,4 @@
-namespace NexPayBFF.WebAPI;
+namespace CezetaBFF.WebAPI;
 
 public class Program
 {

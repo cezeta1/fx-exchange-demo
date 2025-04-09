@@ -1,7 +1,4 @@
-﻿using FXRatesAPI.Domain.DTOs;
-using PaymentsAPI.Domain.Params;
-
-namespace NexPayBFF.WebAPI.Extensions;
+﻿namespace CezetaBFF.WebAPI.Extensions;
 
 public static class CreateContractParamExtensions
 {

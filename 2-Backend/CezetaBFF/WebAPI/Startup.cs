@@ -1,8 +1,7 @@
-﻿using Microsoft.OpenApi.Models;
-using PaymentsAPI.Sdk;
-using FXRatesAPI.Sdk;
-using CZ.Common.Utilities;
-namespace NexPayBFF.WebAPI;
+﻿using CZ.Common.Utilities;
+using Microsoft.OpenApi.Models;
+
+namespace CezetaBFF.WebAPI;
 
 public class Startup
 {
@@ -40,8 +39,8 @@ public class Startup
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen(c =>
         {
-            c.SwaggerDoc("v1", new OpenApiInfo { Title = "CEZ.NexPayBFF", Version = "v1" });
-        }); 
+            c.SwaggerDoc("v1", new OpenApiInfo { Title = "CEZ.CezetaBFF", Version = "v1" });
+        });
 
         services.AddHttpContextAccessor();
         _startupConfigHelper.ConfigureCors(services, Configuration);

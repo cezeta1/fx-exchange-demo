@@ -1,12 +1,9 @@
 ﻿using CZ.Common.Utilities;
-using FXRatesAPI.Domain.DTOs;
-using FXRatesAPI.Domain.Params;
-using FXRatesAPI.Sdk;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
-namespace NexPayBFF.WebAPI.Controllers;
+namespace CezetaBFF.WebAPI.Controllers;
 
 [Authorize]
 [EnableCors("GeneralPolicy")]
@@ -32,7 +29,7 @@ public class FxRatesController(UserHelper _userHelper)
     [ProducesResponseType(typeof(RateDTO), StatusCodes.Status200OK)]
     public async Task<RateDTO> GetRateById([FromRoute] string id)
         => await FXRatesAPIService.GetRateById(id);
-    
+
     /// <summary>
     /// Creates a Rate quote between two currencies. Valid only for a given amount of time.
     /// </summary>
