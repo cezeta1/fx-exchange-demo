@@ -7,26 +7,18 @@ using CZ.Common.Utilities;
 
 namespace PaymentsAPI.WebAPI;
 
-public class Startup
+public class Startup(IConfiguration _configuration)
 {
-    public IConfiguration Configuration { get; }
-    private StartupConfigHelper _startupConfigHelper;
-    public Startup(IConfiguration configuration)
-    {
-        Configuration = configuration;
-        _startupConfigHelper = new StartupConfigHelper();
-    }
-
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddControllers();
         services.AddDbContext<AppDbContext>(options =>
-            options.UseSqlServer(Configuration.GetConnectionString("CEZ_NexPayPaymentsDB"))
-        , ServiceLifetime.Scoped);
+            options.UseSqlServer(_configuration.GetConnectionString("CEZ_NexPayPaymentsDB")), 
+            ServiceLifetime.Scoped);
 
         // Helpers
-        services.Configure<EmailHelperOptions>(Configuration.GetSection(EmailHelperOptions.SectionName));
+        services.Configure<EmailHelperOptions>(_configuration.GetSection(EmailHelperOptions.SectionName));
         services.AddSingleton<EmailHelper>();
 
         // Services
@@ -39,11 +31,10 @@ public class Startup
         services.AddSwaggerGen(c =>
         {
             c.SwaggerDoc("v1", new OpenApiInfo { Title = "CEZ.NexPayPaymentsAPI", Version = "v1" });
-
         });
 
         services.AddHttpContextAccessor();
-        _startupConfigHelper.ConfigureCors(services, Configuration);
+        StartupConfigHelper.ConfigureCors(services, _configuration);
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

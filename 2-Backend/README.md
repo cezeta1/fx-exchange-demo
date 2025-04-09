@@ -21,7 +21,7 @@ For each of these projects, please create a `appsettings.Development.ts` file an
 
 In particular, for the following projects, add the following properties and fill with the respective data:
 
- - **NexPayBFF:**
+ - **CezetaBFF:**
 ```
 {
   ...,
@@ -39,7 +39,7 @@ In particular, for the following projects, add the following properties and fill
 {
   ... ,
   "ConnectionStrings": {
-    "CEZ_NexPayPaymentsDB": "<The Connection String to your local 'CEZ_NexPayPaymentsDB' database>"
+    "CEZ_PaymentsDB": "<The Connection String to your local 'CEZ_PaymentsDB' database>"
   },
   "EmailHelperOptions": {
     "SmtpSourceAddress": "<SMTP address>",
@@ -53,7 +53,7 @@ In particular, for the following projects, add the following properties and fill
 {
   ... ,
   "ConnectionStrings": {
-    "CEZ_NexPayFxDB": "<The Connection String to your local 'CEZ_NexPayFXDB' database>"
+    "CEZ_FxDB": "<The Connection String to your local 'CEZ_FXDB' database>"
   }
 }
 ```

@@ -1,26 +1,23 @@
-﻿using PaymentsAPI.Domain;
+﻿using Microsoft.EntityFrameworkCore;
+using PaymentsAPI.Domain;
 using PaymentsAPI.Persistence;
-using Microsoft.EntityFrameworkCore;
 
 namespace PaymentsAPI.Repository;
 
-public class ContractsRepository: IContractsRepository
+public class ContractsRepository(AppDbContext _db) : IContractsRepository
 {
-    private readonly AppDbContext _db;
-    public ContractsRepository(AppDbContext context)
-    {
-        _db = context;
-    }
-
     public async Task<IEnumerable<Contract>> GetAllContracts()
         => await _db.Contracts.ToListAsync();
-    
+
     public async Task<IEnumerable<Contract>> GetContractsByUserId(Guid userId)
-        => await _db.Contracts.Where(c => c.CreatedById == userId).ToListAsync();
-    
+        => await _db.Contracts
+            .Where(c => c.CreatedById == userId)
+            .ToListAsync();
+
     public async Task<Contract> GetContractById(Guid id)
-        => await _db.Contracts.Where(c => c.Id == id)
-                              .SingleOrDefaultAsync()
+        => await _db.Contracts
+            .Where(c => c.Id == id)
+            .SingleOrDefaultAsync()
             ?? throw new ApplicationException("Contract not found. Id is not valid");
 
     public async Task<Contract> CreateContract(Contract newContract)
@@ -30,7 +27,10 @@ public class ContractsRepository: IContractsRepository
         return newContract;
     }
 
-    public async Task<Contract> UpdateContractStatus(Guid contractId, Guid adminId, ContractStatus newStatus)
+    public async Task<Contract> UpdateContractStatus(
+        Guid contractId,
+        Guid adminId,
+        ContractStatus newStatus)
     {
         Contract cont = await GetContractById(contractId);
         cont.Status = newStatus;

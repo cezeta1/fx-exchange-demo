@@ -9,9 +9,9 @@ public static class HttpClientExtensions
     public static async Task<T?> GetAsync<T>(this HttpClient httpClient, string? query)
         => await httpClient.GetFromJsonAsync<T>(query ?? "");
 
-    public static async Task<T?> PostAsync<T,V>(this HttpClient httpClient, string query, V body)
+    public static async Task<T?> PostAsync<T, V>(this HttpClient httpClient, string query, V body)
         => await (await httpClient.PostAsJsonAsync(query ?? "", body)).ReadFromJsonAsync<T>();
-    
+
     public static async Task<T?> PutAsync<T, V>(this HttpClient httpClient, string query, V body)
         => await (await httpClient.PutAsJsonAsync(query ?? "", body)).ReadFromJsonAsync<T>();
 

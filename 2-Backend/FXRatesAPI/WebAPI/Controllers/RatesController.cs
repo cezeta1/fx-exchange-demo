@@ -8,17 +8,9 @@ namespace FXRatesAPI.WebAPI;
 [EnableCors("GeneralPolicy")]
 [Route("api/rates/")]
 [ApiController]
-public class RatesController : ControllerBase
+public class RatesController(IRatesService _ratesService) 
+    : ControllerBase
 {
-    private readonly ILogger<RatesController> _logger;
-    private IRatesService _ratesService;
-
-    public RatesController(ILogger<RatesController> logger, IRatesService ratesService)
-    {
-        _logger = logger;
-        _ratesService = ratesService;
-    }
-
     /// <summary>
     /// Gets a Rate quote by Id.
     /// </summary>
@@ -27,7 +19,7 @@ public class RatesController : ControllerBase
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(RateDTO), StatusCodes.Status200OK)]
     public async Task<RateDTO> GetRateById([FromRoute] string id)
-        => (await _ratesService.GetRateById(Guid.Parse(id))).toDTO();
+        => (await _ratesService.GetRateById(Guid.Parse(id))).ToDTO();
 
     /// <summary>
     /// Gets multiple Rates by Id.
@@ -37,7 +29,7 @@ public class RatesController : ControllerBase
     [HttpGet("")]
     [ProducesResponseType(typeof(IEnumerable<RateDTO>), StatusCodes.Status200OK)]
     public async Task<IEnumerable<RateDTO>> GetRatesById([FromQuery] IEnumerable<Guid> ids)
-        => (await _ratesService.GetRatesById(ids)).Select(r => r.toDTO());
+        => (await _ratesService.GetRatesById(ids)).Select(r => r.ToDTO());
 
     /// <summary>
     /// Creates a Rate quote between two currencies. Valid only for a given amount of time.
@@ -47,5 +39,5 @@ public class RatesController : ControllerBase
     [HttpPost]
     [ProducesResponseType(typeof(RateDTO), StatusCodes.Status200OK)]
     public async Task<RateDTO> GetRateQuoteAsync([FromBody] GetRateQuoteParam param)
-        => (await _ratesService.CreateRateQuote(param)).toDTO();
+        => (await _ratesService.CreateRateQuote(param)).ToDTO();
 }

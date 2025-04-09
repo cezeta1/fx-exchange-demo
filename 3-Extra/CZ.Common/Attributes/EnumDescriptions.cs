@@ -1,18 +1,7 @@
 ﻿namespace CZ.Common.Attributes;
 
 [AttributeUsage(AttributeTargets.Field)]
-public class EnumDescription : Attribute
+public class EnumDescription(string description) : Attribute
 {
-    private string description;
-
-    public EnumDescription(string desc)
-    {
-        this.description = desc;
-    }
-
-    public virtual string Description
-    {
-        get { return description; }
-    }
-
+    public virtual string Description { get => description; }
 }

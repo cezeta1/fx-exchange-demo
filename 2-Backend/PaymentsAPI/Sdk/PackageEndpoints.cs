@@ -8,14 +8,11 @@ namespace PaymentsAPI.Sdk;
 
 public class PaymentsAPIOptions
 {
-    public string BaseURL { get; set; } = String.Empty;
+    public string BaseURL { get; set; } = string.Empty;
 }
-
-#pragma warning disable CS8603 // Possible null reference return.
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 public class PaymentsAPIService
 {
-    private static HttpClient _httpClient;
+    private static HttpClient? _httpClient;
     public PaymentsAPIService(IOptions<PaymentsAPIOptions> options)
     {
         _httpClient = new() {
@@ -41,5 +38,3 @@ public class PaymentsAPIService
     public async Task<ContractDTO> UpdateContractStatus(UpdateContractStatusParam param)
         => await _httpClient.PutAsync<ContractDTO, UpdateContractStatusParam>($"contracts/{param.ContractId}", param);
 }
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-#pragma warning restore CS8603 // Possible null reference return.

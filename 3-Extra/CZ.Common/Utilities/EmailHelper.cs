@@ -11,17 +11,17 @@ public class EmailHelperOptions
 {
     public const string SectionName = "EmailHelperOptions";
 
-    public string SmtpSourceAddress { get; set; } = String.Empty;
-    public string SmtpPW { get; set; } = String.Empty;
+    public string SmtpSourceAddress { get; set; } = string.Empty;
+    public string SmtpPW { get; set; } = string.Empty;
 }
 
 public class EmailHelper
 {
-    private SmtpCredentials _smtpCredentials;
+    private readonly SmtpCredentials _smtpCredentials;
 
     public EmailHelper(IOptions<EmailHelperOptions> options) {
         string errorBit = "missing from EmailHelper config";
-        _smtpCredentials = new SmtpCredentials
+        _smtpCredentials = new()
         {
             Address = options.Value.SmtpSourceAddress ?? throw new Exception($"Smtp Source Address {errorBit}"),
             Password = options.Value.SmtpPW ?? throw new Exception($"Smtp Password {errorBit}")
@@ -30,10 +30,13 @@ public class EmailHelper
 
     public async Task SendEmailAsync(MailContents mailContents)
     {
-        var email = new MimeMessage();
-        email.Sender = MailboxAddress.Parse(mailContents.Sender);
+        MimeMessage email = new() 
+        { 
+            Subject = mailContents.Subject,
+            Sender = MailboxAddress.Parse(mailContents.Sender),
+        };
         email.To.Add(MailboxAddress.Parse(mailContents.Receiver));
-        email.Subject = mailContents.Subject;
+
         var builder = new BodyBuilder();
 
         email.Body = new TextPart(TextFormat.Html)

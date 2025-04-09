@@ -2,16 +2,9 @@
 
 namespace CZ.Common.Entities;
 
-public class AzureUser
+public class AzureUser(User? user = null)
 {
-    public AzureUser() { }
-    public AzureUser(User user) {
-        Id = user.Id != null ? Guid.Parse(user.Id) : Guid.Empty;
-        FullName = user.DisplayName ?? "";
-        Email = user.UserPrincipalName ?? "";
-    }
-
-    public Guid Id { get; set; }
-    public string FullName { get; set; }
-    public string Email { get; set; }
+    public Guid Id { get; set; } = user?.Id != null ? Guid.Parse(user.Id) : Guid.Empty;
+    public string FullName { get; set; } = user?.DisplayName ?? "";
+    public string Email { get; set; } = user?.UserPrincipalName ?? "";
 }

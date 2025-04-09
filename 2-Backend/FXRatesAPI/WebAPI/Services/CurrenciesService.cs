@@ -3,16 +3,8 @@ using FXRatesAPI.Repository;
 
 namespace FXRatesAPI.WebAPI;
 
-public class CurrenciesService : ICurrenciesService
+public class CurrenciesService(ICurrenciesRepository _currenciesRepository) : ICurrenciesService
 {
-    private readonly ICurrenciesRepository _currenciesRepository;
-
-    public CurrenciesService(ICurrenciesRepository currenciesRepository)
-    {
-        _currenciesRepository = currenciesRepository;
-    }
-
     public async Task<IEnumerable<Currency>> GetCurrencyOptions() 
         => await _currenciesRepository.GetAllCurrencies();
-   
 }

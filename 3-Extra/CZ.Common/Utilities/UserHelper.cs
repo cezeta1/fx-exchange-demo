@@ -12,23 +12,16 @@ public class UserHelperOptions
 {
     public const string SectionName = "UserHelperOptions";
 
-    public string ClientId { get; set; } = String.Empty;
-    public string TenantId { get; set; } = String.Empty;
-    public string ClientSecret { get; set; } = String.Empty;
+    public string ClientId { get; set; } = string.Empty;
+    public string TenantId { get; set; } = string.Empty;
+    public string ClientSecret { get; set; } = string.Empty;
 }
 
-public class UserHelper
+public class UserHelper(
+    IOptions<UserHelperOptions> _options,
+    IHttpContextAccessor _contextAccessor)
 {
-    private readonly IHttpContextAccessor _contextAccessor;
-    private readonly GraphServiceClient _graphClient;
-
-    public UserHelper(
-        IOptions<UserHelperOptions> options,
-        IHttpContextAccessor contextAccessor)
-    {
-        _contextAccessor = contextAccessor;
-        _graphClient = this.InitializeGraphClient(options.Value);
-    }
+    private readonly GraphServiceClient _graphClient = InitializeGraphClient(_options.Value);
 
     public AzureUser GetCurrentUser()
     {
@@ -36,7 +29,7 @@ public class UserHelper
             ?? throw new Exception($"User not found");
 
         return new AzureUser {
-            Id = Guid.Parse(this.GetUserId() ?? ""),
+            Id = Guid.Parse(GetUserId() ?? ""),
             FullName = user?.GetDisplayName() ?? "",
             // Email = 
         }; 
@@ -46,7 +39,8 @@ public class UserHelper
         => _contextAccessor.HttpContext?.User.GetObjectId();
 
     public async Task<User> GetUserByIdAsync(Guid id)
-        => await _graphClient.Users[id.ToString()].GetAsync() ?? throw new Exception($"User not found");
+        => await _graphClient.Users[id.ToString()].GetAsync() 
+            ?? throw new Exception($"User not found");
 
     public async Task<AzureUser> GetAzureUserByIdAsync(Guid id)
     {
@@ -56,7 +50,7 @@ public class UserHelper
         return new AzureUser(result);
     }
 
-    private GraphServiceClient InitializeGraphClient(UserHelperOptions config) {
+    private static GraphServiceClient InitializeGraphClient(UserHelperOptions config) {
         string errorBit = "missing from UserHelper config";
         var scopes = new[] { "https://graph.microsoft.com/.default" };
 
@@ -65,15 +59,13 @@ public class UserHelper
         var clientId = config.ClientId ?? throw new Exception($"Client Id {errorBit}");
         var clientSecret = config.ClientSecret ?? throw new Exception($"Client Secret {errorBit}");
 
-        var options = new ClientSecretCredentialOptions
-        {
-            AuthorityHost = AzureAuthorityHosts.AzurePublicCloud,
-        };
+        ClientSecretCredentialOptions options = new() 
+        { AuthorityHost = AzureAuthorityHosts.AzurePublicCloud };
 
         // https://learn.microsoft.com/dotnet/api/azure.identity.clientsecretcredential
         var clientSecretCredential = new ClientSecretCredential(
             tenantId, clientId, clientSecret, options);
 
-        return new GraphServiceClient(clientSecretCredential, scopes);
+        return new(clientSecretCredential, scopes);
     }
 }

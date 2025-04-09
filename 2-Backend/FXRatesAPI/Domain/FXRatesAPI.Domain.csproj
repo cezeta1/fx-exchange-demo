@@ -6,15 +6,17 @@
     <Nullable>enable</Nullable>
 	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 	<Title>FXRatesAPI.Domain</Title>
-	<Version>1.0.16</Version>
+	<Version>1.0.17</Version>
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Interfaces\" />
+    <Compile Remove="Interfaces\**" />
+    <EmbeddedResource Remove="Interfaces\**" />
+    <None Remove="Interfaces\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="CZ.Common" Version="1.0.12" />
+    <PackageReference Include="CZ.Common" Version="1.0.17" />
   </ItemGroup>
 
 </Project>

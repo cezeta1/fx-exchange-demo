@@ -1,17 +1,8 @@
 ﻿namespace CZ.Common.Entities;
 
-public class Effectiveness
+public class Effectiveness(DateTime? validOn)
 {
-    public Effectiveness()
-    {
-        CreatedOn = DateTime.Now;
-    }
-    public Effectiveness(DateTime validOn)
-    {
-        CreatedOn = validOn;
-    }
-
-    public DateTime CreatedOn { get; set; }
+    public DateTime CreatedOn { get; set; } = validOn ?? DateTime.Now;
     public DateTime ExpiredOn { get; set; }
 }
 

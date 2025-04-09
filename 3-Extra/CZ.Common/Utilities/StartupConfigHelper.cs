@@ -14,9 +14,9 @@ public class CorsConfiguration
 
 public class StartupConfigHelper
 {
-    public StartupConfigHelper() { }
-
-    public void ConfigureAuthentication(IServiceCollection services, IConfiguration Configuration)
+    public static void ConfigureAuthentication(
+        IServiceCollection services,
+        IConfiguration Configuration)
     {
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddMicrosoftIdentityWebApi(options =>
@@ -29,12 +29,16 @@ public class StartupConfigHelper
                 Configuration.Bind("AzureAd", options);
             });
     }
-    public void ConfigureCors(IServiceCollection services, IConfiguration Configuration)
+
+    public static void ConfigureCors(
+        IServiceCollection services,
+        IConfiguration Configuration)
     {
         // Checking if a CORS configuration was provided
         if (Configuration.GetChildren().Any(item => item.Key == "CORS"))
         {
-            services.AddCors(options => {
+            services.AddCors(options =>
+            {
                 // Getting all the CORS policies provided
                 var policies = Configuration.GetSection("CORS").GetChildren().ToList();
                 foreach (var policy in policies)

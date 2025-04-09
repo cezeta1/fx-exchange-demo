@@ -1,9 +1,9 @@
 # nexpay-demo
 
-This project is built as a tech demo for NexPay code challenge interview. It features a foreign exchange (FX) platform where users can create contracts selecting which currency they want to convert from and to. 
+This project is built as a tech demo for a code challenge. It features a foreign exchange (FX) platform where users can create contracts selecting which currency they want to convert from and to. 
 This repo includes:
- - **nexpay-spa** => Single Page Application providing user log-in and Contract management UIs for Users and Admins.
- - **NexPayBFF** => BFF API to manage calls to the other APIs. Provides a single point of entry for the Frontend to get the required data.
+ - **cezeta-spa** => Single Page Application providing user log-in and Contract management UIs for Users and Admins.
+ - **CezetaBFF** => BFF API to manage calls to the other APIs. Provides a single point of entry for the Frontend to get the required data.
  - **FXRatesAPI** => The exchange Rate provider. Upon request, gets the current exchange rate between two currencies from an free open source API ([Frankfurter](https://www.frankfurter.app/)) and provides a Rate quote. This Rate is saved and has a validity of 2 minutes.
  - **PaymentsAPI** => Manages user contracts. To create a new contract, the rate has to be valid at the moment of placement. When a new Contract is placed, sends a notification email to select Admin.Admins can change the Contract status and mark them as Completed, Cancelled, etc.
  - **CZ.Common** => Common library package. Provides common use Classes, Extensions and Utils.

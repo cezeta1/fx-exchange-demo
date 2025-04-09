@@ -10,21 +10,14 @@ using PaymentsAPI.WebAPI.Services;
 
 namespace PaymentsAPI.WebAPI;
 
-
 [EnableCors("GeneralPolicy")]
 [Route("api/")]
 [ApiController]
-public class ContractsController : ControllerBase
+public class ContractsController(
+        ILogger<ContractsController> _logger,
+        IContractsService _contractsService) 
+    : ControllerBase
 {
-    private readonly ILogger<ContractsController> _logger;
-    private readonly IContractsService _contractsService;
-
-    public ContractsController(ILogger<ContractsController> logger, IContractsService contractsService)
-    {
-        _logger = logger;
-        _contractsService = contractsService;
-    }
-
     /// <summary>
     /// Gets all Contracts
     /// </summary>
@@ -32,7 +25,7 @@ public class ContractsController : ControllerBase
     [HttpGet("contracts/all")]
     [ProducesResponseType(typeof(IEnumerable<ContractDTO>), StatusCodes.Status200OK)]
     public async Task<IEnumerable<ContractDTO>> GetAllContracts()
-        => (await _contractsService.GetAllContracts()).Select(c => c.toDTO());
+        => (await _contractsService.GetAllContracts()).Select(c => c.ToDTO());
 
     /// <summary>
     /// Gets all Contracts assigned to a user
@@ -41,7 +34,7 @@ public class ContractsController : ControllerBase
     [HttpGet("users/{userId}/contracts")]
     [ProducesResponseType(typeof(IEnumerable<ContractDTO>), StatusCodes.Status200OK)]
     public async Task<IEnumerable<ContractDTO>> GetContractsByUserId([FromRoute] string userId)
-        => (await _contractsService.GetContractsByUserId(Guid.Parse(userId))).Select(c => c.toDTO());
+        => (await _contractsService.GetContractsByUserId(Guid.Parse(userId))).Select(c => c.ToDTO());
     
     /// <summary>
     /// Gets a Contract by Id
@@ -50,7 +43,7 @@ public class ContractsController : ControllerBase
     [HttpGet("contracts/{id}")]
     [ProducesResponseType(typeof(ContractDTO), StatusCodes.Status200OK)]
     public async Task<ContractDTO> GetContractById([FromRoute] string id)
-        => (await _contractsService.GetContractById(Guid.Parse(id))).toDTO();
+        => (await _contractsService.GetContractById(Guid.Parse(id))).ToDTO();
 
     /// <summary>
     /// Gets all Contract Status Options
@@ -69,7 +62,7 @@ public class ContractsController : ControllerBase
     [HttpPost("contracts")]
     [ProducesResponseType(typeof(ContractDTO), StatusCodes.Status200OK)]
     public async Task<ContractDTO> CreateContract([FromBody] CreateContractParam param)
-        => (await _contractsService.CreateContract(param)).toDTO();
+        => (await _contractsService.CreateContract(param)).ToDTO();
 
     /// <summary>
     /// Updates a Contract's status. 
@@ -79,5 +72,5 @@ public class ContractsController : ControllerBase
     [HttpPut("contracts/{contractId}")]
     [ProducesResponseType(typeof(ContractDTO), StatusCodes.Status200OK)]
     public async Task<ContractDTO> UpdateContractStatus([FromRoute] string contractId, [FromBody] UpdateContractStatusParam param)
-        => (await _contractsService.UpdateContractStatus(param)).toDTO();
+        => (await _contractsService.UpdateContractStatus(param)).ToDTO();
 }
