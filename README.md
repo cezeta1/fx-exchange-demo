@@ -32,11 +32,10 @@ This project was generated with Angular CLI version 17.0.2, using Ng-Zorro as UI
 
 ## Screenshots
 
-![image](https://github.com/Cezeta-hub/fx-exchange-demo/assets/73889711/664b1f36-ab78-4d9b-a228-c0ebec86070c)
+![285847691-664b1f36-ab78-4d9b-a228-c0ebec86070c](https://github.com/user-attachments/assets/73fbb646-4c3a-4ed7-987a-0d4afb826afa)
 
-![image](https://github.com/Cezeta-hub/fx-exchange-demo/assets/73889711/b765935d-86a6-47f0-aaf2-70ba2b7874d4)
+![285847745-b765935d-86a6-47f0-aaf2-70ba2b7874d4](https://github.com/user-attachments/assets/20ef49ab-3a2a-40ef-ac39-4c3fbec9188d)
 
-![image](https://github.com/Cezeta-hub/fx-exchange-demo/assets/73889711/f373284d-8288-40a4-bb37-277bcb4c94b1)
+![286486799-f373284d-8288-40a4-bb37-277bcb4c94b1](https://github.com/user-attachments/assets/2af366cb-df50-400a-9157-cc8cdea66666)
 
-![image](https://github.com/Cezeta-hub/fx-exchange-demo/assets/73889711/c422e3a7-0a66-4599-ac1b-adcab0a341ce)
-
+![285847926-c422e3a7-0a66-4599-ac1b-adcab0a341ce](https://github.com/user-attachments/assets/2d11404b-d5c0-4cc1-a211-93a75a525a88)
